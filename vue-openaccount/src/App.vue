@@ -3,8 +3,6 @@
     <transition name='fade' mode='out-in'>
       <router-view></router-view>
     </transition>
-    <img src="./assets/logo.png">
-    <router-view/>
   </div>
 </template>
 
