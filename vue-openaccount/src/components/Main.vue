@@ -11,12 +11,12 @@
           <span v-else class="system-name">{{systemName}}</span>
         </el-header>
         <el-main>
-          <el-menu :collapse="collapsed" background-color="#EBEEF5">
-            <el-menu-item index="1">
+          <el-menu :collapse="collapsed" background-color="#EBEEF5" router :default-active='onRoutes'>
+            <el-menu-item index="/user/home">
               <i class="el-icon-notebook-1"></i>
               <span>我的账户</span>
             </el-menu-item>
-            <el-menu-item index="2">
+            <el-menu-item index="/user/info">
               <i class="el-icon-user"></i>
               <span>个人信息</span>
             </el-menu-item>
@@ -76,13 +76,18 @@ export default {
   methods: {
     handleCommand(command) {
         if(command == 'loginout'){
-            // localStorage.removeItem('ms_username')
-            // this.$router.push('/login');
+            localStorage.removeItem('ms_username')
+            this.$router.push('/login');
         }
     }
   },
   mounted: function() {
 
+  },
+  computed: {
+    onRoutes(){
+      return this.$route.path;
+    }
   }
 }
 </script>

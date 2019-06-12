@@ -7,11 +7,21 @@ export default new Router({
   routes: [
     {
       path: '/',
-      component: resolve => require(['../pages/Main.vue'], resolve),
+      redirect: '/login'
+    }, {
+      path: '/login',
+      component: resolve => require(['../pages/Login.vue'], resolve)
+    }, {
+      path: '/user/home',
+      component: resolve => require(['../components/Main.vue'], resolve),
       children: [{
-        path: '/',
-        component: resolve => require(['../pages/Home.vue'], resolve),
-        name: '首页'
+        path: '/user/home',
+        component: resolve => require(['../pages/login/myAccounts.vue'], resolve),
+        name: '我的账户'
+      }, {
+        path: '/user/info',
+        component: resolve => require(['../pages/login/personalInfo.vue'], resolve),
+        name: '个人信息'
       }]
     }
   ]
