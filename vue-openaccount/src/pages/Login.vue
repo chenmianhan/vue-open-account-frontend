@@ -13,6 +13,14 @@
                         <el-button slot="prepend" icon="el-icon-lock"></el-button>
                     </el-input>
                 </el-form-item>
+                <el-form-item prop='role'>
+                    <el-radio-group v-model="ruleForm.role" border size="mini">
+                        <el-radio-button :label="1">用户</el-radio-button>
+                        <el-radio-button :label="2">审核员</el-radio-button>
+                        <el-radio-button :label="3">管理员</el-radio-button>
+                        <el-radio-button :label="4">超级管理员</el-radio-button>
+                    </el-radio-group>
+                </el-form-item>
                 <div class="login-btn">
                     <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
                 </div>
@@ -28,7 +36,8 @@
             return {
                 ruleForm: {
                     username: 'admin',
-                    password: '123123'
+                    password: '123123',
+                    role: 1
                 },
                 rules: {
                     username: [
@@ -63,6 +72,7 @@
         height:100%;
         background-image: url(../assets/login4.jpg);
         background-size: 100%;
+        /* opacity: 0.8; */
     }
     .ms-title{
         width:100%;
