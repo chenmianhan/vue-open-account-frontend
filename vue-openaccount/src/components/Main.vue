@@ -14,11 +14,11 @@
           <el-menu :collapse="collapsed" background-color="#EBEEF5" router :default-active='onRoutes'>
             <el-menu-item index="/user/home">
               <i class="el-icon-notebook-1"></i>
-              <span>我的账户</span>
+              <span slot="title">我的账户</span>
             </el-menu-item>
             <el-menu-item index="/user/info">
               <i class="el-icon-user"></i>
-              <span>个人信息</span>
+              <span slot="title">个人信息</span>
             </el-menu-item>
           </el-menu>
         </el-main>
