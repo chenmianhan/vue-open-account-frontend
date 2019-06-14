@@ -13,11 +13,11 @@
                     <el-card class="main-account" shadow='hover'>
                         <el-row>
                             <!-- <span style="float: left;">主资金账户</span> -->
-                            <el-button class='button' type="text"@click="handleWithdraw">提现</el-button>
+                            <el-button class='button' type="text" @click="handleWithdraw">提现</el-button>
                             <el-button class='button' type="text" @click="handleRecharge">充值</el-button>
                         </el-row>
                         <el-row class="primary-account">
-                            <img src="../../assets/coin.png" class="primary-coin"><span class="title-money">余额：￥{{primaryAccount}}</span>
+                            <img src="../../../assets/coin.png" class="primary-coin"><span class="title-money">余额：￥{{primaryAccount}}</span>
                         </el-row>
                     </el-card>
                     <div v-for="item in secondaryAccount" :key='item'>
@@ -44,9 +44,11 @@
                 <el-col :span='8'>
                     <div class="line">
                         <el-timeline>
-                            <el-timeline-item v-for="(amount, index) in bill" :key="index" :timestamp='amount.timestep'>{{amount.value}}</el-timeline-item>
+                            <el-timeline-item v-for="(amount, index) in bill" :color='amount.color' :key="index" :timestamp='amount.timestep'>
+                                <span style="float: left;margin-left: 5px;">{{amount.message}}</span>{{amount.value}}
+                            </el-timeline-item>
                         </el-timeline>
-                        <el-button type='text' @click="lineVisible = true">>> 查看更多流水</el-button>
+                        <el-button type='text' @click="handleMoreDetail">>> 查看更多流水</el-button>
                     </div>
                 </el-col>
             </el-tab-pane>
@@ -82,18 +84,6 @@
             <el-button type="primary" @click="withdrawVisible = false" size="small">确 定</el-button>
         </div>
         </el-dialog>
-        <!-- 流水 -->
-        <el-dialog title="流水明细" :visible.sync='lineVisible' width="30%" class="lineDialog">
-            <el-timeline>
-                <el-timeline-item v-for="(amount, index) in moreBill" :key="index" :timestamp='amount.timestep'>
-                    {{amount.value}}
-                </el-timeline-item>
-                <div slot="footer" class="dialog-footer">
-                    <el-button @click="lineVisible = false" size="small">取 消</el-button>
-                    <el-button @click="lineVisible = false" size="small" type="primaty">确 定</el-button>
-                </div>
-            </el-timeline>
-        </el-dialog>
     </div>
 </div>
 </template>
@@ -107,52 +97,28 @@ export default {
             secondaryAccount: [1234.56, 123.45],
             bill: [{
                 timestep: '2019-06-13',
-                value: '-100.30'
+                value: '-100.30',
+                message: 'xx支出',
+                color: '#F56C6C'
             }, {
                 timestep: '2019-06-12',
-                value: '+100.34'
+                value: '+100.34',
+                message: 'xx收入',
+                color: '#67C23A'
             }, {
                 timestep: '2019-06-11',
-                value: '-110.00'
+                value: '-110.00',
+                message: 'xx支出',
+                color: '#F56C6C'
             }, {
                 timestep: '2019-06-10',
-                value: '+100.00'
-            }],
-            moreBill: [{
-                timestep: '2019-06-13',
-                value: '-100.30'
-            }, {
-                timestep: '2019-06-13',
-                value: '-100.30'
-            }, {
-                timestep: '2019-06-13',
-                value: '-100.30'
-            }, {
-                timestep: '2019-06-13',
-                value: '-100.30'
-            }, {
-                timestep: '2019-06-13',
-                value: '-100.30'
-            }, {
-                timestep: '2019-06-13',
-                value: '-100.30'
-            }, {
-                timestep: '2019-06-13',
-                value: '-100.30'
-            }, {
-                timestep: '2019-06-13',
-                value: '-100.30'
-            }, {
-                timestep: '2019-06-13',
-                value: '-100.30'
-            }, {
-                timestep: '2019-06-13',
-                value: '-100.30'
+                value: '+100.00',
+                message: 'xx收入',
+                color: '#67C23A'
             }],
             rechargeVisible: false,
             withdrawVisible: false,
             visible: false,
-            lineVisible: false,
             withdrawForm: {
                 cardID: '',
                 value: 0
@@ -190,6 +156,9 @@ export default {
                     message: '已取消删除'
                 });
             });
+        },
+        handleMoreDetail(){
+            this.$router.push({path:'/user/lineDetail'});
         }
     }
 }
