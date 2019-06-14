@@ -37,7 +37,7 @@
           </el-col>
           <el-col :span="3"><span class="el-dropdown-link userinfo-inner">你好：{{userName}}</span></el-col>
           <el-col :span="1">
-            <div class="user-avator"><img src='../assets/user.jpg'></div>
+            <div class="user-avator"><img src='../assets/image/user.jpg'></div>
           </el-col>
           <el-col :span="3">
               <el-dropdown @command="handleCommand">

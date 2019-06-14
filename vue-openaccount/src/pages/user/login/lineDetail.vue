@@ -28,22 +28,13 @@
 </template>
 
 <script>
+import Bill from '../../../assets/js/timeLine.js'
 export default {
     data() {
         return {
             startDate: '',
             endDate: '',
-            moreBill: [{
-                timestep: '2019-06-13',
-                value: '-100.30',
-                message: 'xx支出',
-                color: '#F56C6C'
-            }, {
-                timestep: '2019-06-12',
-                value: '+100.30',
-                message: 'xx收入',
-                color: '#67C23A'
-            }]
+            moreBill: bill
         }
     },
     methods: {

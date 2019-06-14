@@ -70,7 +70,7 @@
         position: absolute;
         width:100%;
         height:100%;
-        background-image: url(../assets/login4.jpg);
+        background-image: url(../assets/image/login4.jpg);
         background-size: 100%;
         /* opacity: 0.8; */
     }

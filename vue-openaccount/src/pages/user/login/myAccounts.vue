@@ -17,7 +17,7 @@
                             <el-button class='button' type="text" @click="handleRecharge">充值</el-button>
                         </el-row>
                         <el-row class="primary-account">
-                            <img src="../../../assets/coin.png" class="primary-coin"><span class="title-money">余额：￥{{primaryAccount}}</span>
+                            <img src="../../../assets/image/coin.png" class="primary-coin"><span class="title-money">余额：￥{{primaryAccount}}</span>
                         </el-row>
                     </el-card>
                     <div v-for="item in secondaryAccount" :key='item'>
@@ -52,7 +52,26 @@
                     </div>
                 </el-col>
             </el-tab-pane>
-            <el-tab-pane label="证券账户" name="second">证券账户</el-tab-pane>
+            <el-tab-pane label="证券账户" name="second">
+                <el-card class="box-card" shadow='hover'>
+                <div slot="header" class="clearfix">
+                    <span>上海证券交易所</span>
+                    <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
+                </div>
+                <div v-for="o in 4" :key="o" class="text item">
+                    {{'网点 ' + o }}
+                </div>
+                </el-card>
+                <el-card class="box-card" shadow='hover'>
+                <div slot="header" class="clearfix">
+                    <span>深圳证券交易所</span>
+                    <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
+                </div>
+                <div v-for="o in 4" :key="o" class="text item">
+                    {{'网点 ' + o }}
+                </div>
+                </el-card>
+            </el-tab-pane>
         </el-tabs>
         <!-- 对话框 -->
         <el-dialog title="充值" :visible.sync="rechargeVisible" width="30%">
@@ -89,33 +108,14 @@
 </template>
 
 <script>
+import Bill from '../../../assets/js/timeLine.js'
 export default {
     data() {
         return {
             accountName: 'first',
             primaryAccount: 12345.67,
             secondaryAccount: [1234.56, 123.45],
-            bill: [{
-                timestep: '2019-06-13',
-                value: '-100.30',
-                message: 'xx支出',
-                color: '#F56C6C'
-            }, {
-                timestep: '2019-06-12',
-                value: '+100.34',
-                message: 'xx收入',
-                color: '#67C23A'
-            }, {
-                timestep: '2019-06-11',
-                value: '-110.00',
-                message: 'xx支出',
-                color: '#F56C6C'
-            }, {
-                timestep: '2019-06-10',
-                value: '+100.00',
-                message: 'xx收入',
-                color: '#67C23A'
-            }],
+            bill: billLittle,
             rechargeVisible: false,
             withdrawVisible: false,
             visible: false,
@@ -231,5 +231,9 @@ export default {
 }
 .line {
     margin-top: 50px;
+}
+.box-card{
+    width:70%;
+    margin: 5px;
 }
 </style>
