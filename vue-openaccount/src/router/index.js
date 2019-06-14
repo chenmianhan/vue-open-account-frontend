@@ -12,6 +12,14 @@ export default new Router({
       path: '/login',
       component: resolve => require(['../pages/Login.vue'], resolve)
     }, {
+      path: '/user',
+      component: resolve => require(['../components/unloginMain.vue'], resolve),
+      children: [{
+        path: '/user/loading',
+        component: resolve => require(['../pages/user/unlogin/loading.vue'], resolve),
+        name: '待审核'
+      }]
+    }, {
       path: '/user/home',
       component: resolve => require(['../components/Main.vue'], resolve),
       children: [{
