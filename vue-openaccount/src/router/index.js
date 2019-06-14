@@ -13,10 +13,10 @@ export default new Router({
       component: resolve => require(['../pages/Login.vue'], resolve)
     }, {
       path: '/user',
-      component: resolve => require(['../components/unloginMain.vue'], resolve),
+      component: resolve => require(['../components/beforecheckMain.vue'], resolve),
       children: [{
         path: '/user/loading',
-        component: resolve => require(['../pages/user/unlogin/loading.vue'], resolve),
+        component: resolve => require(['../pages/user/beforecheck/loading.vue'], resolve),
         name: '待审核'
       }]
     }, {
