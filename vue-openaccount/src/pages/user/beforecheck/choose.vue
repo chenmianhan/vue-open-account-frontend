@@ -1,5 +1,12 @@
 <template>
     <div>
+    <!-- 面包屑 -->
+    <div class="bread">
+        <el-breadcrumb separator-class="el-icon-arrow-right">
+            <el-breadcrumb-item>开户</el-breadcrumb-item>
+            <el-breadcrumb-item>营业网点选择</el-breadcrumb-item>
+        </el-breadcrumb>
+    </div>
         <div class="title"><h1>请选择您要加入的营业网点（可多选）：</h1></div>
         <div class="choose">
             <el-col :span="12">
@@ -96,5 +103,8 @@ export default {
     }
     .icon{
         margin-left:3px;
+    }
+    .bread{
+        margin: 10px;
     }
 </style>
