@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import { resolve } from 'url';
 
 Vue.use(Router)
 
@@ -18,6 +19,10 @@ export default new Router({
         path: '/user/loading',
         component: resolve => require(['../pages/user/beforecheck/loading.vue'], resolve),
         name: '待审核'
+      }, {
+        path: '/user/choose',
+        component: resolve => require(['../pages/user/beforecheck/choose.vue'], resolve),
+        name: '选择营业网点'
       }]
     }, {
       path: '/user/home',
