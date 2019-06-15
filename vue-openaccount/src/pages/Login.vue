@@ -25,6 +25,7 @@
                     <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
                 </div>
                 <el-button type="text" class="login-tips">忘记密码？</el-button>
+                <el-button type="text" class="login-tips" @click="$router.push({path: '/user/home'})">点击这里看审核通过界面</el-button>
             </el-form>
         </div>
     </div>
@@ -54,7 +55,7 @@
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         localStorage.setItem('ms_username',this.ruleForm.username);
-                        this.$router.push('/user/home');
+                        this.$router.push('/user/choose');
                     } else {
                         console.log('error submit!!');
                         return false;

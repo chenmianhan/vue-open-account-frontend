@@ -33,6 +33,10 @@
             </el-card>        
             </el-col>
             <!-- <span>{{shanghaiNetpoint}}</span><span>{{shenzhenNetpoint}}</span> -->
+            <el-row>
+                <el-button icon="el-icon-caret-left">上一步</el-button>
+                <el-button type="primary" @click="$router.push({path:'/user/loading'})">下一步<i class="el-icon-caret-right icon"></i></el-button>
+            </el-row>
         </div>
     </div>
 </template>
@@ -86,5 +90,11 @@ export default {
     }
     .choose{
         padding: 0 60px 0 60px;
+    }
+    .el-button{
+        margin: 80px;
+    }
+    .icon{
+        margin-left:3px;
     }
 </style>
