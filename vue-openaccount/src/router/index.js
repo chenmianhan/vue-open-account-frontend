@@ -13,6 +13,10 @@ export default new Router({
       path: '/login',
       component: resolve => require(['../pages/Login.vue'], resolve)
     }, {
+      path: '/login/warning',
+      component: resolve => require(['../pages/Warning.vue'], resolve),
+      name: '风险提示'
+    },{
       path: '/user',
       component: resolve => require(['../components/beforecheckMain.vue'], resolve),
       children: [{
