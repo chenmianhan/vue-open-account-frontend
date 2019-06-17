@@ -18,6 +18,7 @@
       </el-header>
       <!--中间的卡片式幻灯片-->
       <el-main class="main">
+
         <div align="center">
           <el-carousel :interval="4000" type="card" height="400px">
             <el-carousel-item class="el-carousel__item" v-for="item in imagesbox" :key="item.id">
@@ -50,6 +51,7 @@ let data = () => {
     {id:1, idView: require("../../../assets/image/hint2.jpg")},
     {id:2, idView: require("../../../assets/image/hint3.jpg")}],
     checked: true
+
   }
 }
 
