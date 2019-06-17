@@ -33,7 +33,7 @@
 
       <el-form-item>
         <el-button type="primary" @click="submitForm('infoForm')">提交</el-button>
-        <el-button @click="">返回</el-button>
+        <el-button @click="backToWarning">返回</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -83,7 +83,8 @@
               console.log('error submit!!');
               return false;
             }
-          });
+          }
+          );
 
           const postData ={
             name: this.infoForm.name,
@@ -102,8 +103,11 @@
             .catch(function (error) {
               console.log(error);
             });
+        },
+        //回到上一界面风险提示
+        backToWarning(){
+          this.$router.push('/login/warning');
         }
-
       }
     }
 </script>

@@ -14,7 +14,7 @@ export default new Router({
       component: resolve => require(['../pages/Login.vue'], resolve)
     }, {
       path: '/login/warning',
-      component: resolve => require(['../pages/Warning.vue'], resolve),
+      component: resolve => require(['../pages/user/beforecheck/warning.vue'], resolve),
       name: '风险提示'
     },{
       path: '/user',

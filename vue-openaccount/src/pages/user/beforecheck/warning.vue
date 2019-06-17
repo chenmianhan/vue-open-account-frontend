@@ -31,7 +31,7 @@
           <!--我已知悉风险-->
           <el-checkbox v-model="checked">我已知悉风险</el-checkbox>
           <!--下一步按钮-->
-          <el-button type="primary" round @click='nextStepToInfo' :disabled="!checked">下一步<i class="el-icon-caret-right icon"></i></el-button>
+          <el-button type="primary" round @click='nextStepToInfo'>下一步</el-button>
         </el-row>
       </el-footer>
       
@@ -46,9 +46,9 @@ let data = () => {
     collapsed: false,
     systemName: '金证开户平台',
     userName: '新用户',
-    imagesbox:[{id:0, idView: require("../assets/image/hint1.jpg")},
-    {id:1, idView: require("../assets/image/hint2.jpg")},
-    {id:2, idView: require("../assets/image/hint3.jpg")}],
+    imagesbox:[{id:0, idView: require("../../../assets/image/hint1.jpg")},
+    {id:1, idView: require("../../../assets/image/hint2.jpg")},
+    {id:2, idView: require("../../../assets/image/hint3.jpg")}],
     checked: true
   }
 }
@@ -65,8 +65,7 @@ export default {
     },
     //下一步按钮跳转资料填写界面
     nextStepToInfo(){
-      //待填写，填写资料填写界面的路径
-      this.$router.push('/user/evaluation');
+      this.$router.push('/user/inputInfo');
     }
   },
   mounted: function() {
@@ -144,8 +143,5 @@ $header-height: 60px;
         max-width: 100%;
         max-height: 100%;
       }
-    }
-    .icon{
-        margin-left:3px;
     }
 </style>
