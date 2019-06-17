@@ -41,7 +41,7 @@
             </el-col>
             <!-- <span>{{shanghaiNetpoint}}</span><span>{{shenzhenNetpoint}}</span> -->
             <el-row>
-                <el-button icon="el-icon-caret-left">上一步</el-button>
+                <el-button icon="el-icon-caret-left" @click="$router.push({path:'/user/evaluation'})">上一步</el-button>
                 <el-button type="primary" @click="$router.push({path:'/user/loading'})">下一步<i class="el-icon-caret-right icon"></i></el-button>
             </el-row>
         </div>

@@ -23,6 +23,10 @@ export default new Router({
         path: '/user/choose',
         component: resolve => require(['../pages/user/beforecheck/choose.vue'], resolve),
         name: '选择营业网点'
+      }, {
+        path: '/user/evaluation',
+        component: resolve => require(['../pages/user/beforecheck/evaluation.vue'], resolve),
+        name: '风险测评'
       }]
     }, {
       path: '/user/home',
