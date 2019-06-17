@@ -28,24 +28,37 @@
                 <el-button type="text" class="login-tips" @click="$router.push({path: '/user/home'})">点击这里看审核通过界面</el-button>
             </el-form>
         </div>
+        <!--所有的警告弹窗-->
+        <transition name="logInAlert" v-if="alertTitle != '' ">
+            <div class="login-btn">
+                <div class="alert alert-danger" role="alert"><p>{{alertTitle}}</p></div>
+            </div>
+        </transition>
     </div>
 </template>
 
 <script>
+    /*import {AxiosInstance as axios} from "axios";*/
     export default {
         data: function(){
             return {
-                ruleForm: {
-                    username: 'admin',
-                    password: '123123',
-                    role: 1
+                ruleForm: {//表单格式
+                    username: '',//用户名
+                    password: '',//密码
+                    alertTitle:'',//弹窗标题
+                    showAlert: false,//是否显示警告弹窗
+                    isSignup: false,//是否已经注册
+                    role: null//角色标签：用户1；审核员2；管理员3；超管4
                 },
-                rules: {
+                rules: {//表单验证，验证用户输入格式是否正确
                     username: [
                         { required: true, message: '请输入用户名', trigger: 'blur' }
                     ],
                     password: [
                         { required: true, message: '请输入密码', trigger: 'blur' }
+                    ],
+                    role: [
+                        { required: !null, message: '请选择您的账号类别', trigger: 'blur'}
                     ]
                 }
             }
@@ -54,12 +67,30 @@
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
+                        //将用户名保存到ruleForm.username
                         localStorage.setItem('ms_username',this.ruleForm.username);
                         this.$router.push('/login/warning');
+                        console.log('submit!');
                     } else {
                         console.log('error submit!!');
                         return false;
                     }
+                });
+                //向后台传输的数据格式
+                const postLoginData ={
+                username: this.ruleForm.username,
+                password: this.ruleForm.password,
+                role: this.ruleForm.role
+                };
+                //向后台传输数据
+                this.$axios.post('/api/login/loginInfo',postLoginData, {
+                    headers: { 'content-type': 'application/x-www-form-urlencoded' },
+                })
+                .then(function(response) {
+                console.log(response);
+                })
+                .catch(function(error) {
+                console.log(error);
                 });
             }
         },
