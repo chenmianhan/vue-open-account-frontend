@@ -62,6 +62,14 @@
                     }
                 });
             }
+        },
+        mounted(){
+            this.$notify({
+                title: '提示',
+                message: '初次登录用户会自动创建账号，账号名为手机号，初始密码为用户输入密码！',
+                duration: 0,
+                type: 'info'
+            });
         }
     }
 </script>
