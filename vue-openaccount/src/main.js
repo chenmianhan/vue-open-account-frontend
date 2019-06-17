@@ -7,6 +7,10 @@ import router from './router'
 import ElementUI from 'element-ui'
 import './assets/theme/element-#2B6AAB/index.css'
 
+import axios from 'axios'
+Vue.prototype.$axios = axios
+
+
 Vue.use(ElementUI)
 Vue.config.productionTip = false
 
@@ -17,3 +21,5 @@ new Vue({
   components: { App },
   template: '<App/>'
 })
+
+
