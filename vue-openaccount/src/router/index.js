@@ -31,6 +31,10 @@ export default new Router({
         path: '/user/evaluation',
         component: resolve => require(['../pages/user/beforecheck/evaluation.vue'], resolve),
         name: '风险测评'
+      },{
+        path: '/user/inputInfo',
+        component: resolve => require(['../pages/user/login/inputInfo.vue'], resolve),
+        name: '填写资料'
       }]
     }, {
       path: '/user/home',
@@ -47,6 +51,20 @@ export default new Router({
         path: '/user/lineDetail',
         component: resolve => require(['../pages/user/login/lineDetail.vue'], resolve),
         name: '流水明细'
+      }]
+    },
+
+    {
+      path: '/admin/home',
+      component: resolve => require(['../components/Main.vue'], resolve),
+      children:[{
+        path:'/admin/home',
+        component: resolve => require(['../pages/admin/userManagement.vue'], resolve),
+        name: '用户管理'
+      },{
+        path:'/admin/manageReviewer',
+        component: resolve => require(['../pages/admin/reviewerManagement.vue'], resolve),
+        name: '审核员管理'
       }]
     }
   ]
