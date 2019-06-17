@@ -4,7 +4,7 @@
     <div class="bread">
         <el-breadcrumb separator-class="el-icon-arrow-right">
             <el-breadcrumb-item>开户</el-breadcrumb-item>
-            <el-breadcrumb-item>营业网点选择</el-breadcrumb-item>
+            <el-breadcrumb-item>风险测评</el-breadcrumb-item>
         </el-breadcrumb>
     </div>
     <div>
@@ -33,10 +33,13 @@
             </div>
         </div>
     </div>
-    <div style="height: 100px;"><el-button size="medium" round type='success' @click="handleSubmit">保 存</el-button></div>
+    <div style="height: 100px;">
+        <el-button size="medium" type='success' @click="handleSave">保 存</el-button>
+        <el-button size="medium" type='danger' @click="handleSubmit">提 交</el-button>
+    </div>
     <div id="footer">
         <el-row>
-            <el-button icon="el-icon-caret-left" round @click="$router.push({path:'/login/warning'})">上一步</el-button>
+            <el-button icon="el-icon-caret-left" round @click="$router.push({path:'/user/inputInfo'})">上一步</el-button>
             <el-button type="primary" round @click="$router.push({path:'/user/choose'})">下一步<i class="el-icon-caret-right icon"></i></el-button>
         </el-row>
     </div>
@@ -51,11 +54,34 @@ export default {
             userName: '用户姓名',
             account: '资金账号',
             test: evaluateTest,
-            answer: answer
+            answer: answer,
+            visible: false
         }
     },
     methods:{
-        handleSubmit(){}
+        handleSubmit(){
+            this.$confirm('提交后不可修改，确认提交吗？', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                this.$message({
+                    type: 'success',
+                    message: '提交成功！'
+                });
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消提交'
+                });
+            });
+        },
+        handleSave(){
+            this.$message({
+                type: 'success',
+                message: '已成功保存'
+            })
+        }
     }
 }
 </script>
