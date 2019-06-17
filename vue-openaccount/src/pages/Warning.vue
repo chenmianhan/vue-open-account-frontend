@@ -10,28 +10,14 @@
           <el-col :span="21" class="header-title">
             <span class="system-name">{{systemName}}</span>
           </el-col>
-          <!--
-              <el-dropdown @command="handleCommand">
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item command="loginout">退出登录</el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
-            -->
           <!--退出登录-->
           <el-col :span='3' justify="end">
-            <el-button size='medium'>退出登录</el-button>
+            <el-button size='medium' @click='handleCommand("loginout")'>退出登录</el-button>
           </el-col>
         </el-row>
       </el-header>
       <!--中间的卡片式幻灯片-->
       <el-main class="main">
-        <!--
-          <el-carousel :interval="4000" type="card" height="400px">
-            <el-carousel-item v-for="item in 3" :key="item">
-              <h3 class="medium">{{ item }}</h3>
-            </el-carousel-item>
-          </el-carousel>
-        -->
         <div align="center">
           <el-carousel :interval="4000" type="card" height="400px">
             <el-carousel-item class="el-carousel__item" v-for="item in imagesbox" :key="item.id">
@@ -40,12 +26,12 @@
           </el-carousel>
         </div>
       </el-main>
-      <el-footer>
+      <el-footer height='100px'>
         <el-row>     
           <!--我已知悉风险-->
           <el-checkbox v-model="checked">我已知悉风险</el-checkbox>
           <!--下一步按钮-->
-          <el-button type="primary" round>下一步</el-button>
+          <el-button type="primary" round @click='nextStepToInfo'>下一步</el-button>
         </el-row>
       </el-footer>
       
@@ -60,9 +46,9 @@ let data = () => {
     collapsed: false,
     systemName: '金证开户平台',
     userName: '新用户',
-    imagesbox:[{id:0, idView: require("../assets/hint1.jpg")},
-    {id:1, idView: require("../assets/hint2.jpg")},
-    {id:2, idView: require("../assets/hint3.jpg")}],
+    imagesbox:[{id:0, idView: require("../assets/image/hint1.jpg")},
+    {id:1, idView: require("../assets/image/hint2.jpg")},
+    {id:2, idView: require("../assets/image/hint3.jpg")}],
     checked: true
   }
 }
@@ -76,6 +62,11 @@ export default {
             localStorage.removeItem('ms_username')
             this.$router.push('/login');
         }
+    },
+    //下一步按钮跳转资料填写界面
+    nextStepToInfo(){
+      //待填写，填写资料填写界面的路径
+      this.$router.push('/user/home');
     }
   },
   mounted: function() {
@@ -102,33 +93,22 @@ $header-height: 60px;
     top: 0;
     bottom: 0;
     width: 100%;
-    .el-aside {
-        .el-header {
-            line-height: $header-height;
-            background-color: $background-color;
-            color: $header-color;
-            text-align: center;
-        }
-        .el-container {
-            height: $height;
-            .el-main {
-                padding: 0;
-            }
+
+    .el-header {
+        line-height: $header-height;
+        background-color: $background-color;
+        color: $header-color;
+        text-align: center;
+    }
+    .el-container {
+        height: $height;
+        .el-main {
+            padding: 0;
         }
     }
 
     .main {
         width: $width;
-        height: $height;
-    }
-
-    .menu-button {
-        width: 14px;
-        cursor: pointer;
-        font-size: 24px;
-    }
-
-    .el-menu {
         height: $height;
     }
 
@@ -152,11 +132,9 @@ $header-height: 60px;
         font-weight: bold;
     }
 }
-
     .user-name{
         margin-left: 10px;
     }
-
     .el-carousel__item {
       width: 100%;
       display: flex;
@@ -167,14 +145,4 @@ $header-height: 60px;
         max-height: 100%;
       }
     }
-/*
-    .el-carousel__item:nth-child(2n) {
-      background-color: #99a9bf;
-    }
-    
-    .el-carousel__item:nth-child(2n+1) {
-      background-color: #d3dce6;
-    }
-*/
-
 </style>
