@@ -33,10 +33,11 @@
             </div>
         </div>
     </div>
+    <div><el-button size="mini" round type='success' @click="handleSubmit">保 存</el-button></div>
     <div id="footer">
         <el-row>
-            <el-button icon="el-icon-caret-left" @click="$router.push({path:'/login'})">上一步</el-button>
-            <el-button type="primary" @click="$router.push({path:'/user/choose'})">下一步<i class="el-icon-caret-right icon"></i></el-button>
+            <el-button icon="el-icon-caret-left" round @click="$router.push({path:'/login/warning'})">上一步</el-button>
+            <el-button type="primary" round @click="$router.push({path:'/user/choose'})">下一步<i class="el-icon-caret-right icon"></i></el-button>
         </el-row>
     </div>
     </div>

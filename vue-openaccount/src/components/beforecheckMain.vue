@@ -5,7 +5,12 @@
     <el-container>
       <!--页眉-->
       <el-header class="header">
-          <el-col :span="4"><span class="system-name">{{systemName}}</span></el-col>
+        <el-row>
+          <el-col :span="21" class="header-title"><span class="system-name">{{systemName}}</span></el-col>
+          <el-col :span="3" justify="end">
+            <el-button size='medium' @click='handleCommand("loginout")'>退出登录</el-button>
+          </el-col>
+        </el-row>
       </el-header>
       <!--中间-->
       <el-main class="main">
@@ -13,7 +18,7 @@
           <router-view></router-view>
         </transition>
       </el-main>
-    </el-container>
+    </el-container> 
   </el-container>
 </section>
 </template>

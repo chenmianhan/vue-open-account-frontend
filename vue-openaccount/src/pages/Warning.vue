@@ -31,7 +31,7 @@
           <!--我已知悉风险-->
           <el-checkbox v-model="checked">我已知悉风险</el-checkbox>
           <!--下一步按钮-->
-          <el-button type="primary" round @click='nextStepToInfo'>下一步</el-button>
+          <el-button type="primary" round @click='nextStepToInfo' :disabled="!checked">下一步<i class="el-icon-caret-right icon"></i></el-button>
         </el-row>
       </el-footer>
       
@@ -66,7 +66,7 @@ export default {
     //下一步按钮跳转资料填写界面
     nextStepToInfo(){
       //待填写，填写资料填写界面的路径
-      this.$router.push('/user/home');
+      this.$router.push('/user/evaluation');
     }
   },
   mounted: function() {
@@ -144,5 +144,8 @@ $header-height: 60px;
         max-width: 100%;
         max-height: 100%;
       }
+    }
+    .icon{
+        margin-left:3px;
     }
 </style>
