@@ -33,7 +33,7 @@
             </div>
         </div>
     </div>
-    <div><el-button size="mini" round type='success' @click="handleSubmit">保 存</el-button></div>
+    <div style="height: 100px;"><el-button size="medium" round type='success' @click="handleSubmit">保 存</el-button></div>
     <div id="footer">
         <el-row>
             <el-button icon="el-icon-caret-left" round @click="$router.push({path:'/login/warning'})">上一步</el-button>
@@ -55,7 +55,7 @@ export default {
         }
     },
     methods:{
-
+        handleSubmit(){}
     }
 }
 </script>
@@ -71,6 +71,7 @@ export default {
         text-indent: 2em;
         font-size: 12px;
         color: #909399;
+        margin-bottom: 50px;
     }
     .test{
         width: 70%;
