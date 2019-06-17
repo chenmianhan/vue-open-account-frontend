@@ -47,7 +47,7 @@
                     password: '',//密码
                     alertTitle:'',//弹窗标题
                     showAlert: false,//是否显示警告弹窗
-                    isSignup: false,//是否已经注册
+                    isSignup: false,//是否已经注册；是否为旧用户
                     role: null//角色标签：用户1；审核员2；管理员3；超管4
                 },
                 rules: {//表单验证，验证用户输入格式是否正确
@@ -64,6 +64,7 @@
             }
         },
         methods: {
+            //表单验证，主要验证输入格式是否正确
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
@@ -76,29 +77,85 @@
                         return false;
                     }
                 });
-                //向后台传输的数据格式
-                const postLoginData ={
-                username: this.ruleForm.username,
-                password: this.ruleForm.password,
-                role: this.ruleForm.role
-                };
-                //向后台传输数据
-                this.$axios.post('/api/login/loginInfo',postLoginData, {
-                    headers: { 'content-type': 'application/x-www-form-urlencoded' },
-                })
-                .then(function(response) {
-                console.log(response);
-                })
-                .catch(function(error) {
-                console.log(error);
+            },
+            //老用户登录
+            login: function () {
+                var that = this;
+                var router = this.$router;
+                //向后台传输数据-用户登录信息
+                axios.post('/api/login',{
+                    'user_id': this.username,
+                    'user_password': this.password,
+                    'user_role':this.role
+                }).then(function (response) {//从后端得到数据-用户登录是否成功/错误信息
+                if (response.data == 'user_success') {//登录成功跳转用户个人信息界面
+                    router.push({
+                        path: '/user/home'
+                    });
+                    /*
+                    userInfo.store({//把数据封装为json格式
+                    userId:that.user_id,
+                    hasLogin:true
+                    });*/
+                    console.log("login success");//终端显示登录成功
+                }
+                else {
+                    that.alertTitle = '登录失败！请检查账号或密码'
+                }
+                }).catch(function (err) {
+                    that.alertTitle = '网络连接失败！可能是服务器故障！'
+                });
+            },
+            //新用户注册
+            signup: function(){
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {//跳转到风险提示界面
+                        //将用户名保存到ruleForm.username
+                        localStorage.setItem('ms_username',this.ruleForm.username);
+                        this.$router.push('/login/warning');
+                        console.log('submit!');
+                    } else {
+                        console.log('error submit!!');
+                        return false;
+                    }
+                });
+            },
+            //管理员登录
+            admin: function () { 
+                var that = this;
+                var router = this.$router;
+                console.log("Admin post begin");
+                //向后端传输数据-管理员登录信息
+                axios.post('/api/login',{
+                    'user_id': this.username,
+                    'user_password': this.password,
+                    'user_role':this.role
+                }).then(function (response) {//从后端得到数据-管理员是否登录成功/错误信息
+                if (response.data == 'admin_success') {//管理员成功登录
+                    /*
+                    userInfo.store({
+                        userId:that.user_id,
+                        hasLogin:true
+                    });
+                    */
+                    router.push({//进入管理员界面
+                        path: '/admin/home'
+                    });
+                } else {//其他异常情况警告
+                    that.alertTitle = '登录失败！请检查账号或密码'
+                }
+                }).catch(function (error) {
+                    that.alertTitle = '网络连接失败！可能是服务器故障！'
                 });
             }
         },
-        mounted(){
-            this.$notify({
+        mounted: function(){
+            if(this.notifyInstance) {
+                this.notifyInstance.close();
+            }
+            this.notifyInstance=this.$notify({
                 title: '提示',
                 message: '初次登录用户会自动创建账号，账号名为手机号，初始密码为用户输入密码！',
-                duration: 0,
                 type: 'info'
             });
         }
