@@ -1,5 +1,14 @@
 <template>
 <div>
+  <div style="margin: 0 auto;width:70%;margin-top:50px;margin-bottom:50px;text-align:left;">
+  <el-steps :active="0" finish-status="success">
+    <el-step title="用户信息填写"></el-step>
+    <el-step title="风险测评"></el-step>
+    <el-step title="选择营业网点"></el-step>
+    <el-step title="审核"></el-step>
+  </el-steps>  
+  </div>
+<el-divider><i class="el-icon-star-off"></i><i class="el-icon-star-off"></i><i class="el-icon-star-off"></i></el-divider>
   <div class="questions">
     <h1>请填写以下信息</h1>
 
@@ -59,6 +68,19 @@
               if(!reg.test(value)){callback(new Error('身份证号码不正确'))}
           }
         };
+        var checkPhone = (rule, value, callback) => {
+          if (!value) {          
+            return callback(new Error('手机号不能为空'));        
+            } else {          
+              const reg = /^1[3|4|5|7|8][0-9]\d{8}$/          
+              console.log(reg.test(value));          
+              if (reg.test(value)) {            
+                callback();          
+              } else {            
+                return callback(new Error('请输入正确的手机号'));          
+              }        
+            }      
+          };
         return {
           infoForm: {
             name: '',
@@ -80,7 +102,7 @@
             ],
             contact: [
               { required: true, message: '请输入手机号', trigger: 'blur' },
-              { min: 11, max: 13, message: '手机号错误！', trigger: 'blur' }
+              { validator: checkPhone, trigger: 'blur' }
             ],
             idNum: [
               { required: true, message: '请输入身份证号', trigger: 'blur' },
