@@ -1,11 +1,11 @@
 <template>
-
+<div>
   <div class="questions">
     <h1>请填写以下信息</h1>
 
     <el-form :model="infoForm" :rules="rules" ref="infoForm" label-width="100px" class="demo-infoForm">
       <el-form-item label="姓名" prop="name">
-        <el-input v-model="infoForm.name"></el-input>
+        <el-input v-model="infoForm.name" class="wd400"></el-input>
       </el-form-item>
 
       <el-form-item label="性别" prop="gender" >
@@ -15,20 +15,16 @@
         </el-radio-group>
       </el-form-item>
 
-      <el-form-item label="生日" required>
-        <el-col :span="11">
-          <el-form-item prop="birthday">
-            <el-date-picker type="date" placeholder="选择日期" v-model="infoForm.birthday" style="width: 100%;"></el-date-picker>
-          </el-form-item>
-        </el-col>
+      <el-form-item label="生日" required prop="birthday">
+        <el-date-picker type="date" placeholder="选择日期" v-model="infoForm.birthday" style="width: 300px;"></el-date-picker>
       </el-form-item>
 
       <el-form-item label="手机号" prop="contact">
-        <el-input v-model="infoForm.contact"></el-input>
+        <el-input v-model="infoForm.contact" class="wd400"></el-input>
       </el-form-item>
 
       <el-form-item label="身份证号" prop="idNum">
-        <el-input v-model="infoForm.idNum"></el-input>
+        <el-input v-model="infoForm.idNum" class="wd400"></el-input>
       </el-form-item>
 
       <el-form-item label="家庭住址" prop="address">
@@ -48,13 +44,21 @@
       </el-form-item>
     </el-form>
   </div>
-
+</div>
 </template>
 <script>
   /*import {AxiosInstance as axios} from "axios";*/
 
     export default {
       data() {
+        let validID=(rule,value,callback)=>{
+          if(value==''||value==undefined){
+              callback()
+          }else{
+              let reg=/^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/
+              if(!reg.test(value)){callback(new Error('身份证号码不正确'))}
+          }
+        };
         return {
           infoForm: {
             name: '',
@@ -80,8 +84,11 @@
             ],
             idNum: [
               { required: true, message: '请输入身份证号', trigger: 'blur' },
-              { min: 18, max: 19, message: '身份证错误！', trigger: 'blur' }
+              { validator:validID, trigger: 'blur' }
             ],
+            address: [
+              { required: true, message: '请输入家庭地址', trigger: 'blur' },
+            ]
           }
         };
       },
@@ -121,6 +128,10 @@
 <style>
 .questions{
   width:40%;
-  float:left;
+  /* float:left; */
+  margin: 0 auto;
+}
+.wd400{
+  width: 300px;
 }
 </style>
