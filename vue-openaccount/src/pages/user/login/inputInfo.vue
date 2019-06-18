@@ -114,6 +114,7 @@
 <style>
 .questions{
   width:40%;
-  float:left;
+  /* float:left; */
+  margin: 0 auto;
 }
 </style>

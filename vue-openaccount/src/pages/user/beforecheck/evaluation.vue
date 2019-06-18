@@ -51,7 +51,6 @@
             </div>
         </div>
     </div>
-    <span>{{answer}}</span>
     <div style="height: 100px;">
         <el-button size="medium" type='success' @click="handleSave">保 存</el-button>
         <el-button size="medium" type='danger' @click="handleSubmit">提 交</el-button>
@@ -75,8 +74,8 @@ export default {
             test: evaluateTest,
             answer: answer,
             visible: false,
-            grade: null,
-            mark: null
+            grade: '保守型',
+            mark: 25
         }
     },
     methods:{
@@ -96,6 +95,12 @@ export default {
                     });
                     this.grade = response.data.grade;
                     this.mark = response.data.mark;
+                    localStorage.removeItem('answerTemp');
+                    this.$msgbox({
+                        title: '您的风险评级为' + this.grade,
+                        message: '分数：' + String(this.mark),
+                        type: 'info'
+                    });
                 }).catch(() => {
                     this.$msgbox({
                         title: '提交失败',
@@ -111,10 +116,7 @@ export default {
             });
         },
         handleSave(){
-            // console.log(this.answer);
             localStorage.setItem('answerTemp', JSON.stringify(this.answer));
-            console.log(this.answer);
-            // localStorage.removeItem('answerTemp');
             this.$message({
                 type: 'success',
                 message: '已成功保存，请尽快答完问卷'
@@ -138,7 +140,6 @@ export default {
 
         // 获取答案
         if(localStorage.getItem('answerTemp') != null){
-            console.log(localStorage.getItem('answerTemp'));
             this.answer = JSON.parse(localStorage.getItem('answerTemp'));
         }
     }
