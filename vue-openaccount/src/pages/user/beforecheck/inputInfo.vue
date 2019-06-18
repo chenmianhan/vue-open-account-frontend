@@ -1,8 +1,17 @@
 <template>
+<div>
 
+  <div style="margin:0 auto;margin-top:50px;margin-bottom: 50px; width:70%;text-align: left;">
+    <el-steps :active="0" finish-status="success">
+      <el-step title="填写用户信息"></el-step>
+      <el-step title="风险测评"></el-step>
+      <el-step title="选择营业网点"></el-step>
+      <el-step title="审核"></el-step>
+    </el-steps>  
+  </div>
+    <el-divider><i class="el-icon-star-off"></i><i class="el-icon-star-off"></i><i class="el-icon-star-off"></i></el-divider>
   <div class="questions">
     <h1>请填写以下信息</h1>
-
     <el-form :model="infoForm" :rules="rules" ref="infoForm" label-width="100px" class="demo-infoForm">
       <el-form-item label="姓名" prop="name">
         <el-input v-model="infoForm.name" style="width:300px"></el-input>
@@ -49,7 +58,7 @@
       </el-form-item>
     </el-form>
   </div>
-
+</div>
 </template>
 <script>
   /*import {AxiosInstance as axios} from "axios";*/

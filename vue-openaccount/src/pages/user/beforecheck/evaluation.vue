@@ -7,6 +7,15 @@
             <el-breadcrumb-item>风险测评</el-breadcrumb-item>
         </el-breadcrumb>
     </div>
+  <div style="margin:0 auto;margin-top:50px;margin-bottom: 50px; width:70%;text-align: left;">
+    <el-steps :active="1" finish-status="success">
+      <el-step title="填写用户信息"></el-step>
+      <el-step title="风险测评"></el-step>
+      <el-step title="选择营业网点"></el-step>
+      <el-step title="审核"></el-step>
+    </el-steps>  
+  </div>
+    <el-divider><i class="el-icon-star-off"></i><i class="el-icon-star-off"></i><i class="el-icon-star-off"></i></el-divider>
     <div>
         <h2>投资者风险承受能力问卷（适用于自然人客户）</h2>
         <span style="color: #606266">客户姓名：{{userName}}   资金账号： {{account}}</span>

@@ -7,6 +7,15 @@
             <el-breadcrumb-item>营业网点选择</el-breadcrumb-item>
         </el-breadcrumb>
     </div>
+  <div style="margin:0 auto;margin-top:50px;margin-bottom: 50px; width:70%;text-align: left;">
+    <el-steps :active="2" finish-status="success" >
+      <el-step title="填写用户信息"></el-step>
+      <el-step title="风险测评"></el-step>
+      <el-step title="选择营业网点"></el-step>
+      <el-step title="审核"></el-step>
+    </el-steps>  
+  </div>
+    <el-divider><i class="el-icon-star-off"></i><i class="el-icon-star-off"></i><i class="el-icon-star-off"></i></el-divider>
         <div class="title"><h1>请选择您要加入的营业网点（可多选）：</h1></div>
         <div class="choose">
             <el-col :span="12">
