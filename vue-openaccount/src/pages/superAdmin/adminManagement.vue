@@ -1,24 +1,10 @@
 <template>
-<div>
+
+  <div>
     <div class="search-bar">
       <div class="block">
-      <span class="demonstration">所属机构</span>
-      <el-cascader
-        v-model="institute"
-        :options="ins_ops"
-        @change="handleChange"></el-cascader>
-    </div>
-      <div class="block">
-      <span class="demonstration">所属营业网点</span>
-      <el-cascader
-        v-model="stores"
-        :options="str_ops"
-        @change="handleChange"></el-cascader>
-    </div>
-      <div class="block">
-      <el-input v-model="input" placeholder="用户姓名"></el-input>
-    </div>
-      <!--<el-button type="primary" icon="el-icon-search">搜索</el-button>-->
+        <el-input v-model="input" placeholder="管理员名称"></el-input>
+      </div>
       <el-button icon="el-icon-search" circle></el-button>
 
       <el-popover
@@ -26,7 +12,7 @@
         v-model="visible1">
         <div style="text-align:center; width: 300px">
           <el-form ref="form" :model="addForm" label-width="100px" size="mini">
-            <el-form-item label="审核员名称">
+            <el-form-item label="管理员名称">
               <el-input v-model="addForm.name"></el-input>
             </el-form-item>
             <el-form-item label="账号">
@@ -62,21 +48,21 @@
         </div>
         <el-button slot="reference" type="primary" size="small" style="margin-left: 50px">添加</el-button>
       </el-popover>
+    </div>
 
-  </div>
-    <div class="results">
-      <el-table
+  <div class="results">
+    <el-table
       :data="tableData"
       style="width: 100%">
       <el-table-column
-        prop="reviewer_id"
+        prop="admin_id"
         width="100px"
-        label="审核员id">
+        label="管理员id">
       </el-table-column>
       <el-table-column
         prop="name"
         width="100px"
-        label="审核员名称">
+        label="管理员名称">
       </el-table-column>
       <el-table-column
         prop="account"
@@ -87,12 +73,8 @@
         label="密码">
       </el-table-column>
       <el-table-column
-        prop="inst"
-        label="负责机构">
-      </el-table-column>
-      <el-table-column
-        prop="str"
-        label="负责营业网点">
+        prop="authority"
+        label="权限">
       </el-table-column>
       <el-table-column
         label="操作"
@@ -104,7 +86,7 @@
             v-model="visible2">
             <div style="text-align:center; width: 300px">
               <el-form ref="form" :model="modifyForm" label-width="100px" size="mini">
-                <el-form-item label="审核员名称">
+                <el-form-item label="管理员名称">
                   <el-input v-model="modifyForm.name"></el-input>
                 </el-form-item>
                 <el-form-item label="账号">
@@ -117,19 +99,19 @@
                 <el-form-item label="权限" prop="authority">
                   <el-tabs v-model="modifyForm.inst" @tab-click="handleClick">
                     <el-tab-pane label="上海" name="first">
-                      <el-radio-group v-model="modifyForm.str" >
-                        <el-radio label="营业网点1"></el-radio>
-                        <el-radio label="营业网点2"></el-radio>
-                        <el-radio label="营业网点3"></el-radio>
-                        <el-radio label="营业网点4"></el-radio>
-                      </el-radio-group>
+                      <el-checkbox-group v-model="modifyForm.str">
+                        <el-checkbox label="营业网点1"></el-checkbox>
+                        <el-checkbox label="营业网点2"></el-checkbox>
+                        <el-checkbox label="营业网点3"></el-checkbox>
+                        <el-checkbox label="营业网点4"></el-checkbox>
+                      </el-checkbox-group>
                     </el-tab-pane>
                     <el-tab-pane label="深圳" name="second">
-                      <el-radio-group v-model="modifyForm.str" >
-                        <el-radio label="营业网点1"></el-radio>
-                        <el-radio label="营业网点2"></el-radio>
-                        <el-radio label="营业网点3"></el-radio>
-                      </el-radio-group>
+                      <el-checkbox-group v-model="modifyForm.str">
+                        <el-checkbox label="营业网点1"></el-checkbox>
+                        <el-checkbox label="营业网点2"></el-checkbox>
+                        <el-checkbox label="营业网点3"></el-checkbox>
+                      </el-checkbox-group>
                     </el-tab-pane>
                   </el-tabs>
                 </el-form-item>
@@ -144,52 +126,29 @@
         </template>
       </el-table-column>
     </el-table>
-    </div>
   </div>
+
+  </div>
+
+
+
+
+
 </template>
-
-
 <script>
     export default {
-      data() {
-        return {
+      data(){
+        return{
+          input:'',
           visible1: false,
           visible2: false,
-          institute: [],
-          ins_ops: [{
-            institute: 'shanghai',
-            label: '上海',
-          },{
-            institute: 'shenzhen',
-            label: '深圳',
-          } ],
-
-          stores: [],
-          str_ops:[{
-            stores:'wangdian1',
-            label:'营业网点1'
-          },{
-            stores:'wangdian2',
-            label:'营业网点2'
-          }],
-
-          input:'',
-
-          tableData:[{
-            reviewer_id:'1',
-            name:'whatever',
-            account:'123466876887',
-            password:'243546453',
-            inst:'上海',
-            str:'营业网点1',
-          }],
 
           modifyForm:{
             name:'',
             account:'',
             password:'',
-            inst:'',
-            str:''
+            inst:[''],
+            str:[''],
           },
 
           addForm:{
@@ -199,37 +158,18 @@
             inst:'',
             str:''
           },
-
-          ins_radio:'上海',
-          str_radio1:'营业网点1',
-          str_radio2:'营业网点1',
-        };
-      },
-      methods: {
-        handleChange(value) {
-          console.log(value);
-        },
-        onSubmit() {
-          console.log('submit!');
-        },
-        handleClick(tab, event) {
-          console.log(tab, event);
         }
       }
     }
 </script>
-
-
-
 <style>
   .search-bar{
+    /*position: relative;*/
     float:left;
   }
   .block{
     display: inline-block;
     padding: 10px;
   }
-  .results{
-    /*position: relative;*/
-  }
+
 </style>

@@ -8,11 +8,11 @@ import ElementUI from 'element-ui'
 import './assets/theme/element-#2B6AAB/index.css'
 
 import axios from 'axios'
-Vue.prototype.$axios = axios
+Vue.prototype.$axios = axios;
 
 
-Vue.use(ElementUI)
-Vue.config.productionTip = false
+Vue.use(ElementUI);
+Vue.config.productionTip = false;
 
 /* eslint-disable no-new */
 new Vue({
