@@ -48,8 +48,8 @@
         <!-- <el-input v-model="infoForm.address" class="wd400"></!-->
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="submitForm('infoForm')">提交</el-button>
-        <el-button @click="$router.push({path:'/login/warning'})">返回</el-button>
+        <el-button icon="el-icon-caret-left" round @click="$router.push({path:'/login/warning'})">上一步</el-button>
+        <el-button type="primary" round @click="submitForm('infoForm')">下一步<i class="el-icon-caret-right icon"></i></el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -158,5 +158,8 @@ import area from '../../../assets/js/area.js'
 }
 .wd400{
   width: 300px;
+}
+.icon{
+    margin-left:6px;
 }
 </style>
