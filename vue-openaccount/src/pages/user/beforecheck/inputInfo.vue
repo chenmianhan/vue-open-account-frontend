@@ -37,15 +37,15 @@
       </el-form-item>
 
       <el-form-item label="家庭住址" prop="address">
-        <!-- <el-cascader
+        <el-cascader
           :options="address"
           change-on-select
           v-model="infoForm.address"
           expand-trigger="hover"
           @change="handleChange" 
           class="wd400">
-        </el-cascader> -->
-        <el-input v-model="infoForm.address" class="wd400"></el-input>
+        </el-cascader>
+        <!-- <el-input v-model="infoForm.address" class="wd400"></!-->
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="submitForm('infoForm')">提交</el-button>
@@ -56,6 +56,7 @@
 </div>
 </template>
 <script>
+import area from '../../../assets/js/area.js'
   /*import {AxiosInstance as axios} from "axios";*/
 
     export default {
@@ -82,12 +83,14 @@
             }      
           };
         return {
+          address: areajson,
           infoForm: {
             name: '',
             gender: '',
             birthday:'',
             contact: '',
             idNum: '',
+            address: ''
           },
           rules: {
             name: [
