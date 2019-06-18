@@ -33,7 +33,7 @@ export default new Router({
         name: '风险测评'
       },{
         path: '/user/inputInfo',
-        component: resolve => require(['../pages/user/login/inputInfo.vue'], resolve),
+        component: resolve => require(['../pages/user/beforecheck/inputInfo.vue'], resolve),
         name: '填写资料'
       }]
     }, {
