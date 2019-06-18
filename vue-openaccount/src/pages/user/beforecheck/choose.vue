@@ -40,9 +40,11 @@
             </el-card>        
             </el-col>
             <!-- <span>{{shanghaiNetpoint}}</span><span>{{shenzhenNetpoint}}</span> -->
+            <span>{{shanghaiNetpoint}}</span>
+            <span>{{shenzhenNetpoint}}</span>
             <el-row>
                 <el-button icon="el-icon-caret-left" round @click="$router.push({path:'/user/evaluation'})">上一步</el-button>
-                <el-button type="primary" round @click="$router.push({path:'/user/loading'})">下一步<i class="el-icon-caret-right icon"></i></el-button>
+                <el-button type="success" round @click="handleSubmit">提  交<i class="el-icon-success icon"></i></el-button>
             </el-row>
         </div>
     </div>
@@ -81,6 +83,35 @@ export default {
             let checkedSZ = value.length;
             this.szCheckAll = checkedSZ == this.szNet.length;
             this.szIsIndeterminate = checkedSZ > 0 && checkedSZ < this.szNet.length;
+        },
+        handleSubmit(){
+            this.$confirm("提交至审核员后不可修改，确认提交吗？", "提示", {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                const postData = {
+                    shanghaiNetpoint: this.shanghaiNetpoint,
+                    shenzhenNetpoint: this.shenzhenNetpoint,
+                    userId: localStorage.getItem('ms_username')
+                };
+
+                this.$axios.post('', postData).then(function(response){
+                    // 成功的话
+                    this.$message({
+                        type: 'success',
+                        message: '提交成功！已提交给审核员'
+                    });
+                    this.$router.push({path: '/user/loading'});
+                    })
+                    // 否则
+                    this.$message.error('提交失败');
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消提交'
+                });
+            });
         }
     }
 }
@@ -102,7 +133,7 @@ export default {
         margin: 80px;
     }
     .icon{
-        margin-left:3px;
+        margin-left:6px;
     }
     .bread{
         margin: 10px;

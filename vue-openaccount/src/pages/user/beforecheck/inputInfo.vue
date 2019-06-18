@@ -5,7 +5,7 @@
 
     <el-form :model="infoForm" :rules="rules" ref="infoForm" label-width="100px" class="demo-infoForm">
       <el-form-item label="姓名" prop="name">
-        <el-input v-model="infoForm.name"></el-input>
+        <el-input v-model="infoForm.name" style="width:300px"></el-input>
       </el-form-item>
 
       <el-form-item label="性别" prop="gender" >
@@ -15,25 +15,37 @@
         </el-radio-group>
       </el-form-item>
 
-      <el-form-item label="生日" required>
-        <el-col :span="11">
-          <el-form-item prop="birthday">
-            <el-date-picker type="date" placeholder="选择日期" v-model="infoForm.birthday" style="width: 100%;"></el-date-picker>
-          </el-form-item>
-        </el-col>
+      <el-form-item label="生日" required prop="birthday">
+        <!-- <el-col :span="11">
+          <el-form-item > -->
+            <el-date-picker type="date" placeholder="选择日期" v-model="infoForm.birthday" style="width: 300px;"></el-date-picker>
+          <!-- </el-form-item>
+        </el-col> -->
       </el-form-item>
 
       <el-form-item label="手机号" prop="contact">
-        <el-input v-model="infoForm.contact"></el-input>
+        <el-input v-model="infoForm.contact" class="wd400"></el-input>
       </el-form-item>
 
       <el-form-item label="身份证号" prop="idNum">
-        <el-input v-model="infoForm.idNum"></el-input>
+        <el-input v-model="infoForm.idNum" class="wd400"></el-input>
       </el-form-item>
 
+      <el-form-item label="家庭住址" prop="address">
+        <!-- <el-cascader
+          :options="address"
+          change-on-select
+          v-model="infoForm.address"
+          expand-trigger="hover"
+          @change="handleChange" 
+          class="wd400">
+        </el-cascader> -->
+        <el-input v-model="infoForm.address" class="wd400"></el-input>
+      </el-form-item>
+      <span>{{infoForm.address}}</span>
       <el-form-item>
-        <el-button type="primary" @click="submitForm('infoForm')">提交</el-button>
-        <el-button @click="backToWarning">返回</el-button>
+        <el-button icon="el-icon-caret-left" round @click="$router.push({path:'/login/warning'})">上一步</el-button>
+        <el-button type="primary" @click="submitForm('infoForm')" round>下一步<i class="el-icon-caret-right icon"></i></el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -41,9 +53,32 @@
 </template>
 <script>
   /*import {AxiosInstance as axios} from "axios";*/
+import area from '../../../assets/js/area.js'
 
     export default {
       data() {
+        var checkPhone = (rule, value, callback) => {
+          if (!value) {          
+            return callback(new Error('手机号不能为空'));        
+          } else {          
+            const reg = /^1[3|4|5|7|8][0-9]\d{8}$/          
+            console.log(reg.test(value));          
+            if (reg.test(value)) {            
+              callback();          
+            } else {            
+              return callback(new Error('请输入正确的手机号'));          
+            }        
+          }      
+        };
+        let validID=(rule,value,callback)=>{
+            if(value==''||value==undefined){
+                callback()
+            }else{
+                let reg=/^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/
+                if(!reg.test(value)){callback(new Error('身份证号码不正确'))}
+            }
+            
+        };
         return {
           infoForm: {
             name: '',
@@ -51,7 +86,9 @@
             birthday:'',
             contact: '',
             idNum: '',
+            address: ''
           },
+          address: areajson,
           rules: {
             name: [
               { required: true, message: '请输入姓名', trigger: 'blur' },
@@ -65,12 +102,15 @@
             ],
             contact: [
               { required: true, message: '请输入手机号', trigger: 'blur' },
-              { min: 11, max: 13, message: '手机号错误！', trigger: 'blur' }
+              { validator: checkPhone, message: '手机号错误！', trigger: 'blur' }
             ],
             idNum: [
               { required: true, message: '请输入身份证号', trigger: 'blur' },
-              { min: 18, max: 19, message: '身份证错误！', trigger: 'blur' }
+              { validator: validID, message: '身份证错误！', trigger: 'blur' }
             ],
+            address: [
+              {required: true, message: '请输入地址', trigger: 'blur'},
+            ]
           }
         };
       },
@@ -104,16 +144,16 @@
               console.log(error);
             });
         },
-        //回到上一界面风险提示
-        backToWarning(){
-          this.$router.push('/login/warning');
-        }
       }
     }
 </script>
 <style>
 .questions{
   width:40%;
-  float:left;
+  /* float:left; */
+  margin: 0 auto;
+}
+.wd400{
+  width: 300px;
 }
 </style>

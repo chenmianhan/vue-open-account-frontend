@@ -32,7 +32,7 @@
           <!--我已知悉风险-->
           <el-checkbox v-model="checked">我已知悉风险</el-checkbox>
           <!--下一步按钮-->
-          <el-button type="primary" round @click='nextStepToInfo'>下一步</el-button>
+          <el-button type="primary" round @click='nextStepToInfo' :disabled="!checked">下一步<i class="el-icon-caret-right icon"></i></el-button>
         </el-row>
       </el-footer>
       
@@ -50,7 +50,7 @@ let data = () => {
     imagesbox:[{id:0, idView: require("../../../assets/image/hint1.jpg")},
     {id:1, idView: require("../../../assets/image/hint2.jpg")},
     {id:2, idView: require("../../../assets/image/hint3.jpg")}],
-    checked: true
+    checked: false
 
   }
 }
@@ -146,4 +146,8 @@ $header-height: 60px;
         max-height: 100%;
       }
     }
+    .icon{
+        margin-left:3px;
+    }
+
 </style>

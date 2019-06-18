@@ -19,7 +19,8 @@
             <p>本公司建议：当您的各项状况发生重大变化时，需对您所投资的产品及时进行重新审视，以确保您的投资决定与您可承受的投资风险程度等实际情况一致。</p>
             <p>本公司在此承诺，对于您在本问卷中所提供的一切信息，本公司将严格按照法律法规要求承担保密义务。除法律法规规定的有权机关依法定程序进行查询以外，本公司保证不会将涉及您的任何信息提供、泄露给任何第三方，或者将相关信息用于违法、不当用途。</p>
         </div>
-        <div v-for="(block, index) in test" :key="index" class="test">
+        <el-divider><i class="el-icon-edit"></i></el-divider>
+        <!-- <div v-for="(block, index) in test" :key="index" class="test">
             <h3>{{block.title}}</h3>
             <div v-for="(question, subIndex) in block.content" :key="subIndex">
                 <p>{{subIndex + 1}}. {{question.subtitle}}</p>
@@ -29,6 +30,23 @@
                         {{choice}}
                         </el-radio>
                     </el-radio-group>
+                </ul>
+            </div>
+        </div> -->
+        <div v-for="question in test" :key="question.RE_id" class="test">
+            <p>{{question.RE_id + 1}}. {{question.content}}<span v-if="question.isRadio">（单选）</span><span v-else>（多选）</span></p>
+            <div v-if="question.isRadio">
+            <ul v-for="(option, i) in question.options" :key="i">
+                <el-radio-group v-model='answer[question.RE_id]'>
+                    <el-radio :label="i + 1">{{option}}</el-radio>
+                </el-radio-group>
+            </ul>
+            </div>
+            <div v-else>
+                <ul v-for="(option, i) in question.options" :key="i">
+                    <el-checkbox-group v-model="answer[question.RE_id]">
+                        <el-checkbox :label="i + 1">{{option}}</el-checkbox>
+                    </el-checkbox-group>
                 </ul>
             </div>
         </div>
@@ -55,7 +73,9 @@ export default {
             account: '资金账号',
             test: evaluateTest,
             answer: answer,
-            visible: false
+            visible: false,
+            grade: '保守型',
+            mark: 25
         }
     },
     methods:{
@@ -65,9 +85,28 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                this.$message({
-                    type: 'success',
-                    message: '提交成功！'
+                const postData = {
+                    answer: this.answer
+                }
+                this.$axios.get('/risk_evaluation/get_grade', postData).then(function(response){
+                    this.$message({
+                        type: 'success',
+                        message: '提交成功！'
+                    });
+                    this.grade = response.data.grade;
+                    this.mark = response.data.mark;
+                    localStorage.removeItem('answerTemp');
+                    this.$msgbox({
+                        title: '您的风险评级为' + this.grade,
+                        message: '分数：' + String(this.mark),
+                        type: 'info'
+                    });
+                }).catch(() => {
+                    this.$msgbox({
+                        title: '提交失败',
+                        message: '连接异常',
+                        type: 'error'
+                    });
                 });
             }).catch(() => {
                 this.$message({
@@ -77,10 +116,31 @@ export default {
             });
         },
         handleSave(){
+            localStorage.setItem('answerTemp', JSON.stringify(this.answer));
             this.$message({
                 type: 'success',
-                message: '已成功保存'
-            })
+                message: '已成功保存，请尽快答完问卷'
+            });
+        }
+    },
+    mounted(){
+        this.$axios.get('/risk_evaluation/get_questions').then(function(response) {
+            this.test = response.data;
+            this.answer = new Array();
+            for(var i = 0; i < test.length; i++){
+                answer[i] = new Array();
+            }
+        }).catch(() => {
+            this.$msgbox({
+                type: 'error',
+                title: '连接异常',
+                message:'获取题目失败'
+            });
+        });
+
+        // 获取答案
+        if(localStorage.getItem('answerTemp') != null){
+            this.answer = JSON.parse(localStorage.getItem('answerTemp'));
         }
     }
 }
