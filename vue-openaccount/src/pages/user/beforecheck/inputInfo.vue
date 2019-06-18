@@ -51,7 +51,6 @@
         </el-cascader> -->
         <el-input v-model="infoForm.address" class="wd400"></el-input>
       </el-form-item>
-      <span>{{infoForm.address}}</span>
       <el-form-item>
         <el-button icon="el-icon-caret-left" round @click="$router.push({path:'/login/warning'})">上一步</el-button>
         <el-button type="primary" @click="submitForm('infoForm')" round>下一步<i class="el-icon-caret-right icon"></i></el-button>
