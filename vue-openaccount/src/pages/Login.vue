@@ -2,7 +2,7 @@
     <div class="login-wrap">
         <div class="ms-login">
             <div class="ms-title">在线开户平台</div>
-            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px" class="ms-content">
+            <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="0px" class="ms-content">
                 <el-form-item prop="username">
                     <el-input v-model="ruleForm.username" placeholder="username">
                         <el-button slot="prepend" icon="el-icon-user"></el-button>
@@ -28,40 +28,146 @@
                 <el-button type="text" class="login-tips" @click="$router.push({path: '/user/home'})">点击这里看审核通过界面</el-button>
             </el-form>
         </div>
+        <!--所有的警告弹窗-->
+        <transition name="logInAlert" v-if="alertTitle != '' ">
+            <div class="login-btn">
+                <div class="alert alert-danger" role="alert"><p>{{alertTitle}}</p></div>
+            </div>
+        </transition>
     </div>
 </template>
 
 <script>
+    /*import {AxiosInstance as axios} from "axios";*/
     export default {
         data: function(){
+            //校验用户输入数据格式是否正确
+            var validateId = (rule, value, callback) => {
+                if (!value)
+                    return callback(new Error('请输入用户ID或手机号'));
+                else{
+                    if (this.ruleForm.role == 1){//用户检查手机号合法性
+                        validatePhone(rule, value, callback);
+                    }else{//非用户检查账号合法性
+                        validateAdminId(rule, value, callback);
+                    }
+                }
+            };
+            var validatePhone = (rule, value, callback) => {
+                //验证手机号格式是否正确
+                const reg = /^1[3|4|5|7|8][0-9]\d{8}$/;
+                console.log(reg.test(value));
+                if (reg.test(value)) {//格式正确
+                    callback();
+                } else {//格式错误
+                    return callback(new Error('请输入格式正确的手机号（长度11位）'));
+                }
+            };
+            var validateAdminId = (rule, value, callback) => {
+                //验证非用户账号格式是否正确
+                const reg = /^[A-Za-z0-9]{1,12}$/;
+                console.log(reg.test(value));
+                if (reg.test(value)){
+                    callback();
+                }else{
+                    return callback(new Error('请输入格式正确的ID（数字或字母且长度不超过12位）'))
+                }
+                callback();
+            };
+            var validatePass = (rule, value, callback) => {
+                //验证密码格式是否正确
+                if (!value)
+                    return callback(new Error('请输入密码'));
+                else if (value.length > 12)
+                    return callback(new Error('长度不超过12位'))
+                else
+                    callback();
+            };
             return {
+                //表单格式
                 ruleForm: {
-                    username: 'admin',
-                    password: '123123',
-                    role: 1
+                    username: '',//用户id||手机号
+                    password: '',//密码
+                    alertTitle:'',//警告弹窗标题
+                    //showAlert: false,//是否显示警告弹窗
+                    //isSignup: false,//是否已经注册；是否为旧用户
+                    role: 1//角色标签（默认为用户）：用户1；审核员2；管理员3；超管4
                 },
-                rules: {
+                rules: {//表单验证规则，验证用户输入格式是否正确
                     username: [
-                        { required: true, message: '请输入用户名', trigger: 'blur' }
+                        { validator: validateId, trigger: 'blur'}    
                     ],
                     password: [
-                        { required: true, message: '请输入密码', trigger: 'blur' }
+                        { validator: validatePass, trigger: 'blur'}
+                    ],
+                    role: [
+                        { required: !null, message: '请选择您的账号类别', trigger: 'blur'}
                     ]
                 }
             }
         },
         methods: {
+            //表单验证，主要验证输入格式是否正确；验证正确后向后端传输数据
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
+                        /*
+                        //前->后端传输
+                        const postData = {//打包传输数据
+                            username: this.ruleForm.username,
+                            password: this.ruleForm.password,
+                            role: this.ruleForm.role - 1
+                        }
+                        //在这里给后台传输数据
+                        this.$axios.post('/login',postData, {
+                            headers: { 'content-type': 'application/x-www-form-urlencoded' },
+                        }).then(function(response){
+                            //成功登录后根据不同的身份标签跳转页面
+                            if (response.data.code == 100 || 102){
+                                switch(postData.role){
+                                    case 1://用户成功登录
+                                        if (response.data.code == 102)//新
+                                            this.$router.push('/login/warning');
+                                        else//旧
+                                            this.$router.push('/user/home');
+                                        break;
+                                    case 2://审核员成功登录
+                                        this.$router.push('');
+                                        break;
+                                    case 3://管理员成功登录
+                                        this.$router.push('/admin/home');
+                                        break;
+                                    case 4://超管成功登录
+                                        this.$router.push('');
+                                }
+                            }
+                            //登录失败密码或用户名错误
+                            else if (response.data.code == 101)
+                                this.alertTitle = '登录失败：用户名或密码错误！';
+                        }).catch(function(error){
+                            console.log(error);
+                        })*/
+                        //将用户名缓存
                         localStorage.setItem('ms_username',this.ruleForm.username);
-                        this.$router.push('/login/warning');
+                        this.$router.push('/login/warning');//暂时直接跳转风险提示界面
+                        console.log('submit!');
                     } else {
                         console.log('error submit!!');
                         return false;
                     }
                 });
             }
+        },
+        //登录即注册提示
+        mounted: function(){
+            if(this.notifyInstance) {
+                this.notifyInstance.close();
+            }
+            this.notifyInstance=this.$notify({
+                title: '提示',
+                message: '初次登录用户会自动创建账号，账号名为手机号，初始密码为用户输入密码！',
+                type: 'info'
+            });
         }
     }
 </script>

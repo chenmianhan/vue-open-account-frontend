@@ -18,6 +18,7 @@
       </el-header>
       <!--中间的卡片式幻灯片-->
       <el-main class="main">
+
         <div align="center">
           <el-carousel :interval="4000" type="card" height="400px">
             <el-carousel-item class="el-carousel__item" v-for="item in imagesbox" :key="item.id">
@@ -46,10 +47,11 @@ let data = () => {
     collapsed: false,
     systemName: '金证开户平台',
     userName: '新用户',
-    imagesbox:[{id:0, idView: require("../assets/image/hint1.jpg")},
-    {id:1, idView: require("../assets/image/hint2.jpg")},
-    {id:2, idView: require("../assets/image/hint3.jpg")}],
-    checked: true
+    imagesbox:[{id:0, idView: require("../../../assets/image/hint1.jpg")},
+    {id:1, idView: require("../../../assets/image/hint2.jpg")},
+    {id:2, idView: require("../../../assets/image/hint3.jpg")}],
+    checked: false
+
   }
 }
 
@@ -65,8 +67,7 @@ export default {
     },
     //下一步按钮跳转资料填写界面
     nextStepToInfo(){
-      //待填写，填写资料填写界面的路径
-      this.$router.push('/user/evaluation');
+      this.$router.push('/user/inputInfo');
     }
   },
   mounted: function() {
@@ -148,4 +149,5 @@ $header-height: 60px;
     .icon{
         margin-left:3px;
     }
+
 </style>
