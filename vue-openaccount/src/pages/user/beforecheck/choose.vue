@@ -72,24 +72,6 @@ export default {
         }
     },
     methods: {
-        handleSH(val){
-            this.shanghaiNetpoint = val ? this.shNet : [];
-            this.shIsIndeterminate = false;
-        },
-        handleCheckSH(value){
-            let checkedSH = value.length;
-            this.shCheckAll = checkedSH == this.shNet.length;
-            this.shIsIndeterminate = checkedSH > 0 && checkedSH < this.shNet.length;
-        },
-        handleSZ(val){
-            this.shenzhenNetpoint = val ? this.szNet : [];
-            this.szIsIndeterminate = false;
-        },
-        handleCheckSZ(value){
-            let checkedSZ = value.length;
-            this.szCheckAll = checkedSZ == this.szNet.length;
-            this.szIsIndeterminate = checkedSZ > 0 && checkedSZ < this.szNet.length;
-        },
         handleSubmit(){
             this.$confirm("提交至审核员后不可修改，确认提交吗？", "提示", {
                 confirmButtonText: '确定',
@@ -119,6 +101,12 @@ export default {
                 });
             });
         }
+    },
+    mounted(){
+        var that = this;
+        this.$axios.get('').then(function(response){
+            
+        })
     }
 }
 </script>

@@ -103,18 +103,21 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                const postData = {
-                    answer: this.answer
-                }
-                this.$axios.get('/api/risk_evaluation/get_grade', postData).then(function(response){
+                var that = this;
+                let postData = {
+                    answer: that.answer
+                };
+                console.log(postData);
+                this.$axios.post('/api/risk_evaluation/get_grade', postData).then(function(response){
+                    console.log('dfgxdfg');
                     this.haveSubmit = true;
+                    localStorage.removeItem('answerTemp');
                     this.$message({
                         type: 'success',
                         message: '提交成功！'
                     });
                     this.grade = response.data.grade;
                     this.mark = response.data.mark;
-                    localStorage.removeItem('answerTemp');
                     this.dialogVisible = true;
                 }).catch(() => {
                     this.$msgbox({
@@ -142,7 +145,6 @@ export default {
     mounted(){
         var that = this;
         this.$axios.get('/api/risk_evaluation/get_questions').then(function(response) {
-            console.log('sdf');
             // that.test = response.data;
             that.test = evaluateTest;
             // 获取答案
@@ -150,32 +152,17 @@ export default {
                 that.answer = JSON.parse(localStorage.getItem('answerTemp'));
             }else{            
                 that.answer = new Array();
+                for(var i = 0; i < that.test.length; i++){
+                    that.answer[i] = new Array();
+                }
             }
-            for(var i = 0; i < that.test.length; i++){
-                that.answer[i] = new Array();
-            }
-            console.log(that.answer);
         }).catch(() => {
-            console.log(error);
             that.$msgbox({
                 type: 'error',
                 title: '连接异常',
                 message:'获取题目失败'
             });
         });
-        // this.$ajax({
-        //     method: 'get',
-        //     url: 'http://47.106.126.84:10086/risk_evaluation/get_questions',
-        // }).then(function(response){
-        //     console.log("sdf");
-        // }).catch(function(error){
-        //     console.log(error);
-        //     that.$msgbox({
-        //         type: 'error',
-        //         title: '连接异常',
-        //         message:'获取题目失败'
-        //     });
-        // })
     }
 }
 </script>
