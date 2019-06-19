@@ -16,20 +16,20 @@
     </el-steps>  
   </div>
     <el-divider><i class="el-icon-star-off"></i><i class="el-icon-star-off"></i><i class="el-icon-star-off"></i></el-divider>
-        <div class="title"><h1>请选择您要加入的营业网点（可多选）：</h1></div>
+        <div class="title"><h1 style="font-size:20px;">请选择您要加入的营业网点（可多选）：</h1></div>
+        <el-link type='primary' @click="Netpoint=[]">重新选择</el-link>
         <div class="choose">
             <el-col :span="12">
             <el-card class="box-card">
                 <div slot="header" class="clearfix">
                     <span>上海证券交易所</span>
-                    <el-checkbox :indeterminate="shIsIndeterminate" v-model="shCheckAll" @change="handleSH" style="float: right; padding: 3px 0" type="text">全选</el-checkbox>
                 </div>
                 <div>
-                    <el-checkbox-group v-model="shanghaiNetpoint" v-for="(item, index) in shNet" :key="index" @change="handleCheckSH">
-                        <el-col :span="12" style="margin-bottom:15px;">
-                        <el-checkbox :label="item" border></el-checkbox>
+                    <el-radio-group v-model="Netpoint[0]" v-for="(item, index) in shNet" :key="index">
+                        <el-col :span="12" style="margin:15px;">
+                            <el-radio :label="item" border></el-radio>
                         </el-col>
-                    </el-checkbox-group>
+                    </el-radio-group>
                 </div>
             </el-card>    
             </el-col>
@@ -37,23 +37,21 @@
             <el-card class="box-card">
                 <div slot="header" class="clearfix">
                     <span>深圳证券交易所</span>
-                    <el-checkbox :indeterminate="szIsIndeterminate" v-model="szCheckAll" @change="handleSZ" style="float: right; padding: 3px 0" type="text">全选</el-checkbox>
+                    <!-- <el-checkbox :indeterminate="szIsIndeterminate" v-model="szCheckAll" @change="handleSZ" style="float: right; padding: 3px 0" type="text">全选</el-checkbox> -->
                 </div>
                 <div>
-                    <el-checkbox-group v-model="shenzhenNetpoint" v-for="(item, index) in szNet" :key="index" @change="handleCheckSZ">
-                        <el-col :span="12" style="margin-bottom:15px;">
-                        <el-checkbox :label="item" border></el-checkbox>
+                    <el-radio-group v-model="Netpoint[1]" v-for="(item, index) in szNet" :key="index">
+                        <el-col :span="12" style="margin:15px;">
+                            <el-radio :label="item" border></el-radio>
                         </el-col>
-                    </el-checkbox-group>
+                    </el-radio-group>
                 </div>
             </el-card>        
             </el-col>
-            <!-- <span>{{shanghaiNetpoint}}</span><span>{{shenzhenNetpoint}}</span> -->
-            <span>{{shanghaiNetpoint}}</span>
-            <span>{{shenzhenNetpoint}}</span>
+            <span>{{Netpoint}}</span>
             <el-row>
                 <el-button icon="el-icon-caret-left" round @click="$router.push({path:'/user/evaluation'})">上一步</el-button>
-                <el-button type="success" round @click="handleSubmit">提  交<i class="el-icon-success icon"></i></el-button>
+                <el-button type="success" round @click="handleSubmit" :disabled="Netpoint.length==0">提  交<i class="el-icon-success icon"></i></el-button>
             </el-row>
         </div>
     </div>
@@ -64,12 +62,11 @@ import Net from '../../../assets/js/netName';
 export default {
     data(){
         return{
-            shIsIndeterminate: true,
-            shCheckAll: false,
-            szIsIndeterminate: true,
-            szCheckAll: false,
-            shanghaiNetpoint: [],
-            shenzhenNetpoint: [],
+            // shIsIndeterminate: true,
+            // shCheckAll: false,
+            // szIsIndeterminate: true,
+            // szCheckAll: false,
+            Netpoint: [],
             shNet: shNet,
             szNet: szNet
         }

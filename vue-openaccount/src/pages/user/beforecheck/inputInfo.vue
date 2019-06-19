@@ -42,7 +42,6 @@
           change-on-select
           v-model="infoForm.address"
           expand-trigger="hover"
-          @change="handleChange" 
           class="wd400">
         </el-cascader>
         <!-- <el-input v-model="infoForm.address" class="wd400"></!-->
@@ -98,10 +97,10 @@ import area from '../../../assets/js/area.js'
               { min: 2, max: 6, message: '长度在 2 到 6 个字符', trigger: 'blur' }
             ],
             gender: [
-              { required: true, message: '请选择性别', trigger: 'change' }
+              { required: true, message: '请选择性别', trigger: 'blur' }
             ],
             birthday: [
-              { type: 'date', required: true, message: '请选择生日', trigger: 'change' }
+              { type: 'date', required: true, message: '请选择生日', trigger: 'blur' }
             ],
             contact: [
               { required: true, message: '请输入手机号', trigger: 'blur' },
