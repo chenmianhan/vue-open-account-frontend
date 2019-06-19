@@ -135,10 +135,10 @@
                             console.log("2");
                             console.log(response);
                             //成功登录后根据不同的身份标签跳转页面
-                            if (response.data.code == 100 || 102){
+                            if (response.data.code == '100' || '102'){
                                 switch(postData.role){
                                     case 1://用户成功登录
-                                        if (response.data.code == 102)//新
+                                        if (response.data.code == '102')//新
                                             this.$router.push('/login/warning');
                                         else//旧
                                             this.$router.push('/user/home');
@@ -154,7 +154,7 @@
                                 }
                             }
                             //登录失败密码或用户名错误
-                            else if (response.data.code == 101)
+                            else if (response.data.code == '101')
                                 this.alertTitle = '登录失败：用户名或密码错误！';
                         }).catch(function(error){
                             console.log(error);
