@@ -60,14 +60,21 @@
             </div>
         </div>
     </div>
+    <!-- <span>{{answer}}</span> -->
+    <el-dialog title='您的风险评级为' :visible.sync='dialogVisible' width="30%" size='mini'>
+        <div style="margin: 0 auto;font-size:25px;background-color:#E4E7ED;width:50%;border-radius:7px;">{{grade}}</div>
+        <span style="font-size:15px;line-height:60px">得分为{{mark}}分</span>
+        <div style="font=size:12px;color:#909399;"><span>对测评结果不满意？可以</span>
+        <el-link type="primary" @click="haveSubmit=false;dialogVisible = false;">重新测评</el-link></div>
+    </el-dialog>
     <div style="height: 100px;">
-        <el-button size="medium" type='success' @click="handleSave">保 存</el-button>
-        <el-button size="medium" type='danger' @click="handleSubmit">提 交</el-button>
+        <el-button size="medium" type='success' :disabled="haveSubmit" @click="handleSave">保 存</el-button>
+        <el-button size="medium" type='danger' :disabled="haveSubmit" @click="handleSubmit">提 交</el-button>
     </div>
     <div id="footer">
         <el-row>
             <el-button icon="el-icon-caret-left" round @click="$router.push({path:'/user/inputInfo'})">上一步</el-button>
-            <el-button type="primary" round @click="$router.push({path:'/user/choose'})">下一步<i class="el-icon-caret-right icon"></i></el-button>
+            <el-button type="primary" :disabled="!haveSubmit" round @click="$router.push({path:'/user/choose'})">下一步<i class="el-icon-caret-right icon"></i></el-button>
         </el-row>
     </div>
     </div>
@@ -84,7 +91,9 @@ export default {
             answer: answer,
             visible: false,
             grade: '保守型',
-            mark: 25
+            mark: 25,
+            dialogVisible: false,
+            haveSubmit: false
         }
     },
     methods:{
@@ -98,6 +107,7 @@ export default {
                     answer: this.answer
                 }
                 this.$axios.get('/risk_evaluation/get_grade', postData).then(function(response){
+                    this.haveSubmit = true;
                     this.$message({
                         type: 'success',
                         message: '提交成功！'
@@ -105,11 +115,7 @@ export default {
                     this.grade = response.data.grade;
                     this.mark = response.data.mark;
                     localStorage.removeItem('answerTemp');
-                    this.$msgbox({
-                        title: '您的风险评级为' + this.grade,
-                        message: '分数：' + String(this.mark),
-                        type: 'info'
-                    });
+                    this.dialogVisible = true;
                 }).catch(() => {
                     this.$msgbox({
                         title: '提交失败',
