@@ -8,9 +8,14 @@ import ElementUI from 'element-ui'
 import './assets/theme/element-#2B6AAB/index.css'
 
 import axios from 'axios'
+
 import qs from 'qs'
+
+Vue.prototype.$Qs = qs;
+
 Vue.prototype.$axios = axios;
-Vue.prototype.$qs = qs;
+// Vue.prototype.$ajax = axios;
+// Vue.prototype.$http = axios;
 
 
 Vue.use(ElementUI);
@@ -20,6 +25,7 @@ Vue.config.productionTip = false;
 new Vue({
   el: '#app',
   router,
+  axios,
   components: { App },
   template: '<App/>'
 })

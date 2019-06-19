@@ -11,19 +11,20 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/api': {
-        // 测试环境
-        target: "http://47.106.126.84:10086/",  // 接口域名
-        changeOrigin: true,   //是否跨域
-        pathRewrite: {
-          '^/api': '/'  //需要rewrite重写
+      '/api':{
+        //测试环境
+        //target: 'http://192.168.137.1:8080',
+        target: 'http://47.106.126.84:10086/', //接口域名
+        changeOrigin: true, //是否跨域
+        pathRewrite:{
+          '^/api' :'/'
         }
       }
     },
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST
-    port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
+    port: 8086, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,
     errorOverlay: true,
     notifyOnErrors: true,
