@@ -134,7 +134,7 @@
         <el-button type="primary" round @click="submitForm('infoForm')">下一步<i class="el-icon-caret-right icon"></i></el-button>
       </el-form-item>
 
-      <!--<span>{{infoForm.front}}</span>-->
+      <!--<span>{{infoForm.contact_address}}</span>-->
 
     </el-form>
 
@@ -189,9 +189,6 @@ import area from '../../../assets/js/area.js'
             front: '',
             back: {name:'',url:''},
             head: {name:'',url:''},
-            uploadFront:'',
-            uploadBack:'',
-            uploadHead:'',
           },
 
           degree:[{
@@ -308,12 +305,13 @@ import area from '../../../assets/js/area.js'
           };
 
 
-
+          var that = this;
           this.$axios.post('/api/addAccountInfo',postData, {
             headers: { 'content-type': 'application/x-www-form-urlencoded' },
           })
             .then(function (response) {
             console.log(response);
+            that.$router.push('/user/evaluation');
           })
             .catch(function (error) {
               console.log(error);
