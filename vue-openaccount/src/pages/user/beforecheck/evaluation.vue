@@ -46,21 +46,22 @@
             <p>{{question.RE_id}}. {{question.content}}<span v-if="question.isRadio">（单选）</span><span v-else>（多选）</span></p>
             <div v-if="question.isRadio">
             <ul v-for="(option, i) in question.options" :key="i">
-                <el-radio-group v-model='answer[question.RE_id - 1]'>
-                    <el-radio :label="i + 1">{{option}}</el-radio>
-                </el-radio-group>
+                <el-checkbox-group :max='1' v-model='answer[question.RE_id - 1].answer'>
+                    <el-checkbox :label="i + 1">{{option}}{{answer[question.RE_id - 1].answer}}</el-checkbox>
+                </el-checkbox-group>
             </ul>
             </div>
             <div v-else>
                 <ul v-for="(option, i) in question.options" :key="i">
-                    <el-checkbox-group v-model="answer[question.RE_id - 1]">
-                        <el-checkbox :label="i + 1">{{option}}</el-checkbox>
+                    <el-checkbox-group v-model="answer[question.RE_id - 1].answer">
+                        <el-checkbox :label="i + 1">{{option}}{{answer[question.RE_id - 1].answer}}</el-checkbox>
                     </el-checkbox-group>
                 </ul>
             </div>
         </div>
     </div>
     <span>{{answer}}</span>
+    <span>{{answers}}</span>
     <el-dialog title='您的风险评级为' :visible.sync='dialogVisible' width="30%">
         <div style="margin: 0 auto;font-size:25px;background-color:#E4E7ED;width:50%;border-radius:7px;">{{grade}}</div>
         <span style="font-size:15px;line-height:60px">得分为{{mark}}分</span>
@@ -93,7 +94,8 @@ export default {
             grade: '保守型',
             mark: 25,
             dialogVisible: false,
-            haveSubmit: false
+            haveSubmit: false,
+            answers: answers
         }
     },
     methods:{
@@ -143,26 +145,30 @@ export default {
         }
     },
     mounted(){
+        localStorage.removeItem('answerTemp');
         var that = this;
-        this.$axios.get('/api/risk_evaluation/get_questions').then(function(response) {
+        // this.$axios.get('/api/risk_evaluation/get_questions').then(function(response) {
             // that.test = response.data;
             that.test = evaluateTest;
+            // that.answer = answers;
             // 获取答案
             if(localStorage.getItem('answerTemp') != null){
                 that.answer = JSON.parse(localStorage.getItem('answerTemp'));
             }else{            
                 that.answer = new Array();
                 for(var i = 0; i < that.test.length; i++){
-                    that.answer[i] = new Array();
+                    that.answer[i] = {};
+                    that.answer[i].RE_id = that.test[i].RE_id;
+                    that.answer[i].answer = [];
                 }
             }
-        }).catch(() => {
-            that.$msgbox({
-                type: 'error',
-                title: '连接异常',
-                message:'获取题目失败'
-            });
-        });
+        // }).catch(() => {
+            // that.$msgbox({
+            //     type: 'error',
+            //     title: '连接异常',
+            //     message:'获取题目失败'
+            // });
+        // });
     }
 }
 </script>

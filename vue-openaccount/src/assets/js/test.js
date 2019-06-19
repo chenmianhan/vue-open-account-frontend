@@ -57,4 +57,10 @@ evaluateTest = [{
     type: "投资知识", 
     isRadio: true 
 }]
-answer = [[],[]]
+answers = [{
+    RE_id: 1,
+    answer: []
+},{
+    RE_id: 2,
+    answer: []
+}]
