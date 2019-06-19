@@ -21,7 +21,7 @@
         <el-input v-model="infoForm.idNum" class="wd400"></el-input>
       </el-form-item>
 
-      <el-form-item label="证件住址" prop="address">
+      <el-form-item label="证件住址" prop="id_address">
         <el-cascader
           :options="address"
           change-on-select
@@ -34,12 +34,12 @@
       </el-form-item>
 
 
-      <el-form-item label="证件有效期" required prop="period">
-        <el-date-picker type="date" placeholder="选择日期" v-model="infoForm.begin" style="width: 300px;"></el-date-picker>
+      <el-form-item label="证件有效期" prop="dates">
+        <el-date-picker type="date" placeholder="选择日期" v-model="infoForm.begin" value-format="yyyy-MM-dd" style="width: 300px;"></el-date-picker>
         <br>
         <span>——至——</span>
         <br>
-        <el-date-picker type="date" placeholder="选择日期" v-model="infoForm.expire" style="width: 300px;"></el-date-picker>
+        <el-date-picker type="date" placeholder="选择日期" v-model="infoForm.expire" value-format="yyyy-MM-dd" style="width: 300px;"></el-date-picker>
       </el-form-item>
 
       <el-form-item label="发证机关" prop="agency">
@@ -47,7 +47,7 @@
       </el-form-item>
 
 
-    <el-form-item label="联系地址" prop="address">
+    <el-form-item label="联系地址" prop="contact_address">
       <el-cascader
         :options="address"
         change-on-select
@@ -60,7 +60,7 @@
     </el-form-item>
 
 
-      <el-form-item label="邮寄地址" prop="address">
+      <el-form-item label="邮寄地址" prop="mail_address">
         <el-cascader
           :options="address"
           change-on-select
@@ -91,26 +91,46 @@
         <el-input v-model="infoForm.email" class="wd400"></el-input>
       </el-form-item>
 
-      <h3>请上传身份证正反面照和个人大头照</h3>
-      <el-upload
-        class="upload-demo"
-        action="https://jsonplaceholder.typicode.com/posts/"
-        :on-preview="handlePreview"
-        :on-remove="handleRemove"
-        :before-remove="beforeRemove"
-        multiple
-        :limit="3"
-        :on-exceed="handleExceed"
-        :file-list="fileList">
-        <el-button size="small" type="primary">点击上传</el-button>
-        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-      </el-upload>
-
+      <el-form-item>
+        <h3>请上传身份证正反面照和个人大头照</h3>
+        <el-upload
+          class="upload-demo"
+          action="uploadFront"
+          :on-preview="handlePreview"
+          :on-remove="handleRemove"
+          :before-remove="beforeRemove"
+          :file-list="front"
+          list-type="picture">
+          <el-button size="small" type="primary">上传正面照</el-button>
+        </el-upload>
+        <el-upload
+          class="upload-demo"
+          action="uploadBack"
+          :on-preview="handlePreview"
+          :on-remove="handleRemove"
+          :before-remove="beforeRemove"
+          :file-list="back"
+          list-type="picture">
+          <el-button size="small" type="primary">上传反面照</el-button>
+        </el-upload>
+        <el-upload
+          class="upload-demo"
+          action="uploadHead"
+          :on-preview="handlePreview"
+          :on-remove="handleRemove"
+          :before-remove="beforeRemove"
+          :file-list="head"
+          list-type="picture">
+          <el-button size="small" type="primary">上传大头照</el-button>
+          <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+        </el-upload>
+      </el-form-item>
 
       <el-form-item>
         <el-button icon="el-icon-caret-left" round @click="$router.push({path:'/login/warning'})">上一步</el-button>
         <el-button type="primary" round @click="submitForm('infoForm')">下一步<i class="el-icon-caret-right icon"></i></el-button>
       </el-form-item>
+
 
     </el-form>
 
@@ -162,39 +182,45 @@ import area from '../../../assets/js/area.js'
             contact_address: '',
             job:'',
             degree:'',
+            front: [{name:'',url:''}],
+            back: [{name:'',url:''}],
+            head: [{name:'',url:''}],
+            uploadFront:'',
+            uploadBack:'',
+            uploadHead:'',
           },
 
           degree:[{
-            value: 'primary',
+            value: '小学',
             label: '小学',}
             ,{
-              value: 'junior',
+              value: '中学',
               label: '中学',}
             ,{
-            value: 'highschool',
+            value: '高中',
             label: '高中',}
             , {
-              value: 'uni',
+              value: '大学',
               label: '大学',}
             ,{
-              value: 'college',
+              value: '大专',
               label: '大专',
             }
           ],
 
-          fileList: [{name:'',url:''}],
+
 
           rules: {
             name: [
               { required: true, message: '请输入姓名', trigger: 'blur' },
               { min: 2, max: 6, message: '长度在 2 到 6 个字符', trigger: 'blur' }
             ],
-            begin: [
+           /* begin: [
               { type: 'date', required: true, message: '请选择证件有效期', trigger: 'change' }
             ],
             expire: [
               { type: 'date', required: true, message: '请选择证件有效期', trigger: 'change' }
-            ],
+            ],*/
             contact: [
               { required: true, message: '请输入手机号', trigger: 'blur' },
               { validator: checkPhone, trigger: 'blur' }
@@ -203,9 +229,6 @@ import area from '../../../assets/js/area.js'
               { required: true, message: '请输入身份证号', trigger: 'blur' },
               { validator:validID, trigger: 'blur' }
             ],
-            address: [
-              { required: true, message: '请输入家庭地址', trigger: 'blur' },
-            ]
           }
         };
       },
@@ -215,9 +238,6 @@ import area from '../../../assets/js/area.js'
         },
         handlePreview(file) {
           console.log(file);
-        },
-        handleExceed(files, fileList) {
-          this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
         },
         beforeRemove(file, fileList) {
           return this.$confirm(`确定移除 ${ file.name }？`);
@@ -235,19 +255,24 @@ import area from '../../../assets/js/area.js'
 
           const postData ={
             name: this.infoForm.name,
-            idNum: this.infoForm.idNum,
-            begin: this.infoForm.begin,
-            expire:this.infoForm.expire,
-            email: this.infoForm.email,
-            agency:this.infoForm.agency,
-            id_address: this.infoForm.id_address,
-            mail_address: this.infoForm.mail_address,
+            ID_number: this.infoForm.idNum,
+            ID_issuance_date: this.infoForm.begin,
+            ID_overdue_date:this.infoForm.expire,
+            ID_licensing_authority:this.infoForm.agency,
+            ID_address: this.infoForm.id_address,
+            postal_address: this.infoForm.mail_address,
             contact_address: this.infoForm.contact_address,
-            job:this.infoForm.job,
-            degree:this.infoForm.degree,
+            profession:this.infoForm.job,
+            education:this.infoForm.degree,
+            email: this.infoForm.email,
+            /*ID_picture:this.infoForm.front,
+            ID_card_inverse_side:this.infoForm.back,
+            headshot:this.infoForm.head,*/
           };
 
-          this.$axios.post('/api/user/inputInfo',postData, {
+
+
+          this.$axios.post('/api/addAccountInfo',postData, {
             headers: { 'content-type': 'application/x-www-form-urlencoded' },
           })
             .then(function (response) {
