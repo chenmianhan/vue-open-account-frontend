@@ -29,7 +29,7 @@
             </el-form>
         </div>
         <!--所有的警告弹窗-->
-        <transition name="logInAlert" v-if="alertTitle != '' ">
+        <transition name="logInAlert" v-if="ruleForm.alertTitle != '' ">
             <div class="login-btn">
                 <div class="alert alert-danger" role="alert"><p>{{alertTitle}}</p></div>
             </div>
@@ -38,7 +38,8 @@
 </template>
 
 <script>
-    /*import {AxiosInstance as axios} from "axios";*/
+    //import {AxiosInstance as axios} from "axios";
+
     export default {
         data: function(){
             //校验用户输入数据格式是否正确
@@ -89,7 +90,7 @@
                     username: '',//用户id||手机号
                     password: '',//密码
                     alertTitle:'',//警告弹窗标题
-                    //showAlert: false,//是否显示警告弹窗
+                    showAlert: false,//是否显示警告弹窗
                     //isSignup: false,//是否已经注册；是否为旧用户
                     role: 1//角色标签（默认为用户）：用户1；审核员2；管理员3；超管4
                 },
@@ -109,19 +110,30 @@
         methods: {
             //表单验证，主要验证输入格式是否正确；验证正确后向后端传输数据
             submitForm(formName) {
+                var that = this;
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        /*
                         //前->后端传输
                         const postData = {//打包传输数据
-                            username: this.ruleForm.username,
-                            password: this.ruleForm.password,
-                            role: this.ruleForm.role - 1
+                            phone: that.ruleForm.username,
+                            password: that.ruleForm.password,
+                            role: String(that.ruleForm.role - 1)
                         }
-                        //在这里给后台传输数据
-                        this.$axios.post('/login',postData, {
-                            headers: { 'content-type': 'application/x-www-form-urlencoded' },
-                        }).then(function(response){
+                        console.log("1");
+                        console.log(postData);
+                        console.log(this.$Qs.stringify(postData));
+                        //在这里给后台传输数据-
+                        this.$axios.post('/api/login',this.$Qs.stringify(postData), {
+                            headers: {'Content-Type':'application/x-www-form-urlencoded'}}
+                        )
+                        /* this.$http({
+                            method: 'post',
+                            url:'/login',
+                            data: postData
+                        }) */
+                        .then(function(response){
+                            console.log("2");
+                            console.log(response);
                             //成功登录后根据不同的身份标签跳转页面
                             if (response.data.code == 100 || 102){
                                 switch(postData.role){
@@ -146,11 +158,11 @@
                                 this.alertTitle = '登录失败：用户名或密码错误！';
                         }).catch(function(error){
                             console.log(error);
-                        })*/
+                        })
                         //将用户名缓存
                         localStorage.setItem('ms_username',this.ruleForm.username);
-                        this.$router.push('/login/warning');//暂时直接跳转风险提示界面
-                        console.log('submit!');
+                        //this.$router.push('/login/warning');//暂时直接跳转风险提示界面
+                        //console.log('submit!');
                     } else {
                         console.log('error submit!!');
                         return false;
