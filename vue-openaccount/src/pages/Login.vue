@@ -119,43 +119,35 @@
                             password: that.ruleForm.password,
                             role: String(that.ruleForm.role - 1)
                         }
-                        console.log("1");
                         console.log(postData);
                         console.log(this.$Qs.stringify(postData));
                         //在这里给后台传输数据-
                         this.$axios.post('/api/login',this.$Qs.stringify(postData), {
                             headers: {'Content-Type':'application/x-www-form-urlencoded'}}
-                        )
-                        /* this.$http({
-                            method: 'post',
-                            url:'/login',
-                            data: postData
-                        }) */
-                        .then(function(response){
-                            console.log("2");
+                        ).then(function(response){
                             console.log(response);
                             //成功登录后根据不同的身份标签跳转页面
-                            if (response.data.code == 100 || 102){
+                            if (response.data.code == '100' || '102'){
                                 switch(postData.role){
-                                    case 1://用户成功登录
-                                        if (response.data.code == 102)//新
-                                            this.$router.push('/login/warning');
+                                    case '0'://用户成功登录
+                                        if (response.data.code == '102')//新
+                                            that.$router.push('/login/warning');
                                         else//旧
-                                            this.$router.push('/user/home');
+                                            that.$router.push('/user/home');
                                         break;
-                                    case 2://审核员成功登录
-                                        this.$router.push('');
+                                    case '1'://审核员成功登录
+                                        that.$router.push('');
                                         break;
-                                    case 3://管理员成功登录
-                                        this.$router.push('/admin/home');
+                                    case '2'://管理员成功登录
+                                        that.$router.push('/admin/home');
                                         break;
-                                    case 4://超管成功登录
-                                        this.$router.push('');
+                                    case '3'://超管成功登录
+                                        that.$router.push('');
                                 }
                             }
                             //登录失败密码或用户名错误
-                            else if (response.data.code == 101)
-                                this.alertTitle = '登录失败：用户名或密码错误！';
+                            else if (response.data.code == '101')
+                                that.alertTitle = '登录失败：用户名或密码错误！';
                         }).catch(function(error){
                             console.log(error);
                         })
