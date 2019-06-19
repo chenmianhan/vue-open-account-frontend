@@ -13,7 +13,7 @@ module.exports = {
     proxyTable: {
       '/api':{
         //测试环境
-        //target: 'http://192.168.137.1:8080',
+        //target: 'http://192.168.137.1:8080/',
         target: 'http://47.106.126.84:10086/', //接口域名
         changeOrigin: true, //是否跨域
         pathRewrite:{

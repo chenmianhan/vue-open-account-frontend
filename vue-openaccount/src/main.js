@@ -16,6 +16,7 @@ Vue.prototype.$Qs = qs;
 Vue.prototype.$axios = axios;
 // Vue.prototype.$ajax = axios;
 // Vue.prototype.$http = axios;
+axios.defaults.timeout = 30000;
 
 
 Vue.use(ElementUI);
