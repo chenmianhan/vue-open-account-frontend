@@ -60,8 +60,8 @@
             </div>
         </div>
     </div>
-    <!-- <span>{{answer}}</span> -->
-    <el-dialog title='您的风险评级为' :visible.sync='dialogVisible' width="30%" size='mini'>
+    <span>{{answer}}</span>
+    <el-dialog title='您的风险评级为' :visible.sync='dialogVisible' width="30%">
         <div style="margin: 0 auto;font-size:25px;background-color:#E4E7ED;width:50%;border-radius:7px;">{{grade}}</div>
         <span style="font-size:15px;line-height:60px">得分为{{mark}}分</span>
         <div style="font=size:12px;color:#909399;"><span>对测评结果不满意？可以</span>
@@ -103,18 +103,21 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                const postData = {
-                    answer: this.answer
-                }
-                this.$axios.get('/api/risk_evaluation/get_grade', postData).then(function(response){
+                var that = this;
+                let postData = {
+                    answer: that.answer
+                };
+                console.log(postData);
+                this.$axios.post('/api/risk_evaluation/get_grade', postData).then(function(response){
+                    console.log('dfgxdfg');
                     this.haveSubmit = true;
+                    localStorage.removeItem('answerTemp');
                     this.$message({
                         type: 'success',
                         message: '提交成功！'
                     });
                     this.grade = response.data.grade;
                     this.mark = response.data.mark;
-                    localStorage.removeItem('answerTemp');
                     this.dialogVisible = true;
                 }).catch(() => {
                     this.$msgbox({
@@ -144,11 +147,15 @@ export default {
         this.$axios.get('/api/risk_evaluation/get_questions').then(function(response) {
             // that.test = response.data;
             that.test = evaluateTest;
-            that.answer = new Array();
-            for(var i = 0; i < that.test.length; i++){
-                that.answer[i] = new Array();
+            // 获取答案
+            if(localStorage.getItem('answerTemp') != null){
+                that.answer = JSON.parse(localStorage.getItem('answerTemp'));
+            }else{            
+                that.answer = new Array();
+                for(var i = 0; i < that.test.length; i++){
+                    that.answer[i] = new Array();
+                }
             }
-            // console.log(that.answer);
         }).catch(() => {
             that.$msgbox({
                 type: 'error',
@@ -156,12 +163,6 @@ export default {
                 message:'获取题目失败'
             });
         });
-
-        // 获取答案
-        if(localStorage.getItem('answerTemp') != null){
-            this.answer = JSON.parse(localStorage.getItem('answerTemp'));
-            console.log(this.answer);
-        }
     }
 }
 </script>
