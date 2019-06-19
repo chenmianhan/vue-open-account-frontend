@@ -35,11 +35,11 @@
 
 
       <el-form-item label="证件有效期" prop="dates">
-        <el-date-picker type="date" placeholder="选择日期" v-model="infoForm.begin" value-format="yyyy-MM-dd" style="width: 300px;"></el-date-picker>
+        <el-date-picker type="date" placeholder="选择日期" v-model="infoForm.begin" value-format="yyyy-MM-dd HH:mm:ss" style="width: 300px;"></el-date-picker>
         <br>
         <span>——至——</span>
         <br>
-        <el-date-picker type="date" placeholder="选择日期" v-model="infoForm.expire" value-format="yyyy-MM-dd" style="width: 300px;"></el-date-picker>
+        <el-date-picker type="date" placeholder="选择日期" v-model="infoForm.expire" value-format="yyyy-MM-dd HH:mm:ss" style="width: 300px;"></el-date-picker>
       </el-form-item>
 
       <el-form-item label="发证机关" prop="agency">
@@ -95,7 +95,8 @@
         <h3>请上传身份证正反面照和个人大头照</h3>
         <el-upload
           class="upload-demo"
-          action="uploadFront"
+          action="https://jsonplaceholder.typicode.com/posts/"
+          :before-upload="beforeuploadFront"
           :on-preview="handlePreview"
           :on-remove="handleRemove"
           :before-remove="beforeRemove"
@@ -105,7 +106,8 @@
         </el-upload>
         <el-upload
           class="upload-demo"
-          action="uploadBack"
+          action="https://jsonplaceholder.typicode.com/posts/"
+          :before-upload="beforeuploadBack"
           :on-preview="handlePreview"
           :on-remove="handleRemove"
           :before-remove="beforeRemove"
@@ -115,7 +117,8 @@
         </el-upload>
         <el-upload
           class="upload-demo"
-          action="uploadHead"
+          action="https://jsonplaceholder.typicode.com/posts/"
+          :before-upload="beforeuploadHead"
           :on-preview="handlePreview"
           :on-remove="handleRemove"
           :before-remove="beforeRemove"
@@ -131,6 +134,7 @@
         <el-button type="primary" round @click="submitForm('infoForm')">下一步<i class="el-icon-caret-right icon"></i></el-button>
       </el-form-item>
 
+      <!--<span>{{infoForm.front}}</span>-->
 
     </el-form>
 
@@ -182,9 +186,9 @@ import area from '../../../assets/js/area.js'
             contact_address: '',
             job:'',
             degree:'',
-            front: [{name:'',url:''}],
-            back: [{name:'',url:''}],
-            head: [{name:'',url:''}],
+            front: '',
+            back: {name:'',url:''},
+            head: {name:'',url:''},
             uploadFront:'',
             uploadBack:'',
             uploadHead:'',
@@ -242,6 +246,39 @@ import area from '../../../assets/js/area.js'
         beforeRemove(file, fileList) {
           return this.$confirm(`确定移除 ${ file.name }？`);
         },
+        beforeuploadFront(file) {
+          console.log(file);
+          //创建临时的路径来展示图片
+          var windowURL = window.URL || window.webkitURL;
+          this.src=windowURL.createObjectURL(file);
+          //重新写一个表单上传的方法
+          this.infoForm.front = this.src;
+          return false;
+        },
+        beforeuploadBack(file) {
+          console.log(file);
+          //创建临时的路径来展示图片
+          var windowURL = window.URL || window.webkitURL;
+          this.src=windowURL.createObjectURL(file);
+          //重新写一个表单上传的方法
+          this.infoForm.back = this.src;
+          return false;
+        },
+        beforeuploadHead(file) {
+          console.log(file);
+          //创建临时的路径来展示图片
+          var windowURL = window.URL || window.webkitURL;
+          this.src=windowURL.createObjectURL(file);
+          //重新写一个表单上传的方法
+          this.infoForm.head = this.src;
+          return false;
+        },
+        //覆盖默认的上传行为
+        httprequest() {
+
+        },
+
+
 
         submitForm(formName) {
           this.$refs[formName].validate((valid) => {
@@ -265,9 +302,9 @@ import area from '../../../assets/js/area.js'
             profession:this.infoForm.job,
             education:this.infoForm.degree,
             email: this.infoForm.email,
-            /*ID_picture:this.infoForm.front,
+            ID_picture:this.infoForm.front,
             ID_card_inverse_side:this.infoForm.back,
-            headshot:this.infoForm.head,*/
+            headshot:this.infoForm.head,
           };
 
 
