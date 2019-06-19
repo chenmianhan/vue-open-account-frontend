@@ -13,45 +13,108 @@
     <h1>请填写以下信息</h1>
 
     <el-form :model="infoForm" :rules="rules" ref="infoForm" label-width="100px" class="demo-infoForm">
-      <el-form-item label="姓名" prop="name">
+      <el-form-item label="真实姓名" prop="name">
         <el-input v-model="infoForm.name" class="wd400"></el-input>
       </el-form-item>
 
-      <el-form-item label="性别" prop="gender" >
-        <el-radio-group v-model="infoForm.gender">
-          <el-radio label="男"></el-radio>
-          <el-radio label="女"></el-radio>
-        </el-radio-group>
-      </el-form-item>
-
-      <el-form-item label="生日" required prop="birthday">
-        <el-date-picker type="date" placeholder="选择日期" v-model="infoForm.birthday" style="width: 300px;"></el-date-picker>
-      </el-form-item>
-
-      <el-form-item label="手机号" prop="contact">
-        <el-input v-model="infoForm.contact" class="wd400"></el-input>
-      </el-form-item>
-
-      <el-form-item label="身份证号" prop="idNum">
+      <el-form-item label="证件号码" prop="idNum">
         <el-input v-model="infoForm.idNum" class="wd400"></el-input>
       </el-form-item>
 
-      <el-form-item label="家庭住址" prop="address">
+      <el-form-item label="证件住址" prop="address">
         <el-cascader
           :options="address"
           change-on-select
-          v-model="infoForm.address"
+          v-model="infoForm.id_address"
           expand-trigger="hover"
-          @change="handleChange" 
+          @change="handleChange"
           class="wd400">
         </el-cascader>
         <!-- <el-input v-model="infoForm.address" class="wd400"></!-->
       </el-form-item>
+
+
+      <el-form-item label="证件有效期" required prop="period">
+        <el-date-picker type="date" placeholder="选择日期" v-model="infoForm.begin" style="width: 300px;"></el-date-picker>
+        <br>
+        <span>——至——</span>
+        <br>
+        <el-date-picker type="date" placeholder="选择日期" v-model="infoForm.expire" style="width: 300px;"></el-date-picker>
+      </el-form-item>
+
+      <el-form-item label="发证机关" prop="agency">
+        <el-input v-model="infoForm.agency" class="wd400"></el-input>
+      </el-form-item>
+
+
+    <el-form-item label="联系地址" prop="address">
+      <el-cascader
+        :options="address"
+        change-on-select
+        v-model="infoForm.contact_address"
+        expand-trigger="hover"
+        @change="handleChange"
+        class="wd400">
+      </el-cascader>
+      <!-- <el-input v-model="infoForm.address" class="wd400"></!-->
+    </el-form-item>
+
+
+      <el-form-item label="邮寄地址" prop="address">
+        <el-cascader
+          :options="address"
+          change-on-select
+          v-model="infoForm.mail_address"
+          expand-trigger="hover"
+          @change="handleChange"
+          class="wd400">
+        </el-cascader>
+        <!-- <el-input v-model="infoForm.address" class="wd400"></!-->
+      </el-form-item>
+
+
+      <el-form-item label="职业" prop="job">
+        <el-input v-model="infoForm.job" class="wd400"></el-input>
+      </el-form-item>
+
+
+      <el-form-item label="学历" prop="degree">
+        <el-cascader
+          :options="degree"
+          change-on-select
+          v-model="infoForm.degree">
+        </el-cascader>
+        <!-- <el-input v-model="infoForm.address" class="wd400"></!-->
+      </el-form-item>
+
+      <el-form-item label="联系邮箱" prop="email">
+        <el-input v-model="infoForm.email" class="wd400"></el-input>
+      </el-form-item>
+
+      <h3>请上传身份证正反面照和个人大头照</h3>
+      <el-upload
+        class="upload-demo"
+        action="https://jsonplaceholder.typicode.com/posts/"
+        :on-preview="handlePreview"
+        :on-remove="handleRemove"
+        :before-remove="beforeRemove"
+        multiple
+        :limit="3"
+        :on-exceed="handleExceed"
+        :file-list="fileList">
+        <el-button size="small" type="primary">点击上传</el-button>
+        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+      </el-upload>
+
+
       <el-form-item>
         <el-button icon="el-icon-caret-left" round @click="$router.push({path:'/login/warning'})">上一步</el-button>
         <el-button type="primary" round @click="submitForm('infoForm')">下一步<i class="el-icon-caret-right icon"></i></el-button>
       </el-form-item>
+
     </el-form>
+
+
   </div>
 </div>
 </template>
@@ -83,25 +146,54 @@ import area from '../../../assets/js/area.js'
             }      
           };
         return {
+          dialogImageUrl: '',
+          dialogVisible: false,
           address: areajson,
+
           infoForm: {
             name: '',
-            gender: '',
-            birthday:'',
-            contact: '',
+            begin: '',
+            expire:'',
+            email: '',
             idNum: '',
-            address: ''
+            agency:'',
+            id_address: '',
+            mail_address: '',
+            contact_address: '',
+            job:'',
+            degree:'',
           },
+
+          degree:[{
+            value: 'primary',
+            label: '小学',}
+            ,{
+              value: 'junior',
+              label: '中学',}
+            ,{
+            value: 'highschool',
+            label: '高中',}
+            , {
+              value: 'uni',
+              label: '大学',}
+            ,{
+              value: 'college',
+              label: '大专',
+            }
+          ],
+
+          fileList: [{name:'',url:''}],
+
           rules: {
             name: [
               { required: true, message: '请输入姓名', trigger: 'blur' },
               { min: 2, max: 6, message: '长度在 2 到 6 个字符', trigger: 'blur' }
             ],
-            gender: [
-              { required: true, message: '请选择性别', trigger: 'change' }
+            begin: [
+              { type: 'date', required: true, message: '请选择证件有效期', trigger: 'change' }
             ],
-            birthday: [
-              { type: 'date', required: true, message: '请选择生日', trigger: 'change' }
+            expire: [
+              { type: 'date', required: true, message: '请选择证件有效期', trigger: 'change' }
             ],
             contact: [
               { required: true, message: '请输入手机号', trigger: 'blur' },
@@ -118,6 +210,19 @@ import area from '../../../assets/js/area.js'
         };
       },
       methods: {
+        handleRemove(file, fileList) {
+          console.log(file, fileList);
+        },
+        handlePreview(file) {
+          console.log(file);
+        },
+        handleExceed(files, fileList) {
+          this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+        },
+        beforeRemove(file, fileList) {
+          return this.$confirm(`确定移除 ${ file.name }？`);
+        },
+
         submitForm(formName) {
           this.$refs[formName].validate((valid) => {
             if (valid) {
@@ -130,10 +235,16 @@ import area from '../../../assets/js/area.js'
 
           const postData ={
             name: this.infoForm.name,
-            gender: this.infoForm.gender,
-            birthday:this.infoForm.birthday,
-            contact: this.infoForm.contact,
             idNum: this.infoForm.idNum,
+            begin: this.infoForm.begin,
+            expire:this.infoForm.expire,
+            email: this.infoForm.email,
+            agency:this.infoForm.agency,
+            id_address: this.infoForm.id_address,
+            mail_address: this.infoForm.mail_address,
+            contact_address: this.infoForm.contact_address,
+            job:this.infoForm.job,
+            degree:this.infoForm.degree,
           };
 
           this.$axios.post('/api/user/inputInfo',postData, {
