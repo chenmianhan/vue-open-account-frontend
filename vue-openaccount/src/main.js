@@ -9,7 +9,6 @@ import './assets/theme/element-#2B6AAB/index.css'
 
 import axios from 'axios'
 import qs from 'qs'
-// Vue.prototype.$ajax = axios;
 Vue.prototype.$axios = axios;
 Vue.prototype.$qs = qs;
 
