@@ -30,6 +30,13 @@
                             <el-radio :label="item" border></el-radio>
                         </el-col>
                     </el-radio-group>
+        <!-- <el-cascader
+          :options="address"
+          change-on-select
+          v-model="shPoint"
+          expand-trigger="hover"
+          class="wd400">
+        </el-cascader> -->
                 </div>
             </el-card>    
             </el-col>
@@ -59,16 +66,15 @@
 
 <script>
 import Net from '../../../assets/js/netName';
+import area from '../../../assets/js/secondary.js';
 export default {
     data(){
         return{
-            // shIsIndeterminate: true,
-            // shCheckAll: false,
-            // szIsIndeterminate: true,
-            // szCheckAll: false,
             Netpoint: [],
+            shPoint: '',
             shNet: shNet,
-            szNet: szNet
+            szNet: szNet,
+            address: secondary
         }
     },
     methods: {
