@@ -43,31 +43,38 @@
             </div>
         </div> -->
         <div v-for="question in test" :key="question.RE_id" class="test">
-            <p>{{question.RE_id + 1}}. {{question.content}}<span v-if="question.isRadio">（单选）</span><span v-else>（多选）</span></p>
+            <p>{{question.RE_id}}. {{question.content}}<span v-if="question.isRadio">（单选）</span><span v-else>（多选）</span></p>
             <div v-if="question.isRadio">
             <ul v-for="(option, i) in question.options" :key="i">
-                <el-radio-group v-model='answer[question.RE_id]'>
+                <el-radio-group v-model='answer[question.RE_id - 1]'>
                     <el-radio :label="i + 1">{{option}}</el-radio>
                 </el-radio-group>
             </ul>
             </div>
             <div v-else>
                 <ul v-for="(option, i) in question.options" :key="i">
-                    <el-checkbox-group v-model="answer[question.RE_id]">
+                    <el-checkbox-group v-model="answer[question.RE_id - 1]">
                         <el-checkbox :label="i + 1">{{option}}</el-checkbox>
                     </el-checkbox-group>
                 </ul>
             </div>
         </div>
     </div>
+    <span>{{answer}}</span>
+    <el-dialog title='您的风险评级为' :visible.sync='dialogVisible' width="30%">
+        <div style="margin: 0 auto;font-size:25px;background-color:#E4E7ED;width:50%;border-radius:7px;">{{grade}}</div>
+        <span style="font-size:15px;line-height:60px">得分为{{mark}}分</span>
+        <div style="font=size:12px;color:#909399;"><span>对测评结果不满意？可以</span>
+        <el-link type="primary" @click="haveSubmit=false;dialogVisible = false;">重新测评</el-link></div>
+    </el-dialog>
     <div style="height: 100px;">
-        <el-button size="medium" type='success' @click="handleSave">保 存</el-button>
-        <el-button size="medium" type='danger' @click="handleSubmit">提 交</el-button>
+        <el-button size="medium" type='success' :disabled="haveSubmit" @click="handleSave">保 存</el-button>
+        <el-button size="medium" type='danger' :disabled="haveSubmit" @click="handleSubmit">提 交</el-button>
     </div>
     <div id="footer">
         <el-row>
             <el-button icon="el-icon-caret-left" round @click="$router.push({path:'/user/inputInfo'})">上一步</el-button>
-            <el-button type="primary" round @click="$router.push({path:'/user/choose'})">下一步<i class="el-icon-caret-right icon"></i></el-button>
+            <el-button type="primary" :disabled="!haveSubmit" round @click="$router.push({path:'/user/choose'})">下一步<i class="el-icon-caret-right icon"></i></el-button>
         </el-row>
     </div>
     </div>
@@ -80,11 +87,13 @@ export default {
         return{
             userName: '用户姓名',
             account: '资金账号',
-            test: evaluateTest,
-            answer: answer,
+            test: null,
+            answer: null,
             visible: false,
             grade: '保守型',
-            mark: 25
+            mark: 25,
+            dialogVisible: false,
+            haveSubmit: false
         }
     },
     methods:{
@@ -97,7 +106,8 @@ export default {
                 const postData = {
                     answer: this.answer
                 }
-                this.$axios.get('/risk_evaluation/get_grade', postData).then(function(response){
+                this.$axios.get('/api/risk_evaluation/get_grade', postData).then(function(response){
+                    this.haveSubmit = true;
                     this.$message({
                         type: 'success',
                         message: '提交成功！'
@@ -105,11 +115,7 @@ export default {
                     this.grade = response.data.grade;
                     this.mark = response.data.mark;
                     localStorage.removeItem('answerTemp');
-                    this.$msgbox({
-                        title: '您的风险评级为' + this.grade,
-                        message: '分数：' + String(this.mark),
-                        type: 'info'
-                    });
+                    this.dialogVisible = true;
                 }).catch(() => {
                     this.$msgbox({
                         title: '提交失败',
@@ -130,27 +136,46 @@ export default {
                 type: 'success',
                 message: '已成功保存，请尽快答完问卷'
             });
+            // console.log(localStorage);
         }
     },
     mounted(){
-        this.$axios.get('/risk_evaluation/get_questions').then(function(response) {
-            this.test = response.data;
-            this.answer = new Array();
-            for(var i = 0; i < test.length; i++){
-                answer[i] = new Array();
+        var that = this;
+        this.$axios.get('/api/risk_evaluation/get_questions').then(function(response) {
+            console.log('sdf');
+            // that.test = response.data;
+            that.test = evaluateTest;
+            // 获取答案
+            if(localStorage.getItem('answerTemp') != null){
+                that.answer = JSON.parse(localStorage.getItem('answerTemp'));
+            }else{            
+                that.answer = new Array();
             }
+            for(var i = 0; i < that.test.length; i++){
+                that.answer[i] = new Array();
+            }
+            console.log(that.answer);
         }).catch(() => {
-            this.$msgbox({
+            console.log(error);
+            that.$msgbox({
                 type: 'error',
                 title: '连接异常',
                 message:'获取题目失败'
             });
         });
-
-        // 获取答案
-        if(localStorage.getItem('answerTemp') != null){
-            this.answer = JSON.parse(localStorage.getItem('answerTemp'));
-        }
+        // this.$ajax({
+        //     method: 'get',
+        //     url: 'http://47.106.126.84:10086/risk_evaluation/get_questions',
+        // }).then(function(response){
+        //     console.log("sdf");
+        // }).catch(function(error){
+        //     console.log(error);
+        //     that.$msgbox({
+        //         type: 'error',
+        //         title: '连接异常',
+        //         message:'获取题目失败'
+        //     });
+        // })
     }
 }
 </script>
