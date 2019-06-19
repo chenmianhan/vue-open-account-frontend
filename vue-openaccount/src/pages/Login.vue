@@ -111,7 +111,7 @@
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        /*
+                        
                         //前->后端传输
                         const postData = {//打包传输数据
                             username: this.ruleForm.username,
@@ -119,9 +119,10 @@
                             role: this.ruleForm.role - 1
                         }
                         //在这里给后台传输数据
-                        this.$axios.post('/login',postData, {
-                            headers: { 'content-type': 'application/x-www-form-urlencoded' },
+                        this.$axios.post('/api/login',postData, {
+                            headers: { 'content-type': 'application/x-www-form-urlencoded' }
                         }).then(function(response){
+                            console.log('1');
                             //成功登录后根据不同的身份标签跳转页面
                             if (response.data.code == 100 || 102){
                                 switch(postData.role){
@@ -146,11 +147,11 @@
                                 this.alertTitle = '登录失败：用户名或密码错误！';
                         }).catch(function(error){
                             console.log(error);
-                        })*/
+                        })
                         //将用户名缓存
                         localStorage.setItem('ms_username',this.ruleForm.username);
-                        this.$router.push('/login/warning');//暂时直接跳转风险提示界面
-                        console.log('submit!');
+                        //this.$router.push('/login/warning');//暂时直接跳转风险提示界面
+                        //console.log('submit!');
                     } else {
                         console.log('error submit!!');
                         return false;

@@ -36,7 +36,7 @@
 //     }]
 // }],
 evaluateTest = [{
-    RE_id: 0,
+    RE_id: 1,
     content: "您的主要收入来源是：",
     options: ['A. 工资、劳务报酬',
         'B. 生产经营所得',
@@ -47,7 +47,7 @@ evaluateTest = [{
     type: '财务状况',
     isRadio: false
 }, {
-    RE_id: 1,
+    RE_id: 2,
     content: "以下描述中何种符合您的实际情况:", 
     options: ['A. 现在或此前曾从事金融、经济或财会等与金融产品投资相关的工作超过两年',
         'B. 已取得金融、经济或财会等与金融产品投资相关专业学士以上学位',
