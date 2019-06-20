@@ -17,7 +17,7 @@
   </div>
     <el-divider><i class="el-icon-star-off"></i><i class="el-icon-star-off"></i><i class="el-icon-star-off"></i></el-divider>
         <div class="title"><h1 style="font-size:20px;">请选择您要加入的营业网点（可多选）：</h1></div>
-        <el-link type='primary' @click="Netpoint=[]">重新选择</el-link>
+        <!-- <el-link type='primary' @click="Netpoint=[]">重新选择</el-link> -->
         <div class="choose">
             <el-col :span="12">
             <el-card class="box-card">
@@ -30,13 +30,14 @@
                             <el-radio :label="item" border></el-radio>
                         </el-col>
                     </el-radio-group> -->
-        <el-cascader
-          :options="Netpoint"
-          checkStrictly
-          v-model="shPoint"
-          expand-trigger="hover"
-          class="wd400">
-        </el-cascader>
+                    <el-cascader
+                    :options="Netpoint"
+                    checkStrictly
+                    v-model="shPoint"
+                    expandTrigger="hover"
+                    :show-all-levels='false'
+                    class="wd400">
+                    </el-cascader>
                 </div>
             </el-card>    
             </el-col>
@@ -52,15 +53,22 @@
                             <el-radio :label="item" border></el-radio>
                         </el-col>
                     </el-radio-group> -->
+                    <el-cascader
+                    :options="Netpoint"
+                    checkStrictly
+                    v-model="szPoint"
+                    expand-trigger="hover"
+                    class="wd400">
+                    </el-cascader>
                 </div>
             </el-card>        
             </el-col>
-            <span>{{Netpoint}}</span>
-            <el-row>
+            <span></span>
+        </div>
+            <el-row style="height:50px;">
                 <el-button icon="el-icon-caret-left" round @click="$router.push({path:'/user/evaluation'})">上一步</el-button>
                 <el-button type="success" round @click="handleSubmit" :disabled="Netpoint.length==0">提  交<i class="el-icon-success icon"></i></el-button>
             </el-row>
-        </div>
     </div>
 </template>
 
@@ -74,6 +82,7 @@ export default {
             shNet: netPoint,
             szNet: netPoint,
             shPoint: '',
+            szPoint: '',
             shNet: shNet,
             szNet: szNet,
         }
@@ -113,15 +122,43 @@ export default {
         var that = this;
         this.shNet = [];
         this.szNet = [];
-        this.$axios.get('').then(function(response){
-            for(var pro; pro < response.data.length; pro++){
-                for(var city; city < response.data[pro].length; city++){
-                    for(var com; com < response.data[pro][city].length; com++){
-
-                    }
-                }
-            }
-        })
+        // var response = {};
+        // response.data = netPoint;
+        // this.$axios.get('').then(function(response){
+            // for(var pro = 0; pro < response.data.length; pro++){
+            //     // 对于每一个省
+            //     var obj = {};
+            //     obj.label = response.data[pro].label;
+            //     obj.value = response.data[pro].value;
+            //     var child1sh = [];
+            //     var child1sz = [];
+            //     for(var city = 0; city < response.data[pro].length; city++){
+            //         // 对于每一个城市
+            //         var obj = {};
+            //         obj.label = response.data[pro][city].label;
+            //         obj.value = response.data[pro][city].value;
+            //         var child2sh = [];
+            //         var child2sz = [];
+            //         for(var com = 0; com < response.data[pro][city].length; com++){
+            //             // 对于每一个公司
+            //             var obj = response.data[pro][city][com];
+            //             if (obj.type == 'sh'){
+            //                 child2sh.push(obj);
+            //             } else {
+            //                 child2sz.push(obj);
+            //             }
+            //         }
+            //         obj.children = child2sh;
+            //         child1sh.push(obj);
+            //         obj.children = child2sz
+            //         child1sz.push(obj);
+            //     }
+            //     obj.children = child1sh;
+            //     that.shNet.push(obj);
+            //     obj.children = child1sz;
+            //     that.szNet.push(obj);
+            // }
+        // })
     }
 }
 </script>
