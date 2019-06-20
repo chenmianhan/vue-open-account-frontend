@@ -43,24 +43,24 @@
             </div>
         </div> -->
         <div v-for="question in test" :key="question.RE_id" class="test">
-            <p>{{question.RE_id}}. {{question.content}}<span v-if="question.isRadio">（单选）</span><span v-else>（多选）</span></p>
-            <div v-if="question.isRadio">
-            <ul v-for="(option, i) in question.options" :key="i">
-                <el-radio-group v-model='answer[question.RE_id - 1]'>
-                    <el-radio :label="i + 1">{{option}}</el-radio>
-                </el-radio-group>
+            <p>{{question.content}}<span v-if="question.is_radio">（单选）</span><span v-else>（多选）</span></p>
+            <div v-if="question.is_radio">
+            <ul v-for="option in question.options" :key="option.oid">
+                <el-checkbox-group :max='1' v-model='answer[question.RE_id - 1].answer'>
+                    <el-checkbox :label="option.oid">{{option.option}}</el-checkbox>
+                </el-checkbox-group>
             </ul>
             </div>
             <div v-else>
-                <ul v-for="(option, i) in question.options" :key="i">
-                    <el-checkbox-group v-model="answer[question.RE_id - 1]">
-                        <el-checkbox :label="i + 1">{{option}}</el-checkbox>
+                <ul v-for="option in question.options" :key="option.oid">
+                    <el-checkbox-group v-model="answer[question.RE_id - 1].answer">
+                        <el-checkbox :label="option.oid">{{option.option}}</el-checkbox>
                     </el-checkbox-group>
                 </ul>
             </div>
         </div>
     </div>
-    <span>{{answer}}</span>
+    <!-- <span>{{answer}}</span> -->
     <el-dialog title='您的风险评级为' :visible.sync='dialogVisible' width="30%">
         <div style="margin: 0 auto;font-size:25px;background-color:#E4E7ED;width:50%;border-radius:7px;">{{grade}}</div>
         <span style="font-size:15px;line-height:60px">得分为{{mark}}分</span>
@@ -93,7 +93,7 @@ export default {
             grade: '保守型',
             mark: 25,
             dialogVisible: false,
-            haveSubmit: false
+            haveSubmit: false,
         }
     },
     methods:{
@@ -105,20 +105,19 @@ export default {
             }).then(() => {
                 var that = this;
                 let postData = {
-                    answer: that.answer
+                    answers: that.answer
                 };
-                console.log(postData);
+                // console.log(postData);
                 this.$axios.post('/api/risk_evaluation/get_grade', postData).then(function(response){
-                    console.log('dfgxdfg');
-                    this.haveSubmit = true;
+                    that.haveSubmit = true;
                     localStorage.removeItem('answerTemp');
-                    this.$message({
+                    that.$message({
                         type: 'success',
                         message: '提交成功！'
                     });
-                    this.grade = response.data.grade;
-                    this.mark = response.data.mark;
-                    this.dialogVisible = true;
+                    that.grade = response.data.grade;
+                    that.mark = response.data.mark;
+                    that.dialogVisible = true;
                 }).catch(() => {
                     this.$msgbox({
                         title: '提交失败',
@@ -143,17 +142,24 @@ export default {
         }
     },
     mounted(){
+        // localStorage.removeItem('answerTemp');
         var that = this;
         this.$axios.get('/api/risk_evaluation/get_questions').then(function(response) {
-            // that.test = response.data;
-            that.test = evaluateTest;
+            console.log(response.data);
+            that.test = response.data;
+            // that.test = evaluateTest;
+            // that.answer = answers;
             // 获取答案
             if(localStorage.getItem('answerTemp') != null){
                 that.answer = JSON.parse(localStorage.getItem('answerTemp'));
             }else{            
-                that.answer = new Array();
+                that.answer = [];
                 for(var i = 0; i < that.test.length; i++){
-                    that.answer[i] = new Array();
+                    // that.answer[i] = {};
+                    var obj = {}
+                    obj.RE_id = that.test[i].RE_id;
+                    obj.answer = [];
+                    that.answer.push(obj);
                 }
             }
         }).catch(() => {
