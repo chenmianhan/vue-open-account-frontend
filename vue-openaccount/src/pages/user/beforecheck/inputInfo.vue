@@ -156,14 +156,19 @@ import area from '../../../assets/js/area.js'
 
     export default {
       data() {
-        // let validID=(rule,value,callback)=>{
-        //   if(value==''||value==undefined){
-        //       callback()
-        //   }else{
-        //       let reg=/^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/
-        //       if(!reg.test(value)){callback(new Error('身份证号码不正确'))}
-        //   }
-        // };
+        let validID=(rule,value,callback)=>{
+          if(value==''||value==undefined){
+              callback()
+          }else{
+              //const reg=/^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$|^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}([0-9]|X)$/;
+              const reg=/^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/
+              if(reg.test(value)){
+                callback();
+              }else{
+                return callback(new Error('身份证号码不正确'));
+              }
+          }
+        };
         var checkPhone = (rule, value, callback) => {
           if (!value) {          
             return callback(new Error('手机号不能为空'));        

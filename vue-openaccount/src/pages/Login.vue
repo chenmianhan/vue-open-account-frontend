@@ -128,7 +128,12 @@
                         ).then(function(response){
                             console.log(response);
                             //成功登录后根据不同的身份标签跳转页面
-                            if (response.data.code == '100' || '102'){
+                            if (response.data.code == '100' || response.data.code == '102'){
+                                localStorage.setItem('Flag', 'isLogin');//存储登录状态
+                                localStorage.setItem('Role', postData.role); //存储身份标识
+                                console.log(localStorage.getItem('Flag'));
+                                console.log(localStorage.getItem('Role'));
+
                                 switch(postData.role){
                                     case '0'://用户成功登录
                                         if (response.data.code == '102')//新
@@ -145,15 +150,17 @@
                                     case '3'://超管成功登录
                                         that.$router.push('');
                                 }
-                                //that.isLogin = true;
-                                localStorage.setItem('Flag', 'isLogin');//存储登录状态
-                                localStorage.setItem('Role', postData.role); //存储身份标识
-                                console.log(localStorage.getItem('Flag'));
-                                console.log(localStorage.getItem('Role'));
                             }
                             //登录失败密码或用户名错误
-                            else if (response.data.code == '101')
-                                that.alertTitle = '登录失败：用户名或密码错误！';
+                            else if (response.data.code == '101'){
+                                that.$message({//消息提示请先登录
+                                    showClose: true,
+                                    message: '用户名或密码错误！',
+                                    duration: 5000,
+                                    type: 'error'
+                                    });
+                                //console.log('error');
+                            }
                         }).catch(function(error){
                             console.log(error);
                         })
