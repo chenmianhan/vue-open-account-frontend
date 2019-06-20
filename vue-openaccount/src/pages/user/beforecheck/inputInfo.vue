@@ -101,6 +101,17 @@
           list-type="picture">
           <el-button size="small" type="primary">上传正面照</el-button>
         </el-upload>
+        <!-- <el-upload
+          class="upload-demo"
+          action="https://jsonplaceholder.typicode.com/posts/"
+          :before-upload="beforeuploadBack"
+          :on-preview="handlePreview"
+          :on-remove="handleRemove"
+          :before-remove="beforeRemove"
+          :file-list="infoForm.back"
+          list-type="picture">
+          <el-button size="small" type="primary">上传反面照</el-button>
+        </el-upload> -->
         <el-upload
           class="upload-demo"
           action="https://jsonplaceholder.typicode.com/posts/"
@@ -188,9 +199,12 @@ import area from '../../../assets/js/area.js'
             contact_address: '',
             job:'',
             degree:'',
-            front: [{name:'',url:''}],
-            back: [{name:'',url:''}],
-            head: [{name:'',url:''}],
+            front: [],
+            frontUrl: '',
+            back: [],
+            backUrl: '',
+            head: [],
+            headUrl: ''
           },
 
           degree:[{
@@ -230,7 +244,7 @@ import area from '../../../assets/js/area.js'
             ],
             idNum: [
               { required: true, message: '请输入身份证号', trigger: 'blur' },
-              { validator:validID, trigger: 'blur' }
+              // { validator:validID, trigger: 'blur' }
             ],
           }
         };
@@ -249,10 +263,10 @@ import area from '../../../assets/js/area.js'
           // console.log(file);
           //创建临时的路径来展示图片
           var windowURL = window.URL || window.webkitURL;
-          this.src=windowURL.createObjectURL(file);
+           var src=windowURL.createObjectURL(file);
           //重新写一个表单上传的方法
-          this.infoForm.front = this.src;
-          return false;
+          this.infoForm.frontUrl = src;
+          // return false;
         },
         beforeuploadBack(file) {
           // console.log(file);
@@ -260,8 +274,8 @@ import area from '../../../assets/js/area.js'
           var windowURL = window.URL || window.webkitURL;
           this.src=windowURL.createObjectURL(file);
           //重新写一个表单上传的方法
-          this.infoForm.back = this.src;
-          return false;
+          this.infoForm.backUrl = this.src;
+          // return false;
         },
         beforeuploadHead(file) {
           // console.log(file);
@@ -269,8 +283,8 @@ import area from '../../../assets/js/area.js'
           var windowURL = window.URL || window.webkitURL;
           this.src=windowURL.createObjectURL(file);
           //重新写一个表单上传的方法
-          this.infoForm.head = this.src;
-          return false;
+          this.infoForm.headUrl = this.src;
+          // return false;
         },
         //覆盖默认的上传行为
         httprequest() {
@@ -281,8 +295,10 @@ import area from '../../../assets/js/area.js'
 
         submitForm(formName) {
           var that = this;
+          // console.log(this.infoForm);
+          // debugger;
           this.$refs[formName].validate((valid) => {
-            console.log('ddddd');
+            // console.log(valid);
             if (valid) {
               const postData ={
                 name: that.infoForm.name,
@@ -296,13 +312,14 @@ import area from '../../../assets/js/area.js'
                 profession:that.infoForm.job,
                 education:that.infoForm.degree,
                 email: that.infoForm.email,
-                ID_picture:that.infoForm.front,
-                ID_card_inverse_side:that.infoForm.back,
-                headshot:that.infoForm.head,
+                ID_picture:that.infoForm.frontUrl,
+                ID_card_inverse_side:that.infoForm.backUrl,
+                headshot:that.infoForm.headUrl,
               };
 
               // var that = this;
-              this.$axios.post('/api/addAccountInfo',postData, {
+              console.log(postData);
+              this.$axios.post('/api/addAccountInfo',this.$Qs.stringify(postData), {
                 headers: { 'content-type': 'application/x-www-form-urlencoded' },
               })
                 .then(function (response) {
