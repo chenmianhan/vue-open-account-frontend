@@ -28,12 +28,6 @@
                 <el-button type="text" class="login-tips" @click="$router.push({path: '/user/home'})">点击这里看审核通过界面</el-button>
             </el-form>
         </div>
-        <!--所有的警告弹窗-->
-        <transition name="logInAlert" v-if="ruleForm.alertTitle != '' ">
-            <div class="login-btn">
-                <div class="alert alert-danger" role="alert"><p>{{alertTitle}}</p></div>
-            </div>
-        </transition>
     </div>
 </template>
 
@@ -89,8 +83,6 @@
                 ruleForm: {
                     username: '',//用户id||手机号
                     password: '',//密码
-                    alertTitle:'',//警告弹窗标题
-                    showAlert: false,//是否显示警告弹窗
                     //isSignup: false,//是否已经注册；是否为旧用户
                     role: 0//角色标签（默认为用户）：用户1；审核员2；管理员3；超管4
                 },
