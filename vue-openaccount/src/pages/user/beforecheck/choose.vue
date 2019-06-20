@@ -124,7 +124,8 @@ export default {
         this.szNet = [];
         // var response = {};
         // response.data = netPoint;
-        // this.$axios.get('').then(function(response){
+        this.$axios.get('/api/security/get_securityall').then(function(response){
+            console.log(response.data);
             // for(var pro = 0; pro < response.data.length; pro++){
             //     // 对于每一个省
             //     var obj = {};
@@ -146,19 +147,19 @@ export default {
             //                 child2sh.push(obj);
             //             } else {
             //                 child2sz.push(obj);
-            //             }
-            //         }
-            //         obj.children = child2sh;
-            //         child1sh.push(obj);
-            //         obj.children = child2sz
-            //         child1sz.push(obj);
-            //     }
+                //         }
+                //     }
+                //     obj.children = child2sh;
+                //     child1sh.push(obj);
+                //     obj.children = child2sz
+                //     child1sz.push(obj);
+                // }
             //     obj.children = child1sh;
             //     that.shNet.push(obj);
             //     obj.children = child1sz;
             //     that.szNet.push(obj);
             // }
-        // })
+        });
     }
 }
 </script>

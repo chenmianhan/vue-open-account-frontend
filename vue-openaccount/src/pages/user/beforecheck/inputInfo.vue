@@ -189,8 +189,8 @@ import area from '../../../assets/js/area.js'
 
           infoForm: {
             name: '',
-            begin: '',
-            expire:'',
+            begin: '2000-01-01 00:00:00',
+            expire: '2000-01-01 00:00:00',
             email: '',
             idNum: '',
             agency:'',
@@ -244,7 +244,7 @@ import area from '../../../assets/js/area.js'
             ],
             idNum: [
               { required: true, message: '请输入身份证号', trigger: 'blur' },
-              // { validator:validID, trigger: 'blur' }
+              { validator:validID, trigger: 'blur' }
             ],
           }
         };
@@ -315,6 +315,7 @@ import area from '../../../assets/js/area.js'
                 ID_picture:that.infoForm.frontUrl,
                 ID_card_inverse_side:that.infoForm.backUrl,
                 headshot:that.infoForm.headUrl,
+                user_id: 1
               };
 
               // var that = this;
