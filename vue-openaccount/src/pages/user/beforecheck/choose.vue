@@ -25,18 +25,18 @@
                     <span>上海证券交易所</span>
                 </div>
                 <div>
-                    <el-radio-group v-model="Netpoint[0]" v-for="(item, index) in shNet" :key="index">
+                    <!-- <el-radio-group v-model="Netpoint[0]" v-for="(item, index) in shNet" :key="index">
                         <el-col :span="12" style="margin:15px;">
                             <el-radio :label="item" border></el-radio>
                         </el-col>
-                    </el-radio-group>
-        <!-- <el-cascader
-          :options="address"
-          change-on-select
+                    </el-radio-group> -->
+        <el-cascader
+          :options="Netpoint"
+          checkStrictly
           v-model="shPoint"
           expand-trigger="hover"
           class="wd400">
-        </el-cascader> -->
+        </el-cascader>
                 </div>
             </el-card>    
             </el-col>
@@ -47,11 +47,11 @@
                     <!-- <el-checkbox :indeterminate="szIsIndeterminate" v-model="szCheckAll" @change="handleSZ" style="float: right; padding: 3px 0" type="text">全选</el-checkbox> -->
                 </div>
                 <div>
-                    <el-radio-group v-model="Netpoint[1]" v-for="(item, index) in szNet" :key="index">
+                    <!-- <el-radio-group v-model="Netpoint[1]" v-for="(item, index) in szNet" :key="index">
                         <el-col :span="12" style="margin:15px;">
                             <el-radio :label="item" border></el-radio>
                         </el-col>
-                    </el-radio-group>
+                    </el-radio-group> -->
                 </div>
             </el-card>        
             </el-col>
@@ -66,15 +66,16 @@
 
 <script>
 import Net from '../../../assets/js/netName';
-import area from '../../../assets/js/secondary.js';
+import Point from '../../../assets/js/netPoint';
 export default {
     data(){
         return{
-            Netpoint: [],
+            Netpoint: netPoint,
+            shNet: netPoint,
+            szNet: netPoint,
             shPoint: '',
             shNet: shNet,
             szNet: szNet,
-            address: secondary
         }
     },
     methods: {
@@ -110,8 +111,16 @@ export default {
     },
     mounted(){
         var that = this;
+        this.shNet = [];
+        this.szNet = [];
         this.$axios.get('').then(function(response){
-            
+            for(var pro; pro < response.data.length; pro++){
+                for(var city; city < response.data[pro].length; city++){
+                    for(var com; com < response.data[pro][city].length; com++){
+
+                    }
+                }
+            }
         })
     }
 }
