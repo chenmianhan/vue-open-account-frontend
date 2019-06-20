@@ -1,43 +1,19 @@
 <template>
 <section>
-  <el-container class="container">
-    <!--内容-->
-    <el-container>
-      <!--页眉-->
-      <el-header class="header">
-        <el-row>
-          <!--标题 金证开户平台-->
-          <el-col :span="21" class="header-title">
-            <span class="system-name">{{systemName}}</span>
-          </el-col>
-          <!--退出登录-->
-          <el-col :span='3' justify="end">
-            <el-button size='medium' @click='handleCommand("loginout")'>退出登录</el-button>
-          </el-col>
-        </el-row>
-      </el-header>
-      <!--中间的卡片式幻灯片-->
-      <el-main class="main">
-
-        <div align="center">
-          <el-carousel :interval="4000" type="card" height="400px">
-            <el-carousel-item class="el-carousel__item" v-for="item in imagesbox" :key="item.id">
-              <img :src="item.idView" class="image">
-            </el-carousel-item>
-          </el-carousel>
-        </div>
-      </el-main>
-      <el-footer height='100px'>
-        <el-row>     
-          <!--我已知悉风险-->
-          <el-checkbox v-model="checked">我已知悉风险</el-checkbox>
-          <!--下一步按钮-->
-          <el-button type="primary" round @click='nextStepToInfo' :disabled="!checked">下一步<i class="el-icon-caret-right icon"></i></el-button>
-        </el-row>
-      </el-footer>
-      
-    </el-container>
-  </el-container>
+    <!--中间的卡片式幻灯片-->
+    <div align="center">
+      <el-carousel :interval="4000" type="card" height="400px">
+        <el-carousel-item class="el-carousel__item" v-for="item in imagesbox" :key="item.id">
+          <img :src="item.idView" class="image">
+        </el-carousel-item>
+      </el-carousel>
+    </div>
+    <el-row>     
+      <!--我已知悉风险-->
+      <el-checkbox v-model="checked">我已知悉风险</el-checkbox>
+      <!--下一步按钮-->
+      <el-button type="primary" round @click='nextStepToInfo' :disabled="!checked">下一步<i class="el-icon-caret-right icon"></i></el-button>
+    </el-row>
 </section>
 </template>
 
