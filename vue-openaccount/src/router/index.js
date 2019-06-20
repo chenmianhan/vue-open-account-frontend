@@ -17,13 +17,6 @@ export default new Router({
         isLogin: false//不需登录即可进入
       },
       name: '登录'
-    }, {
-      path: '/login/warning',
-      component: resolve => require(['../pages/user/beforecheck/warning.vue'], resolve),
-      meta:{
-        isLogin: true//需要登录
-      },
-      name: '风险提示'
     },{
       path: '/user',
       component: resolve => require(['../components/beforecheckMain.vue'], resolve),
@@ -58,7 +51,14 @@ export default new Router({
           isLogin: true//需要登录
         },
         name: '填写资料'
-      }]
+      }, {
+      path: '/login/warning',
+      component: resolve => require(['../pages/user/beforecheck/warning.vue'], resolve),
+      meta:{
+        isLogin: true//需要登录
+      },
+      name: '风险提示'
+    }]
     }, {
       path: '/user/home',
       component: resolve => require(['../components/Main.vue'], resolve),
