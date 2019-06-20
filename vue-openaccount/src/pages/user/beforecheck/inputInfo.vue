@@ -8,7 +8,7 @@
     <el-step title="审核"></el-step>
   </el-steps>  
   </div>
-<el-divider><i class="el-icon-star-off"></i><i class="el-icon-star-off"></i><i class="el-icon-star-off"></i></el-divider>
+  <el-divider><i class="el-icon-star-off"></i><i class="el-icon-star-off"></i><i class="el-icon-star-off"></i></el-divider>
   <div class="questions">
     <h1>请填写以下信息</h1>
 
@@ -24,10 +24,9 @@
       <el-form-item label="证件住址" prop="id_address">
         <el-cascader
           :options="address"
-          change-on-select
+          props.checkStrictly
           v-model="infoForm.id_address"
-          expand-trigger="hover"
-          @change="handleChange"
+          props.expandTrigger="hover"
           class="wd400">
         </el-cascader>
         <!-- <el-input v-model="infoForm.address" class="wd400"></!-->
@@ -50,10 +49,9 @@
     <el-form-item label="联系地址" prop="contact_address">
       <el-cascader
         :options="address"
-        change-on-select
+        props.checkStrictly
         v-model="infoForm.contact_address"
-        expand-trigger="hover"
-        @change="handleChange"
+        props.expandTrigger="hover"
         class="wd400">
       </el-cascader>
       <!-- <el-input v-model="infoForm.address" class="wd400"></!-->
@@ -63,10 +61,9 @@
       <el-form-item label="邮寄地址" prop="mail_address">
         <el-cascader
           :options="address"
-          change-on-select
+          props.checkStrictly
           v-model="infoForm.mail_address"
-          expand-trigger="hover"
-          @change="handleChange"
+          props.expandTrigger="hover"
           class="wd400">
         </el-cascader>
         <!-- <el-input v-model="infoForm.address" class="wd400"></!-->
@@ -81,7 +78,7 @@
       <el-form-item label="学历" prop="degree">
         <el-cascader
           :options="degree"
-          change-on-select
+          props.checkStrictly
           v-model="infoForm.degree">
         </el-cascader>
         <!-- <el-input v-model="infoForm.address" class="wd400"></!-->
@@ -100,7 +97,7 @@
           :on-preview="handlePreview"
           :on-remove="handleRemove"
           :before-remove="beforeRemove"
-          :file-list="front"
+          :file-list="infoForm.front"
           list-type="picture">
           <el-button size="small" type="primary">上传正面照</el-button>
         </el-upload>
@@ -111,7 +108,7 @@
           :on-preview="handlePreview"
           :on-remove="handleRemove"
           :before-remove="beforeRemove"
-          :file-list="back"
+          :file-list="infoForm.back"
           list-type="picture">
           <el-button size="small" type="primary">上传反面照</el-button>
         </el-upload>
@@ -122,7 +119,7 @@
           :on-preview="handlePreview"
           :on-remove="handleRemove"
           :before-remove="beforeRemove"
-          :file-list="head"
+          :file-list="infoForm.head"
           list-type="picture">
           <el-button size="small" type="primary">上传大头照</el-button>
           <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
@@ -161,7 +158,7 @@ import area from '../../../assets/js/area.js'
             return callback(new Error('手机号不能为空'));        
             } else {          
               const reg = /^1[3|4|5|7|8][0-9]\d{8}$/          
-              console.log(reg.test(value));          
+              // console.log(reg.test(value));          
               if (reg.test(value)) {            
                 callback();          
               } else {            
@@ -186,9 +183,9 @@ import area from '../../../assets/js/area.js'
             contact_address: '',
             job:'',
             degree:'',
-            front: '',
-            back: {name:'',url:''},
-            head: {name:'',url:''},
+            front: [{name:'',url:''}],
+            back: [{name:'',url:''}],
+            head: [{name:'',url:''}],
           },
 
           degree:[{
@@ -235,16 +232,16 @@ import area from '../../../assets/js/area.js'
       },
       methods: {
         handleRemove(file, fileList) {
-          console.log(file, fileList);
+          // console.log(file, fileList);
         },
         handlePreview(file) {
-          console.log(file);
+          // console.log(file);
         },
         beforeRemove(file, fileList) {
           return this.$confirm(`确定移除 ${ file.name }？`);
         },
         beforeuploadFront(file) {
-          console.log(file);
+          // console.log(file);
           //创建临时的路径来展示图片
           var windowURL = window.URL || window.webkitURL;
           this.src=windowURL.createObjectURL(file);
@@ -253,7 +250,7 @@ import area from '../../../assets/js/area.js'
           return false;
         },
         beforeuploadBack(file) {
-          console.log(file);
+          // console.log(file);
           //创建临时的路径来展示图片
           var windowURL = window.URL || window.webkitURL;
           this.src=windowURL.createObjectURL(file);
@@ -262,7 +259,7 @@ import area from '../../../assets/js/area.js'
           return false;
         },
         beforeuploadHead(file) {
-          console.log(file);
+          // console.log(file);
           //创建临时的路径来展示图片
           var windowURL = window.URL || window.webkitURL;
           this.src=windowURL.createObjectURL(file);
@@ -278,44 +275,54 @@ import area from '../../../assets/js/area.js'
 
 
         submitForm(formName) {
+          var that = this;
           this.$refs[formName].validate((valid) => {
+            console('ddddd')
             if (valid) {
-              alert('submit!');
+              const postData ={
+                name: that.infoForm.name,
+                ID_number: that.infoForm.idNum,
+                ID_issuance_date: that.infoForm.begin,
+                ID_overdue_date:that.infoForm.expire,
+                ID_licensing_authority:that.infoForm.agency,
+                ID_address: that.infoForm.id_address,
+                postal_address: that.infoForm.mail_address,
+                contact_address: that.infoForm.contact_address,
+                profession:that.infoForm.job,
+                education:that.infoForm.degree,
+                email: that.infoForm.email,
+                ID_picture:that.infoForm.front,
+                ID_card_inverse_side:that.infoForm.back,
+                headshot:that.infoForm.head,
+              };
+
+              // var that = this;
+              this.$axios.post('/api/addAccountInfo',postData, {
+                headers: { 'content-type': 'application/x-www-form-urlencoded' },
+              })
+                .then(function (response) {
+                  // if(response.data.)
+                console.log(response);
+                that.$router.push('/user/evaluation');
+              })
+                .catch(function (error) {
+                  that.$msgbox({
+                    title: '连接失败',
+                    type: 'error'
+                  });
+                });
             } else {
-              console.log('error submit!!');
+              this.$msgbox({
+                message: '表单格式有误',
+                type: 'error'
+              });
+              // console.log('error submit!!');
               return false;
             }
           });
 
-          const postData ={
-            name: this.infoForm.name,
-            ID_number: this.infoForm.idNum,
-            ID_issuance_date: this.infoForm.begin,
-            ID_overdue_date:this.infoForm.expire,
-            ID_licensing_authority:this.infoForm.agency,
-            ID_address: this.infoForm.id_address,
-            postal_address: this.infoForm.mail_address,
-            contact_address: this.infoForm.contact_address,
-            profession:this.infoForm.job,
-            education:this.infoForm.degree,
-            email: this.infoForm.email,
-            ID_picture:this.infoForm.front,
-            ID_card_inverse_side:this.infoForm.back,
-            headshot:this.infoForm.head,
-          };
 
 
-          var that = this;
-          this.$axios.post('/api/addAccountInfo',postData, {
-            headers: { 'content-type': 'application/x-www-form-urlencoded' },
-          })
-            .then(function (response) {
-            console.log(response);
-            that.$router.push('/user/evaluation');
-          })
-            .catch(function (error) {
-              console.log(error);
-            });
         }
 
       }
