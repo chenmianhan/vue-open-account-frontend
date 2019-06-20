@@ -38,6 +38,8 @@ export default {
     handleCommand(command) {
         if(command == 'loginout'){
             localStorage.removeItem('ms_username')
+            localStorage.removeItem('Flag')
+            localStorage.removeItem('Role')
             this.$router.push('/login');
         }
     }

@@ -15,10 +15,10 @@
                 </el-form-item>
                 <el-form-item prop='role'>
                     <el-radio-group v-model="ruleForm.role" border size="mini">
-                        <el-radio-button :label="1">用户</el-radio-button>
-                        <el-radio-button :label="2">审核员</el-radio-button>
-                        <el-radio-button :label="3">管理员</el-radio-button>
-                        <el-radio-button :label="4">超级管理员</el-radio-button>
+                        <el-radio-button :label="0">用户</el-radio-button>
+                        <el-radio-button :label="1">审核员</el-radio-button>
+                        <el-radio-button :label="2">管理员</el-radio-button>
+                        <el-radio-button :label="3">超级管理员</el-radio-button>
                     </el-radio-group>
                 </el-form-item>
                 <div class="login-btn">
@@ -92,7 +92,7 @@
                     alertTitle:'',//警告弹窗标题
                     showAlert: false,//是否显示警告弹窗
                     //isSignup: false,//是否已经注册；是否为旧用户
-                    role: 1//角色标签（默认为用户）：用户1；审核员2；管理员3；超管4
+                    role: 0//角色标签（默认为用户）：用户1；审核员2；管理员3；超管4
                 },
                 rules: {//表单验证规则，验证用户输入格式是否正确
                     username: [
@@ -104,7 +104,8 @@
                     role: [
                         { required: !null, message: '请选择您的账号类别', trigger: 'blur'}
                     ]
-                }
+                },
+                isLogin: false //登录状态变量
             }
         },
         methods: {
@@ -114,10 +115,10 @@
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         //前->后端传输
-                        const postData = {//打包传输数据
+                        const postData = {//打包传输数据，类型均为string
                             phone: that.ruleForm.username,
                             password: that.ruleForm.password,
-                            role: String(that.ruleForm.role - 1)
+                            role: String(that.ruleForm.role)
                         }
                         console.log(postData);
                         console.log(this.$Qs.stringify(postData));
@@ -144,6 +145,11 @@
                                     case '3'://超管成功登录
                                         that.$router.push('');
                                 }
+                                //that.isLogin = true;
+                                localStorage.setItem('Flag', 'isLogin');//存储登录状态
+                                localStorage.setItem('Role', postData.role); //存储身份标识
+                                console.log(localStorage.getItem('Flag'));
+                                console.log(localStorage.getItem('Role'));
                             }
                             //登录失败密码或用户名错误
                             else if (response.data.code == '101')
