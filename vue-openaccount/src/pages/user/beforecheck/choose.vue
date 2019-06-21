@@ -85,11 +85,12 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
+                var point = [this.shPoint[2],this.szPoint[2]];
                 const postData = {
-                    shanghaiNetpoint: this.shPoint,
-                    shenzhenNetpoint: this.szPoint,
+                    netPoint: point,
                     userId: localStorage.getItem('ms_username')
                 };
+                console.log(postData);
 
                 this.$axios.post('', postData).then(function(response){
                     // 成功的话
@@ -123,11 +124,6 @@ export default {
                         }
                     }
                 }
-            }).catch(()=>{
-                this.$msgbox({
-                    type:'error',
-                    title:'加载失败'
-                });
             });
         },
         getSZList(){
@@ -145,11 +141,6 @@ export default {
                         }
                     }
                 }
-            }).catch(()=>{
-                this.$msgbox({
-                    type:'error',
-                    title:'加载失败'
-                });
             });
         }
     },

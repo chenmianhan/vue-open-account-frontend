@@ -59,3 +59,10 @@ netPoint = [{
         }]
     }]
 }]
+
+
+
+postData = {
+    netPoint: ["1","122"],
+    user_id: '1'
+}
