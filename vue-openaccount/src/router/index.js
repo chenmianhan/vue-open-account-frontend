@@ -58,7 +58,14 @@ export default new Router({
         isLogin: true//需要登录
       },
       name: '风险提示'
-    }]
+    },{
+        path: '/user/chooseBank',
+        component: resolve => require(['../pages/user/beforecheck/chooseBank.vue'], resolve),
+        meta:{
+          isLogin: true//需要登录
+        },
+        name: '选择银行'
+      }]
     }, {
       path: '/user/home',
       component: resolve => require(['../components/Main.vue'], resolve),
