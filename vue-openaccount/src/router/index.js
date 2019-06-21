@@ -7,7 +7,7 @@ Vue.use(Router)
 
 export default new Router({
   routes: [
-    {
+    {//用户界面
       path: '/',
       redirect: '/login'
     }, {
@@ -88,7 +88,30 @@ export default new Router({
         name: '流水明细'
       }]
     },
-
+    //审核员界面
+    {
+      path: '/reviewer/home',
+      component: resolve => require(['../components/reviewerMain.vue'], resolve),
+      meta:{
+        isLogin: true
+      },
+      children:[{
+        path:'/reviewer/home',
+        component: resolve => require(['../pages/reviewer/statisticData.vue'], resolve),
+        meta:{
+          isLogin: true//需要登录
+        },
+        name: '统计数据'
+      },{
+        path:'/reviewer/reviewUser',
+        component: resolve => require(['../pages/reviewer/reviewUser.vue'], resolve),
+        meta:{
+          isLogin: true//需要登录
+        },
+        name: '开始审核'
+      }]
+    },
+    //管理员界面
     {
       path: '/admin/home',
       component: resolve => require(['../components/Main.vue'], resolve),
