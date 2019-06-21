@@ -41,7 +41,7 @@
                 if (!value)
                     return callback(new Error('请输入用户ID或手机号'));
                 else{
-                    if (this.ruleForm.role == 1){//用户检查手机号合法性
+                    if (this.ruleForm.role == 0){//用户检查手机号合法性
                         validatePhone(rule, value, callback);
                     }else{//非用户检查账号合法性
                         validateAdminId(rule, value, callback);
@@ -134,7 +134,7 @@
                                             that.$router.push('/user/home');
                                         break;
                                     case '1'://审核员成功登录
-                                        that.$router.push('');
+                                        that.$router.push('/reviewer/home');
                                         break;
                                     case '2'://管理员成功登录
                                         that.$router.push('/admin/home');
