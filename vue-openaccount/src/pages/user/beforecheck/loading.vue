@@ -12,6 +12,7 @@
       <el-step title="填写用户信息"></el-step>
       <el-step title="风险测评"></el-step>
       <el-step title="选择营业网点"></el-step>
+      <el-step title="选择银行"></el-step>
       <el-step title="审核"></el-step>
     </el-steps>  
   </div>
