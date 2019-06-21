@@ -2,62 +2,88 @@
     <div class='statistic item'>
         <!-- 页头 -->
         <el-row :gutter="12">
-            <el-col :span="12">
+            <el-col :span="6">
                 <el-card shadow="hover">
-                    <div class='firm item'>
-                        <el-row v-model='getFirmName'>你所负责的机构：{{ exchangeName }}</el-row>
-                        <el-row v-model='getFirmName'>你所负责的网点：{{ branchNetworkName }}</el-row>
+                    <div slot="header" class="clearfix" style="font-weight:bold">
+                        <span>你所负责的机构</span>
+                    </div>
+                    <div class='text item'>
+                        <el-row v-model='getFirmName'>{{ exchangeName }}</el-row>
                     </div>
                 </el-card>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="6">
                 <el-card shadow="hover">
-                    <div class='data item'>
-                        <el-row v-model='getFirmName'>
-                            待审核人数 {{ toReviewNum }}
-                            <el-button type="text" @click='goToReview' class="button">立即前往</el-button>
-                        </el-row>
-                        <el-row v-model='getFirmName'>已审核人数 {{ reviewedNum }}</el-row>
+                    <div slot="header" class="clearfix" style="font-weight:bold">
+                        <span>你所负责的网点</span>
+                    </div>
+                    <div class='text item'>
+                        <el-row v-model='getFirmName'>{{ branchNetworkName }}</el-row>
+                    </div>
+                </el-card>
+            </el-col>
+            <el-col :span="6">
+                <el-card shadow="hover">
+                    <div slot="header" class="clearfix" style="font-weight:bold">
+                        <span>已审核人数</span>
+                    </div>
+                    <div class="text item">
+                        <el-row v-model='getStatisticData'>{{ reviewedNum }} </el-row>
+                    </div>
+                </el-card>
+            </el-col>
+            <el-col :span="6">
+                <el-card shadow="hover">
+                    <div slot="header" class="clearfix" style="font-weight:bold">
+                        <span>待审核人数</span>
+                        <el-button @click='goToReview' size='mini' style="float: right; padding: 3px 0" type="text">
+                            立即前往<i class="el-icon-arrow-right el-icon--right"></i>
+                        </el-button>
+                    </div>
+                    <div class="text item">
+                        <el-row v-model='getStatisticData'>{{ toReviewNum }} </el-row>
                     </div>
                 </el-card>
             </el-col>
         </el-row>
         <el-divider></el-divider>
         <!-- 日期查询 -->
-        <el-row>
-            <span class="demonstration">查询选择日期范围内的已审核用户信息</span>
-        </el-row>
-        <el-row>
-                <el-date-picker
-                    v-model="dateValue"
-                    type="daterange"
-                    align="right"
-                    unlink-panels
-                    range-separator="至"
-                    start-placeholder="开始日期"
-                    end-placeholder="结束日期"
-                    :picker-options="pickerOptions">
-                </el-date-picker>
-        </el-row>
+        <div style="padding: 5px; text-align: center;">
+            <el-date-picker
+                v-model="dateValue"
+                type="daterange"
+                align="right"
+                unlink-panels
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+                :picker-options="pickerOptions">
+            </el-date-picker>
+            <el-tooltip class="item" effect="dark" content="所选日期范围最大为一周" placement="right">
+                <el-button icon='el-icon-search' type='primary' circle></el-button>
+            </el-tooltip>
+        </div>
         <!-- 下方的表格：固定表头 -->
-        <el-table :data="tableData" border style="width: 100%">
-            <el-table-column prop="userId" label="用户id"  width="80">
-            </el-table-column>
-            <el-table-column prop="userName" label="姓名" width="80">
-            </el-table-column>
-            <el-table-column prop="gender" label="性别" width='60'>
-            </el-table-column>
-            <el-table-column prop="idCardNum" label="身份证号码" width='210'>
-            </el-table-column>
-            <el-table-column prop="contactNum" label="联系方式" width='140'>
-            </el-table-column>
-            <el-table-column prop="accExchangeName" label="开户机构" width='129'>
-            </el-table-column>
-            <el-table-column prop="accbranchNetworkName" label="开户营业网点" width='130'>
-            </el-table-column>
-            <el-table-column prop="accTime" label="开户时间" width='210'>
-            </el-table-column>
-        </el-table>
+        <div style="padding: 14px;">
+            <el-table v-loading="loading" :data="tableData" border style="width: 100%">
+                <el-table-column prop="userId" label="用户id"  width="80">
+                </el-table-column>
+                <el-table-column prop="userName" label="姓名" width="80">
+                </el-table-column>
+                <el-table-column prop="gender" label="性别" width='60'>
+                </el-table-column>
+                <el-table-column prop="idCardNum" label="身份证号码" width='180'>
+                </el-table-column>
+                <el-table-column prop="contactNum" label="联系方式" width='140'>
+                </el-table-column>
+                <el-table-column prop="accExchangeName" label="开户机构" width='140'>
+                </el-table-column>
+                <el-table-column prop="accbranchNetworkName" label="开户营业网点" width='140'>
+                </el-table-column>
+                <el-table-column prop="accTime" label="开户时间">
+                </el-table-column>
+            </el-table>
+        </div>
     </div>
 </template>
 
@@ -100,13 +126,18 @@ export default {
                     }
                 }]
              },
-             dateValue:''
+             dateValue:'',
+             loading: false
           }
     },
 
     methods: {
         getFirmName(){
             console.log('here!');
+        },
+
+        getStatisticData(){
+            console.log('here here1!');
         },
 
         goToReview(){//跳转到开始审核界面
@@ -125,9 +156,9 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
     .text {
-        font-size: 18px;
+        font-size: 14px;
     }
 
     .item {
@@ -145,5 +176,9 @@ export default {
 
     .box-card {
         width: 480px;
+    }
+
+    .card-box {
+        height: 100px;
     }
 </style>

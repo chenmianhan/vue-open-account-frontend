@@ -7,86 +7,72 @@
         <div class='review info'>
             <el-row :gutter="12">
                 <!-- 用户信息 -->
-                <el-col :span="8">
+                <el-col :span="10" class='box-card'>
                     <el-card shadow="hover">
                         <div slot="header" class="clearfix">
-                            <el-col :span='12'>
-                                <span style='font-weight:bold;font-size:18px'>基本信息</span>
-                            </el-col>
-                            <el-col :span='12'>
-                                <el-button-group>
-                                    <el-button size='small' type="primary" icon="el-icon-check" round></el-button>
-                                    <el-button size='small' type="info" icon="el-icon-close" round></el-button>
-                                </el-button-group>
-                            </el-col>
+                            <span style='font-weight:bold;font-size:18px'>基本信息</span>
                         </div>
                         <div class="text item">
                             <div v-for="(item, index) in userInfo" :key='index' class="info-box">
-                                <el-row>
-                                    <el-col :span="8" align='left'><span class="title">{{item.title}}：</span></el-col>
-                                    <el-col :span="16" align='left'><span class="content">{{item.content}}</span></el-col>
+                                <el-row gutter='16'>
+                                    <el-col :span="9" align='right'><span class="title">{{item.title}}：</span></el-col>
+                                    <el-col :span="15" align='left'><span class="content">{{item.content}}</span></el-col>
                                 </el-row>
                             </div>
                         </div>
                     </el-card>
+                    <div style='padding: 14px;'>
+                        <el-button-group>
+                            <el-button size='small' type="primary" icon="el-icon-check" round></el-button>
+                            <el-button size='small' type="info" icon="el-icon-close" round></el-button>
+                        </el-button-group>
+                    </div>
                 </el-col>
-                <!-- 身份证照片 -->
-                <el-col :span="8">
+                <!-- 风险测评结果 -->
+                <el-col :span="4" class='box-card'>
                     <el-card shadow="hover">
                         <div slot="header" class="clearfix">
-                            <el-col :span='12'>
-                                <span style='font-weight:bold;font-size:18px'>身份证照片</span>
-                            </el-col>
-                            <el-col :span='12'>
-                                <el-button-group>
-                                    <el-button size='small' type="primary" icon="el-icon-check" round></el-button>
-                                    <el-button size='small' type="info" icon="el-icon-close" round></el-button>
-                                </el-button-group>
-                            </el-col>
+                            <span style='font-weight:bold;font-size:18px'>风险测评结果</span>
+                        </div>
+                        <div class="text item">
+                            <div style='padding: 12px'><el-button>{{userType}}</el-button></div>
+                            <div style='padding: 12px'><el-button type="primary" plain>{{userGrade}} 分</el-button></div>
+                        </div>
+                    </el-card>
+                    <div style='padding: 14px;'>
+                        <el-button-group>
+                            <el-button size='small' type="primary" icon="el-icon-check" round></el-button>
+                            <el-button size='small' type="info" icon="el-icon-close" round></el-button>
+                        </el-button-group>
+                    </div>
+                </el-col>
+                <!-- 身份证照片 -->
+                <el-col :span="10" class='box-card'>
+                    <el-card shadow="hover">
+                        <div slot="header" class="clearfix">
+                            <span style='font-weight:bold;font-size:18px'>身份证照片</span>
                         </div>
                         <div class="text item">
                             <div class="image__placeholder">
                                 <el-col :span='12'>
-                                    <el-row>
-                                        <!-- <img class="photo" src="../../assets/image/user.jpg"> -->
-                                        <el-image src='../../assets/image/user.jpg' fit='scale-down'></el-image>
-                                    </el-row>
-                                    <div style="padding: 14px;">
-                                        <el-row><span class="demonstration">正面照</span></el-row>
+                                    <div class='img-box'>
+                                        <img class="img-item" src="../../assets/image/user.jpg">
                                     </div>
                                 </el-col>
                                 <el-col :span='12'>
-                                    <el-row>
-                                        <!-- <img class="photo" src="../../assets/image/user.jpg"> -->
-                                        <el-image src='../../assets/image/user.jpg' fit='scale-down'></el-image>
-                                    </el-row>
-                                    <div style="padding: 14px;">
-                                        <el-row><span class="demonstration">反面照</span></el-row>
+                                    <div class='img-box'>
+                                        <img class="img-item" src="../../assets/image/user.jpg">
                                     </div>
                                 </el-col>
                             </div>
                         </div>
                     </el-card>
-                </el-col>
-                <!-- 风险测评结果 -->
-                <el-col :span="8">
-                    <el-card shadow="hover">
-                        <div slot="header" class="clearfix">
-                            <el-col :span='12'>
-                                <span style='font-weight:bold;font-size:18px'>风险测评结果</span>
-                            </el-col>
-                            <el-col :span='12'>
-                                <el-button-group>
-                                    <el-button size='small' type="primary" icon="el-icon-check" round></el-button>
-                                    <el-button size='small' type="info" icon="el-icon-close" round></el-button>
-                                </el-button-group>
-                            </el-col>
-                        </div>
-                        <div class="text item">
-                            <div style='padding: 12px'><el-button>{{userType}}</el-button></div>
-                            <div style='padding: 12px'><el-button type="primary">{{userGrade}} 分</el-button></div>
-                        </div>
-                    </el-card>
+                    <div style='padding: 14px;'>
+                        <el-button-group>
+                            <el-button size='small' type="primary" icon="el-icon-check" round></el-button>
+                            <el-button size='small' type="info" icon="el-icon-close" round></el-button>
+                        </el-button-group>
+                    </div>
                 </el-col>
             </el-row>
         </div>
@@ -116,13 +102,13 @@ export default {
 
         },
         getUserGrade(){
-            
+
         }
     }
 }
 </script>
 
-<style>
+<style scoped>
     .text {
         font-size: 14px;
     }
@@ -140,7 +126,28 @@ export default {
         clear: both
     }
 
-    .box-card {
-        width: 480px;
+    /* .box-card {
+        height: 360px;
+        max-height: 360px;
+        min-height: 360px;
+    } */
+
+    .img-box{
+        position:relative;
+        z-index:1;
+        margin:0 auto;
+        width:140px;
+        height:165px;
+        overflow:hidden;
+    }
+
+    .img-item{
+        position: absolute;
+        max-width: 100%;
+        top:0;
+        left:0;
+        right: 0;
+        bottom: 0;
+        margin: auto;
     }
 </style>
