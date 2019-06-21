@@ -5,6 +5,7 @@
     <el-step title="用户信息填写"></el-step>
     <el-step title="风险测评"></el-step>
     <el-step title="选择营业网点"></el-step>
+    <el-step title="选择银行"></el-step>
     <el-step title="审核"></el-step>
   </el-steps>  
   </div>
@@ -189,8 +190,8 @@ import area from '../../../assets/js/area.js'
 
           infoForm: {
             name: '',
-            begin: '',
-            expire:'',
+            begin: '2000-01-01 00:00:00',
+            expire: '2000-01-01 00:00:00',
             email: '',
             idNum: '',
             agency:'',
@@ -244,7 +245,7 @@ import area from '../../../assets/js/area.js'
             ],
             idNum: [
               { required: true, message: '请输入身份证号', trigger: 'blur' },
-              // { validator:validID, trigger: 'blur' }
+              { validator:validID, trigger: 'blur' }
             ],
           }
         };
@@ -315,6 +316,7 @@ import area from '../../../assets/js/area.js'
                 ID_picture:that.infoForm.frontUrl,
                 ID_card_inverse_side:that.infoForm.backUrl,
                 headshot:that.infoForm.headUrl,
+                user_id: 1
               };
 
               // var that = this;

@@ -157,7 +157,7 @@
                             console.log(error);
                         })
                         //将用户名缓存
-                        localStorage.setItem('ms_username',this.ruleForm.username);
+                        localStorage.setItem('ms_username',this.ruleForm.phone);
                         //this.$router.push('/login/warning');//暂时直接跳转风险提示界面
                         //console.log('submit!');
                     } else {
