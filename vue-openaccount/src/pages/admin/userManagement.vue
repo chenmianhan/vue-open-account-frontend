@@ -23,7 +23,7 @@
     </div>
     <div class="results">
       <el-table
-      :data="tableData"
+      :data="userData"
       style="width: 100%">
       <el-table-column
         prop="user_id"
@@ -82,10 +82,10 @@
         return {
           institute: [],
           ins_ops: [{
-            institute: 'shanghai',
+            institute: '上海',
             label: '上海',
           },{
-            institute: 'shenzhen',
+            institute: '深圳',
             label: '深圳',
           } ],
 
@@ -100,7 +100,7 @@
 
           input:'',
 
-          tableData:[{
+          /*tableData:[{
             user_id:'1',
             name:'whatever',
             gender:'男',
@@ -109,13 +109,50 @@
             inst:'上海',
             str:'营业网点1',
             date:'2019-6-10 13:20:45'
-          }]
+          }],*/
+
+          userData:[],
         };
       },
       methods: {
         handleChange(value) {
           console.log(value);
-        }
+        },
+
+        querytable(){
+          var that = this;
+          this.$axios.get('/api/admin/getAllUsers')//post也可以改成get，但需要对应服务端的请求方法
+            .then(function (response) {
+              //将返回的数据存入页面中声明的data中
+              that.userData = response.data;
+            })
+            .catch(function (error) {
+              alert(error);
+            });
+        },
+
+        /*querytable() {
+          var data = [];
+          let url = 'table.json';
+          let that = this;
+          this.$axios.post(url, {}).then(function (res) {
+          for (let i = 0; i < res.data.length; i++) {
+            var obj = {};
+            obj.user_id = res.data[i].user_id;
+            obj.name = res.data[i].name;
+            obj.contact_address = res.data[i].contact_address;
+            data[i] = obj
+          }
+          that.userData = data;
+          }).catch(function (error) {
+            alert(error);
+          })
+        },*/
+
+        created () {
+          querytable();
+        },
+
       }
     }
 </script>
