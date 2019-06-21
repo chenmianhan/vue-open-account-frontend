@@ -85,7 +85,7 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                var point = [this.shPoint[2],this.szPoint[2]];
+                var point = [parseInt(this.shPoint[2]), parseInt(this.szPoint[2])];
                 const postData = {
                     netPoint: point,
                     userId: localStorage.getItem('ms_username')

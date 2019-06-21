@@ -14,10 +14,10 @@
                         <el-row>
                             <!-- <span style="float: left;">主资金账户</span> -->
                             <el-button class='button' type="text" @click="handleWithdraw">提现</el-button>
-                            <el-button class='button' type="text" @click="handleRecharge">充值</el-button>
+                            <el-button class='button' type="text" @click="handleRecharge(primaryAccount.cardID)">充值</el-button>
                         </el-row>
                         <el-row class="primary-account">
-                            <img src="../../../assets/image/coin.png" class="primary-coin"><span class="title-money">余额：￥{{primaryAccount}}</span>
+                            <img src="../../../assets/image/coin.png" class="primary-coin"><span class="title-money">余额：￥{{primaryAccount.balance}}</span>
                         </el-row>
                     </el-card>
                     <div v-for="item in secondaryAccount" :key='item'>
@@ -40,6 +40,15 @@
                             </el-col>
                         </el-row>
                     </div>
+                    <el-row style="margin-bottom:50px;">
+                        <el-col :span='16'>
+                            <el-card class="secon-account-plus" shadow='hover'>
+                                <el-row class="seco-account-plus">
+                                    <i class='el-icon-circle-plus plus'></i><span class="second-money">添加资金账户</span>
+                                </el-row>
+                            </el-card>
+                        </el-col>
+                    </el-row>
                 </el-col>
                 <el-col :span='8'>
                     <div class="line">
@@ -77,7 +86,7 @@
         <el-dialog title="充值" :visible.sync="rechargeVisible" width="30%">
         <el-form :model="rechargeForm">
             <el-form-item label="储蓄卡" :label-width="formLabelWidth">
-            <el-input size="small" v-model="rechargeForm.cardID" autocomplete="off"></el-input>
+            <el-input size="small" :disabled="true" v-model="rechargeForm.cardID" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item label="充值金额" :label-width="formLabelWidth">
             <el-input size="small" v-model="rechargeForm.value" autocomplete="off"></el-input>
@@ -85,7 +94,7 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button @click="rechargeVisible = false" size="small" >取 消</el-button>
-            <el-button type="primary" @click="rechargeVisible = false" size="small">确 定</el-button>
+            <el-button type="primary" @click="rechargeOK" size="small">确 定</el-button>
         </div>
         </el-dialog>
         <!-- 提现 -->
@@ -108,13 +117,14 @@
 </template>
 
 <script>
-import Bill from '../../../assets/js/timeLine.js'
+import Bill from '../../../assets/js/timeLine.js';
+import account from '../../../assets/js/myAccount';
 export default {
     data() {
         return {
             accountName: 'first',
-            primaryAccount: 12345.67,
-            secondaryAccount: [1234.56, 123.45],
+            primaryAccount: data.primaryAccount,
+            secondaryAccount: data.secondaryAccount,
             bill: billLittle,
             rechargeVisible: false,
             withdrawVisible: false,
@@ -134,8 +144,12 @@ export default {
         handleClick(tab, event) {
             console.log(tab, event);
         },
-        handleRecharge(){
+        handleRecharge(ID){
+            this.rechargeForm.cardID = ID;
             this.rechargeVisible = true;
+        },
+        rechargeOK(){
+            this.rechargeVisible = false;
         },
         handleWithdraw(){
             this.withdrawVisible = true;
@@ -160,6 +174,11 @@ export default {
         handleMoreDetail(){
             this.$router.push({path:'/user/lineDetail'});
         }
+    },
+    mounted(){
+        var a = '1';
+        var b = parseInt(a);
+        console.log(b);
     }
 }
 </script>
@@ -182,9 +201,21 @@ export default {
     transition: all 0.4s;
     background-color: #fff;
 }
+.secon-account-plus {
+    margin: 20px 0 0 20px;
+    /* width: 70%; */
+    transition: all 0.4s;
+    background-color: #fff;
+    height: 94px;
+    color: #909399;
+}
 .secon-account:hover{
     background-color: #E4E7ED;
     transform: scale(1.02);
+}
+.secon-account-plus:hover{
+    background-color: #E4E7ED;
+    transform: scale(1.20);
 }
 .main-account {
     margin: 20px 0 5px 20px;
@@ -230,10 +261,26 @@ export default {
     margin-top: 5px;
 }
 .line {
-    margin-top: 50px;
+    margin-top: 40px;
+    margin-left: 30px;
+    position:fixed;
+    border-left: 1px solid #DCDFE6;
+    /* background-color: black; */
 }
 .box-card{
     width:70%;
     margin: 5px;
+}
+.plus-button{
+    padding:50px;
+    text-align: right;
+    position: fixed;
+    /* background-color: black; */
+    width: 70%;
+    bottom: 0;
+    /* overflow: hidden; */
+}
+.plus{
+    font-size:40px;
 }
 </style>

@@ -63,6 +63,8 @@ netPoint = [{
 
 
 postData = {
-    netPoint: ["1","122"],
-    user_id: '1'
+    // netPoint: [1, 122],
+    n_security_id: 1,
+    s_security_id: 122,
+    user_id: 1
 }
