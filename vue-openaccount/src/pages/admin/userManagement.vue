@@ -52,11 +52,6 @@
         label="姓名">
       </el-table-column>
       <el-table-column
-        prop="gender"
-        width="50px"
-        label="性别">
-      </el-table-column>
-      <el-table-column
         prop="id_num"
         label="身份证号码">
       </el-table-column>
@@ -113,7 +108,6 @@
           tableData:[{//表格用户对象列表
             user_id:'1',
             name:'whatever',
-            gender:'男',
             id_num:'123466876878987',
             contact:'2435465767453',
             inst:'上海',

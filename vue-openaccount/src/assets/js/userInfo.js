@@ -2,9 +2,6 @@ userInfo =[{
     title: '姓名',
     content: 'XX'
 }, {
-    title: '性别',
-    content: '女'
-}, {
     title: '年龄',
     content: 'XX'
 }, {
