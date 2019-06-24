@@ -7,7 +7,7 @@ netPoint = [{
         children: [{
             label: '公司名1',
             value: '公司名1',
-            type: 'sh'
+            type: '0'
         }]
     },{
         label: '深圳市',
@@ -15,7 +15,7 @@ netPoint = [{
         children: [{
             label: '公司名2',
             value: '公司名2',
-            type: 'sz'
+            type: '1'
         }]
     }]
 },{
@@ -27,7 +27,7 @@ netPoint = [{
         children: [{
             label: '公司名5',
             value: '公司名5',
-            type: 'sh'
+            type: '0'
         }]
     },{
         label: '宜宾市',
@@ -35,7 +35,7 @@ netPoint = [{
         children: [{
             label: '公司名6',
             value: '公司名6',
-            type: 'sz'
+            type: '1'
         }]
     }]
 },{
@@ -47,7 +47,7 @@ netPoint = [{
         children: [{
             label: '公司名3',
             value: '公司名3',
-            type: 'sh'
+            type: '0'
         }]
     },{
         label: '石家庄市',
@@ -55,7 +55,16 @@ netPoint = [{
         children: [{
             label: '公司名4',
             value: '公司名4',
-            type: 'sz'
+            type: '1'
         }]
     }]
 }]
+
+
+
+postData = {
+    // netPoint: [1, 122],
+    n_security_id: 1,
+    s_security_id: 122,
+    user_id: 1
+}
