@@ -321,9 +321,7 @@ import area from '../../../assets/js/area.js'
 
               // var that = this;
               console.log(postData);
-              this.$axios.post('/api/addAccountInfo',this.$Qs.stringify(postData), {
-                headers: { 'content-type': 'application/x-www-form-urlencoded' },
-              })
+              this.$axios.post('/api/addAccountInfo',postData)
                 .then(function (response) {
                   // if(response.data.)
                 console.log(response);
