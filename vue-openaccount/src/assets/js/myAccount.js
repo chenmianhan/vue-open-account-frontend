@@ -133,3 +133,9 @@ data = {
             color: '#67C23A'
         }],
     }
+
+
+netPoint = {
+    n_netpoint: '上海网点',
+    s_netpoint: '深圳网点'
+}
