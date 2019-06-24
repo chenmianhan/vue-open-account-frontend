@@ -85,27 +85,28 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                var point = [parseInt(this.shPoint[2]), parseInt(this.szPoint[2])];
+                // var point = [parseInt(this.shPoint[2]), parseInt(this.szPoint[2])];
                 const postData = {
-                    netPoint: point,
-                    userId: localStorage.getItem('ms_username')
+                    n_security_id: parseInt(this.shPoint[2]),
+                    s_security_id: parseInt(this.szPoint[2]),
+                    userId: 1
                 };
-                console.log(postData);
-
-                this.$axios.post('', postData).then(function(response){
+                console.log(postData)
+                var that = this;
+                this.$axios.put('/api/updateSecurity', postData).then(function(response){
                     // 成功的话
-                    this.$message({
+                    that.$message({
                         type: 'success',
                         message: '提交成功！已提交给审核员'
                     });
-                    this.$router.push({path: '/user/loading'});
-                    });
+                    that.$router.push({path: '/user/loading'});
+                });
                     // 否则
-                    this.$message.error('提交失败');
+                    // that.$message.error('提交失败');
             }).catch(() => {
                 this.$message({
                     type: 'info',
-                    message: '已取消提交'
+                    message: error
                 });
             });
         },

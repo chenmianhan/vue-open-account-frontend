@@ -13,40 +13,41 @@
                     <el-card class="main-account" shadow='hover'>
                         <el-row>
                             <!-- <span style="float: left;">主资金账户</span> -->
-                            <el-button class='button' type="text" @click="handleWithdraw">提现</el-button>
-                            <el-button class='button' type="text" @click="handleRecharge(primaryAccount.cardID)">充值</el-button>
+                            <el-button class='button' type="text" @click="handleWithdraw(primaryAccount)">提现</el-button>
+                            <el-button class='button' type="text" @click="handleRecharge(primaryAccount)">充值</el-button>
                         </el-row>
                         <el-row class="primary-account">
                             <img src="../../../assets/image/coin.png" class="primary-coin"><span class="title-money">余额：￥{{primaryAccount.balance}}</span>
                         </el-row>
                     </el-card>
-                    <div v-for="item in secondaryAccount" :key='item'>
+                    <div v-for="item in secondaryAccount" :key='item.id'>
                         <el-row>
                             <el-col :span='16'>
                                 <el-card class="secon-account" shadow='hover'>
                                     <el-row>
-                                        <!-- <span style="float: left;">主资金账户</span> -->
-                                        <el-button class='button' type="text" @click="handleWithdraw">提现</el-button>
-                                        <el-button class='button' type="text" @click="handleRecharge">充值</el-button>
+                                        <el-button class='button' type="text" @click="handleWithdraw(item)">提现</el-button>
+                                        <el-button class='button' type="text" @click="handleRecharge(item)">充值</el-button>
                                     </el-row>
                                     <el-row class="seco-account">
                                         <!-- <img src="../../assets/coin.png" class="secon-coin"> -->
-                                        <span class="second-money">余额：￥{{item}}</span>
+                                        <span class="second-money">余额：￥{{item.balance}}</span>
                                     </el-row>
                                 </el-card>
                             </el-col>
                             <el-col :span='6'>
-                                <el-button size="small" type="danger" round style="margin: 50px 0;" @click="handleDelete">删 除</el-button>
+                                <el-button size="small" type="danger" round style="margin: 50px 0;" @click="handleDelete(item.id)">删 除</el-button>
                             </el-col>
                         </el-row>
                     </div>
                     <el-row style="margin-bottom:50px;">
                         <el-col :span='16'>
+                            <a @click="addVisible = true">
                             <el-card class="secon-account-plus" shadow='hover'>
                                 <el-row class="seco-account-plus">
                                     <i class='el-icon-circle-plus plus'></i><span class="second-money">添加资金账户</span>
                                 </el-row>
                             </el-card>
+                            </a>
                         </el-col>
                     </el-row>
                 </el-col>
@@ -84,32 +85,53 @@
         </el-tabs>
         <!-- 对话框 -->
         <el-dialog title="充值" :visible.sync="rechargeVisible" width="30%">
-        <el-form :model="rechargeForm">
-            <el-form-item label="储蓄卡" :label-width="formLabelWidth">
+        <el-form :model="rechargeForm" :rules="rules" ref="rechargeForm">
+            <el-form-item label="储蓄卡" :label-width="formLabelWidth" prop="cardID">
             <el-input size="small" :disabled="true" v-model="rechargeForm.cardID" autocomplete="off"></el-input>
             </el-form-item>
-            <el-form-item label="充值金额" :label-width="formLabelWidth">
+            <el-form-item label="充值金额" :label-width="formLabelWidth" prop="value">
             <el-input size="small" v-model="rechargeForm.value" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="账户密码" :label-width="formLabelWidth" prop="password">
+            <el-input size="small" type="password" v-model="rechargeForm.password" autocomplete="off"></el-input>
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button @click="rechargeVisible = false" size="small" >取 消</el-button>
-            <el-button type="primary" @click="rechargeOK" size="small">确 定</el-button>
+            <el-button type="primary" @click="rechargeOK(rechargeForm.account)" size="small">确 定</el-button>
         </div>
         </el-dialog>
         <!-- 提现 -->
         <el-dialog title="提现" :visible.sync="withdrawVisible" width="30%">
-        <el-form :model="withdrawForm">
-            <el-form-item label="储蓄卡" :label-width="formLabelWidth">
-            <el-input size="small" v-model="withdrawForm.cardID" autocomplete="off"></el-input>
+        <el-form :model="withdrawForm" :rules="rules" ref="withdrawForm">
+            <el-form-item label="储蓄卡" :label-width="formLabelWidth" prop="cardID">
+            <el-input size="small" :disabled="true" v-model="withdrawForm.cardID" autocomplete="off"></el-input>
             </el-form-item>
-            <el-form-item label="提现金额" :label-width="formLabelWidth">
+            <el-form-item label="提现金额" :label-width="formLabelWidth" prop="value">
             <el-input size="small" v-model="withdrawForm.value" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="账户密码" :label-width="formLabelWidth" prop="password">
+            <el-input size="small" type="password" v-model="withdrawForm.password" autocomplete="off"></el-input>
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button @click="withdrawVisible = false" size="small" >取 消</el-button>
-            <el-button type="primary" @click="withdrawVisible = false" size="small">确 定</el-button>
+            <el-button type="primary" @click="withdrawOK(withdrawForm.account)" size="small">确 定</el-button>
+        </div>
+        </el-dialog>
+        <!-- 添加账户 -->
+        <el-dialog title="添加账户" :visible.sync="addVisible" width="30%">
+        <el-form :model="addForm">
+            <el-form-item label="储蓄卡" :label-width="formLabelWidth">
+            <el-input size="small" v-model="addForm.cardID" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="账户密码" :label-width="formLabelWidth">
+            <el-input size="small" type="password" v-model="addForm.password" autocomplete="off"></el-input>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="addVisible = false" size="small" >取 消</el-button>
+            <el-button type="primary" @click="handleAdd" size="small">确 定</el-button>
         </div>
         </el-dialog>
     </div>
@@ -126,43 +148,145 @@ export default {
             primaryAccount: data.primaryAccount,
             secondaryAccount: data.secondaryAccount,
             bill: billLittle,
+            addVisible: false,
             rechargeVisible: false,
             withdrawVisible: false,
             visible: false,
             withdrawForm: {
                 cardID: '',
-                value: 0
+                value: 0,
+                password: ''
             },
             rechargeForm: {
                 cardID: '',
-                value: 0
+                value: 0,
+                password: ''
             },
-            formLabelWidth: '70px'
+            addForm: {
+                cardID: '',
+                password: ''
+            },
+            formLabelWidth: '80px',
+            rules: {
+                value: [
+                    {required: true, message: '请输入金额', trigger: 'blur'},
+                    {min: 0, max: 10000, message: "每笔交易金额下限为0元，上限为10000元", trigger: 'blur'}
+                ],
+                password: [
+                    {required: true, message: '请输入密码', trigger: 'blur'}
+                ],
+                cardID: [
+                    {required: true, message: '请输入卡号', trigger: 'blur'}
+                ]
+            }
         }
     },
     methods: {
+        getData(){
+            var that = this;
+            this.$axios.get('').then(function(response){
+                that.primaryAccount = response.data.primaryAccount;
+                that.secondaryAccount = response.data.secondaryAccount;
+                if(response.data.bill.length >= 5){
+                    that.bill = response.data.bill.slice(0, 5);
+                }else{
+                    that.bill = response.data.bill;
+                }
+            }).catch(() => {
+                that.$msgbox.error({
+                    title: '连接失败'
+                });
+            });
+        },
+        handleAdd(){
+            var that = this;
+            this.$axios.post('', that.addForm.cardID).then(function(response){
+                if(this.addForm.password == '111111'){
+                    that.$message.success({
+                        message: '添加账户成功'
+                    });
+                    that.getData();
+                }else{
+                    that.$message.error({
+                        message: '密码错误'
+                    });
+                }
+            }).catch(() => {
+                that.$message.error({
+                    message: '连接失败'
+                });
+            });
+        },
         handleClick(tab, event) {
             console.log(tab, event);
         },
-        handleRecharge(ID){
-            this.rechargeForm.cardID = ID;
+        handleRecharge(item){
+            this.rechargeForm.cardID = item.cardID;
+            this.rechargeForm.account = item;
             this.rechargeVisible = true;
         },
-        rechargeOK(){
-            this.rechargeVisible = false;
+        rechargeOK(account){
+            this.$refs['rechargeForm'].validate((valid) => {
+                if(valid){
+                    if(this.rechargeForm.password == '111111'){
+                        account.balance += parseFloat(this.rechargeForm.value);
+                        this.$message.success({
+                            message: '充值成功'
+                        });
+                        this.rechargeVisible = false;
+                    } else {
+                        this.$message.error({
+                            message: '密码错误'
+                        });
+                    }
+                }
+            });
         },
-        handleWithdraw(){
+        withdrawOK(account){
+            this.$refs['withdrawForm'].validate((valid) => {
+                if(valid){
+                    if(this.withdrawForm.password == '111111'){
+                        if(account.balance < parseFloat(this.withdrawForm.value)){
+                            this.$message.error({
+                                message: '余额不足'
+                            });
+                        } else{
+                            account.balance -= parseFloat(this.withdrawForm.value);
+                            this.$message.success({
+                                message: '提现成功，将在24小时内到账'
+                            });
+                            this.withdrawVisible = false;
+                        }
+                    }else{
+                        this.$message.error({
+                            message: '密码错误'
+                        });
+                    }
+                }
+            });
+        },
+        handleWithdraw(account){
+            this.withdrawForm.cardID = account.cardID;
+            this.withdrawForm.account = account;
             this.withdrawVisible = true;
         },
-        handleDelete(){
+        handleDelete(index){
+            var that = this;
             this.$confirm('此操作将永久删除此账号，是否继续？', "警告", {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                this.$message({
-                    type:'success',
-                    message: '删除成功！'
+                this.$axios.post('', index).then(function(response){
+                    that.secondaryAccount.splice(index,1);
+                    that.$message({
+                        type:'success',
+                        message: '删除成功！'
+                    });
+                }).catch(() => {
+                    that.$message.error({
+                        message: '连接失败'
+                    });
                 });
             }).catch(() => {
                 this.$message({
@@ -176,9 +300,7 @@ export default {
         }
     },
     mounted(){
-        var a = '1';
-        var b = parseInt(a);
-        console.log(b);
+        // this.getData();
     }
 }
 </script>
