@@ -2,21 +2,15 @@ userInfo =[{
     title: '姓名',
     content: 'XX'
 }, {
-    title: '性别',
-    content: '女'
-}, {
-    title: '年龄',
-    content: 'XX'
+    title: '身份证号码',
+    content: '510504199901010000'
 }, {
     title: '联系方式',
     content: '131********'
 }, {
-    title: '家庭住址',
-    content: 'XX省XX市XX路XX号'
+    title: '开户机构',
+    content: '上海'
 }, {
-    title: '证件类型',
-    content: 'XX'
-}, {
-    title: '证件号码',
-    content: 'XX'
+    title: '开户营业网点',
+    content: '广发证券公司'
 }]

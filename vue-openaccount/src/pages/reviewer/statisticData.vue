@@ -79,8 +79,6 @@
                 </el-table-column>
                 <el-table-column prop="userName" label="姓名" width="80">
                 </el-table-column>
-                <el-table-column prop="gender" label="性别" width='60'>
-                </el-table-column>
                 <el-table-column prop="idCardNum" label="身份证号码" width='180'>
                 </el-table-column>
                 <el-table-column prop="contactNum" label="联系方式" width='140'>
@@ -110,7 +108,6 @@ export default {
             tableData: [{//表格用户对象列表
                 userId: '1',
                 userName:'张三',
-                gender:'女',
                 idCardNum:'510504199901010311',
                 contactNum:'13800000000',
                 accExchangeName:'上海证券交易所',

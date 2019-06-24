@@ -35,7 +35,6 @@
       <div class="block">
         <el-input v-model="targetUser" placeholder="用户姓名"></el-input>
       </div>
-      <!--<el-button type="primary" icon="el-icon-search">搜索</el-button>-->
       <el-button icon="el-icon-search" circle></el-button>
     </div>
     <div class="results">
@@ -51,11 +50,6 @@
         prop="name"
         width="100px"
         label="姓名">
-      </el-table-column>
-      <el-table-column
-        prop="gender"
-        width="50px"
-        label="性别">
       </el-table-column>
       <el-table-column
         prop="id_num"
@@ -114,7 +108,6 @@
           tableData:[{//表格用户对象列表
             user_id:'1',
             name:'whatever',
-            gender:'男',
             id_num:'123466876878987',
             contact:'2435465767453',
             inst:'上海',
@@ -124,16 +117,80 @@
         };
       },
       methods: {
-        querytable(){
+        querytable(){//查询指定网点的用户
           var that = this;
-          this.$axios.get('/api/admin/getAllUsers')//post也可以改成get，但需要对应服务端的请求方法
-            .then(function (response) {
-              //将返回的数据存入页面中声明的data中
-              that.tableData = response.data;
-            })
-            .catch(function (error) {
-              alert(error);
+
+          if (this.institute != '' && this.shPoint.length > 0 && this.szPoint.length > 0){
+            if (institute == 'sh'){
+              const postData = {
+                institue: this.institute,
+                net: this.shPoint[0]
+              };
+            }else{
+              const postData = {
+                institute: this.institute,
+                net: this.szPoint[0]
+              }
+            }
+            this.$axios.post('/api/admin/getAllUsers', this.$Qs.stringify(postData)
+              ).then(function (response) {
+                //将返回的数据存入页面中声明的data中
+                that.tableData = response.data.tableData;
+              })
+              .catch(function (error) {
+                console.log(error);
+                that.$msgbox({
+                      type: 'error',
+                      title: '连接异常',
+                      message:'获取目标网点用户信息失败！'
+                  })
+              });
+          }else{
+            this.$msgbox({
+              type: 'error',
+              title: '信息不完全',
+              message: '未选择机构或网点!'
             });
+          }
+        },
+
+        queryUser(){//查询指定姓名的用户
+          var that = this;
+          if (this.institute != '' && this.shPoint.length > 0 && this.szPoint.length > 0){
+            if (this.institute == 'sh'){
+              const postData = {
+                institue: this.institute,
+                net: this.shPoint[0],
+                username: this.targetUser
+              };
+            }else{
+              const postData = {
+                institute: this.institute,
+                net: this.szPoint[0],
+                username: this.targetUser
+              };
+            }
+
+            this.$axios.post('/api/admin/getTargetUsers', this.$Qs.stringify(postData)
+              ).then(function (response) {
+                //将返回的数据存入页面中声明的data中
+                that.tableData = response.data.tableData;
+              })
+              .catch(function (error) {
+                console.log(error);
+                that.$msgbox({
+                      type: 'error',
+                      title: '连接异常',
+                      message:'获取目标用户信息失败！'
+                  })
+              });
+          }else{
+            this.$msgbox({
+              type: 'error',
+              title: '信息不完全',
+              message: '未选择机构或网点!'
+            });
+          }
         },
 
         getSHList(){
