@@ -33,7 +33,7 @@
           </el-cascader>
       </div>
       <div class="block">
-        <el-input v-model="targetUser" placeholder="审核员姓名"></el-input>
+        <el-input v-model="targetReviewer" placeholder="审核员姓名"></el-input>
       </div>
       <!--<el-button type="primary" icon="el-icon-search">搜索</el-button>-->
       <el-button icon="el-icon-search" circle></el-button>
@@ -171,6 +171,7 @@
         return {
           visible1: false,
           visible2: false,
+
           institute: '',
           ins_ops: [{//机构显示列表
             institute: 'sh',
@@ -185,17 +186,15 @@
           shPoint: [],//最终被选择的营业网点列表
           szPoint: [],
 
-          targetUser:'',//搜索的目标用户名称
+          targetReviewer:'',//搜索的目标审核员名称
 
-          tableData:[{//表格用户对象列表
-            user_id:'1',
+          tableData:[{//表格审核员对象列表
+            reviewer_id:'1',
             name:'whatever',
-            gender:'男',
-            id_num:'123466876878987',
-            contact:'2435465767453',
+            account:'abc',
+            password:'123456',
             inst:'上海',
-            str:'营业网点1',
-            date:'2019-6-10 13:20:45'
+            str:'营业网点1'
           }],
 
           modifyForm:{
@@ -220,6 +219,81 @@
         };
       },
       methods: {
+        querytable(){//查询指定网点的审核员
+          var that = this;
+
+          if (this.institute != '' && this.shPoint.length > 0 && this.szPoint.length > 0){
+            if (institute == 'sh'){
+              const postData = {
+                institue: this.institute,
+                net: this.shPoint[0]
+              };
+            }else{
+              const postData = {
+                institute: this.institute,
+                net: this.szPoint[0]
+              }
+            }
+            this.$axios.post('/api/admin/getAllReviewers', this.$Qs.stringify(postData)
+              ).then(function (response) {
+                //将返回的数据存入页面中声明的data中
+                that.tableData = response.data.tableData;
+              }).catch(function (error) {
+                console.log(error);
+                that.$msgbox({
+                      type: 'error',
+                      title: '连接异常',
+                      message:'获取目标网点审核员信息失败！'
+                  })
+              });
+          }else{
+            this.$msgbox({
+              type: 'error',
+              title: '信息不完全',
+              message: '未选择机构或网点!'
+            });
+          }
+        },
+
+        queryUser(){//查询指定姓名的审核员
+          var that = this;
+
+          if (this.institute != '' && this.shPoint.length > 0 && this.szPoint.length > 0){
+            if (this.institute == 'sh'){
+              const postData = {
+                institue: this.institute,
+                net: this.shPoint[0],
+                username: this.targetReviewer
+              };
+            }else{
+              const postData = {
+                institute: this.institute,
+                net: this.szPoint[0],
+                username: this.targetReviewer
+              };
+            }
+
+            this.$axios.post('/api/admin/getTargetReviewer', this.$Qs.stringify(postData)
+              ).then(function (response) {
+                //将返回的数据存入页面中声明的data中
+                that.tableData = response.data.tableData;
+              })
+              .catch(function (error) {
+                console.log(error);
+                that.$msgbox({
+                      type: 'error',
+                      title: '连接异常',
+                      message:'获取目标审核员信息失败！'
+                  })
+              });
+          }else{
+            this.$msgbox({
+              type: 'error',
+              title: '信息不完全',
+              message: '未选择机构或网点!'
+            });
+          }
+        },
         onSubmit() {
           console.log('submit!');
         },
