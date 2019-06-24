@@ -16,6 +16,7 @@
             type="date"
             placeholder="选择日期" size="small">
             </el-date-picker>
+            <el-button style="margin-left:30px;" type="primary" icon="el-icon-search" circle @click="handleSearch"></el-button>
         </div>
         <div class="timeline">
             <el-timeline>
@@ -28,18 +29,32 @@
 </template>
 
 <script>
-import Bill from '../../../assets/js/timeLine.js'
+import Bill from '../../../assets/js/myAccount';
 export default {
     data() {
         return {
             startDate: '',
             endDate: '',
-            moreBill: bill
+            moreBill: data.bill
         }
     },
     methods: {
         goBack(){
             this.$router.push({path: '/user/home'})
+        },
+        handleSearch(){
+            var that = this;
+            const postData = {
+                startDate: that.startDate,
+                endDate: that.endDate
+            }
+            this.$axios.post('', postData).then(function(response){
+                that.moreBill = response.data.bill;
+            }).catch(() => {
+                that.$message.error({
+                    message: '连接错误'
+                });
+            });
         }
     },
     mounted(){
@@ -59,7 +74,9 @@ export default {
                 });
                 this.endDate = nowDate;
             } 
-        })
+        });
+
+        this.handleSearch();
     }
 }
 </script>

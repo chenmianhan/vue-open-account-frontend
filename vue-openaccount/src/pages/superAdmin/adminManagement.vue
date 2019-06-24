@@ -30,6 +30,7 @@
                     <el-radio label="营业网点2"></el-radio>
                     <el-radio label="营业网点3"></el-radio>
                     <el-radio label="营业网点4"></el-radio>
+                    <!--<el-radio>{{shStore}}</el-radio>-->
                   </el-radio-group>
                 </el-tab-pane>
                 <el-tab-pane label="深圳" name="second">
@@ -37,16 +38,17 @@
                     <el-radio label="营业网点1"></el-radio>
                     <el-radio label="营业网点2"></el-radio>
                     <el-radio label="营业网点3"></el-radio>
+                    <!--<el-radio>{{szStore}}</el-radio>-->
                   </el-radio-group>
                 </el-tab-pane>
               </el-tabs>
             </el-form-item>
 
-            <el-button size="mini" type="text" @click="visible = false">取消</el-button>
-            <el-button type="primary" size="mini" @click="visible = false; onSubmit">保存</el-button>
+            <el-button size="mini" type="text" @click="visible1 = false">取消</el-button>
+            <el-button type="primary" size="mini" @click="visible1 = false; submitAddForm('addForm')">保存</el-button>
           </el-form>
         </div>
-        <el-button slot="reference" type="primary" size="small" style="margin-left: 50px">添加</el-button>
+        <el-button slot="reference" type="primary" size="small" style="margin-left: 700px">添加</el-button>
       </el-popover>
     </div>
 
@@ -61,7 +63,7 @@
       </el-table-column>
       <el-table-column
         prop="name"
-        width="100px"
+        width="150px"
         label="管理员名称">
       </el-table-column>
       <el-table-column
@@ -75,10 +77,20 @@
       <el-table-column
         prop="authority"
         label="权限">
+        <template slot-scope="scope">
+          <el-popover trigger="hover" placement="top">
+            <p>上海：</p>
+            <!--<p>{{ scope.row. }}</p>-->
+            <p>深圳：</p>
+            <div slot="reference" class="name-wrapper">
+              <el-tag size="medium">查看权限信息</el-tag>
+            </div>
+          </el-popover>
+        </template>
       </el-table-column>
       <el-table-column
         label="操作"
-        width="100">
+        width="300">
         <template slot-scope="scope">
 
           <el-popover
@@ -116,14 +128,16 @@
                   </el-tabs>
                 </el-form-item>
 
-                <el-button size="mini" type="text" @click="visible = false">取消</el-button>
-                <el-button type="primary" size="mini" @click="visible = false; onSubmit">保存</el-button>
+                <el-button size="mini" type="text" @click="visible2 = false">取消</el-button>
+                <el-button type="primary" size="mini" @click="visible2 = false; submitModifyForm('modifyForm')">保存</el-button>
               </el-form>
             </div>
-            <el-button slot="reference">修改</el-button>
+            <el-button slot="reference" size="mini">修改</el-button>
           </el-popover>
 
+          <el-button type="danger" size="mini" style="margin-left: 15px" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
         </template>
+
       </el-table-column>
     </el-table>
   </div>
@@ -143,6 +157,12 @@
           visible1: false,
           visible2: false,
 
+          tableData:[{
+            admin_id:'1',
+            name:'whatever',
+            authority:'',
+          }],
+
           modifyForm:{
             name:'',
             account:'',
@@ -155,10 +175,124 @@
             name:'',
             account:'',
             password:'',
-            inst:'',
-            str:''
+            inst:[''],
+            str:[''],
           },
         }
+      },
+      methods: {
+
+        submitAddForm(formName) {
+          var that = this;
+          // console.log(this.infoForm);
+          // debugger;
+          this.$refs[formName].validate((valid) => {
+            // console.log(valid);
+            if (valid) {
+              const postData = {
+                name: that.addForm.name,
+                account: that.addForm.account,
+                password: that.addForm.password,
+                inst: that.addForm.inst,
+                str: that.addForm.str,
+              };
+
+              // var that = this;
+              console.log(postData);
+              this.$axios.post('/api/addAdmin', this.$Qs.stringify(postData), {
+                headers: {'content-type': 'application/x-www-form-urlencoded'},
+              })
+                .then(function (response) {
+                  console.log(response);
+                  that.$msgbox({
+                    title: '添加成功',
+                    type: 'succeed'
+                  });
+                })
+                .catch(function (error) {
+                  that.$msgbox({
+                    title: '连接失败',
+                    type: 'error'
+                  });
+                });
+            } else {
+              this.$msgbox({
+                message: '表单格式有误',
+                type: 'error'
+              });
+              // console.log('error submit!!');
+              return false;
+            }
+          });
+          },
+
+        submitModifyForm(formName) {
+          var that = this;
+          // console.log(this.infoForm);
+          // debugger;
+          this.$refs[formName].validate((valid) => {
+            // console.log(valid);
+            if (valid) {
+              const postData = {
+                name: that.modifyForm.name,
+                account: that.modifyForm.account,
+                password: that.modifyForm.password,
+                inst: that.modifyForm.inst,
+                str: that.modifyForm.str,
+              };
+
+              // var that = this;
+              console.log(postData);
+              this.$axios.post('/api/modifyAdmin', this.$Qs.stringify(postData), {
+                headers: {'content-type': 'application/x-www-form-urlencoded'},
+              })
+                .then(function (response) {
+                  console.log(response);
+                  that.$msgbox({
+                    title: '修改成功',
+                    type: 'succeed'
+                  });
+                })
+                .catch(function (error) {
+                  that.$msgbox({
+                    title: '连接失败',
+                    type: 'error'
+                  });
+                });
+            } else {
+              this.$msgbox({
+                message: '表单格式有误',
+                type: 'error'
+              });
+              // console.log('error submit!!');
+              return false;
+            }
+          });
+        },
+
+        handleDelete(index, row) {
+          console.log(index, row);
+          var deleteId = row.admin_id;
+          this.$confirm("确认删除该管理员吗？", "提示", {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.$axios.post('/api/superadmin/deleteAdmin', deleteId)//post也可以改成get，但需要对应服务端的请求方法
+              .then(function (response) {
+                console.log(response);
+              })
+              .catch(function (error) {
+                alert(error);
+              });
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消'
+            });
+          });
+        },
+
       }
     }
 </script>
