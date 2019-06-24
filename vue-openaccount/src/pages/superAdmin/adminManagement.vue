@@ -23,25 +23,33 @@
             </el-form-item>
 
             <el-form-item label="权限" prop="authority">
-              <el-tabs v-model="addForm.inst" @tab-click="handleClick">
-                <el-tab-pane label="上海" name="first">
-                  <el-radio-group v-model="addForm.str" >
-                    <el-radio label="营业网点1"></el-radio>
-                    <el-radio label="营业网点2"></el-radio>
-                    <el-radio label="营业网点3"></el-radio>
-                    <el-radio label="营业网点4"></el-radio>
-                    <!--<el-radio>{{shStore}}</el-radio>-->
-                  </el-radio-group>
-                </el-tab-pane>
-                <el-tab-pane label="深圳" name="second">
-                  <el-radio-group v-model="addForm.str" >
-                    <el-radio label="营业网点1"></el-radio>
-                    <el-radio label="营业网点2"></el-radio>
-                    <el-radio label="营业网点3"></el-radio>
-                    <!--<el-radio>{{szStore}}</el-radio>-->
-                  </el-radio-group>
-                </el-tab-pane>
-              </el-tabs>
+              <el-select v-model="institute" placeholder="请选择">
+                <el-option
+                  v-for="item in ins_ops"
+                  :key="item.institute"
+                  :label="item.label"
+                  :value="item.institute">
+                </el-option>
+              </el-select>
+              <!--选择地点-->
+              <el-cascader v-show="institute=='sh'"
+                           :options="shNet"
+                           :props="props"
+                           checkStrictly
+                           v-model="addForm.shPoint"
+                           class="wd400"
+                           collapse-tags
+                           clearable></el-cascader>
+
+              <el-cascader v-show="institute=='sz'"
+                           :options="szNet"
+                           :props="props"
+                           checkStrictly
+                           v-model="addForm.szPoint"
+                           class="wd400"
+                           collapse-tags
+                           clearable>
+              </el-cascader>
             </el-form-item>
 
             <el-button size="mini" type="text" @click="visible1 = false">取消</el-button>
@@ -140,7 +148,7 @@
                                :options="shNet"
                                :props="props"
                                checkStrictly
-                               v-model="shPoint"
+                               v-model="modifyForm.shPoint"
                                class="wd400"
                                collapse-tags
                                clearable></el-cascader>
@@ -149,7 +157,7 @@
                                :options="szNet"
                                :props="props"
                                checkStrictly
-                               v-model="szPoint"
+                               v-model="modifyForm.szPoint"
                                class="wd400"
                                collapse-tags
                                clearable>
@@ -196,8 +204,6 @@
           } ],
           shNet: [],//后端传来的所有营业网点列表
           szNet: [],
-          shPoint: [],//最终被选择的营业网点列表
-          szPoint: [],
 
           tableData:[{
             admin_id:'1',
@@ -209,16 +215,16 @@
             name:'',
             account:'',
             password:'',
-            inst:[''],
-            str:[''],
+            shPoint:[],
+            szPoint:[],
           },
 
           addForm:{
             name:'',
             account:'',
             password:'',
-            inst:[''],
-            str:[''],
+            shPoint:[],
+            szPoint:[],
           },
         }
       },

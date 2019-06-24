@@ -2,8 +2,8 @@
   <div>
     <div class="search-bar">
       <div class="block">
-      <span class="demonstration">所属机构</span>
-        <el-select v-model="institute" placeholder="请选择">
+      <span class="demonstration">选择网点</span>
+        <el-select v-model="institute" placeholder="所属机构">
           <el-option
             v-for="item in ins_ops"
             :key="item.institute"
@@ -13,8 +13,9 @@
         </el-select>
       </div>
       <div class="block">
-      <span class="demonstration">所属营业网点</span>
+     <!-- <span class="demonstration">所属营业网点</span>-->
         <el-cascader v-show="institute=='sh'"
+                     placeholder="所属营业网点"
                      :options="shNet"
                      checkStrictly
                      v-model="shPoint"
@@ -23,6 +24,7 @@
                      class="wd400">
         </el-cascader>
         <el-cascader v-show="institute=='sz'"
+                     placeholder="所属营业网点"
                      :options="szNet"
                      checkStrictly
                      v-model="szPoint"
