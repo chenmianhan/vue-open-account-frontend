@@ -87,7 +87,7 @@
                 </el-table-column>
                 <el-table-column prop="accExchangeName" label="开户机构" sortable width='140'>
                 </el-table-column>
-                <el-table-column prop="accbranchNetName" label="开户营业网点" sortable width='140'>
+                <el-table-column prop="accBranchNetName" label="开户营业网点" sortable width='140'>
                 </el-table-column>
                 <el-table-column prop="accTime" sortable label="开户时间">
                 </el-table-column>
@@ -114,7 +114,7 @@ export default {
                 idCardNum:'510504199901010311',
                 contactNum:'13800000000',
                 accExchangeName:'上海证券交易所',
-                accbranchNetName:'广发证券公司',
+                accBranchNetName:'广发证券公司',
                 accTime:'2000-01-01 00:00:00'
             }],
              pickerOptions: {//日期选择器的快捷选项
@@ -139,7 +139,7 @@ export default {
                 reviewerId: this.reviewerId
             }
             //向后端传输审核员的ID，后端返回审核员信息
-            this.$axios.post('/api/statisticData/reviewerInfo', this.$Qs.stringify(postData)
+            this.$axios.post('/api/statisticData/getReviewerInfo', this.$Qs.stringify(postData)
             ).then(function(response) {
                 console.log(response.data);
                 that.exchangeName = response.data.exchangeName;
@@ -166,7 +166,7 @@ export default {
             console.log(postData);
             //向后端传输日期范围，后端返回该范围中已审核的用户信息对象列表
             //一个对象元素对应一个用户信息
-            this.$axios.post('/api/statisitcData/reviewedUserInfo', this.$Qs.stringify(postData)
+            this.$axios.post('/api/statisitcData/getUserInfo', this.$Qs.stringify(postData)
             ).then(function(response){
                 console.log(response.data);
                 that.tableData = response.data.userInfoList;

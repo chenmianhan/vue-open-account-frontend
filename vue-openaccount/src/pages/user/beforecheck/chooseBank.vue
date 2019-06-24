@@ -81,6 +81,7 @@
           this.$refs[formName].validate((valid) => {
             if (valid) {
               const postData = {
+                user_bank: that.bankForm.user_bank,
                 bank_account: that.bankForm.bank_account,
                 bank_password: that.bankForm.bank_password,
               };

@@ -120,8 +120,8 @@ export default new Router({
     },
     //管理员界面
     {
-      path: '/admin/home',
-      component: resolve => require(['../components/Main.vue'], resolve),
+      path: '/admin',
+      component: resolve => require(['../components/adminMain.vue'], resolve),
       meta:{
         isLogin: true
       },
@@ -139,6 +139,36 @@ export default new Router({
           isLogin: true//需要登录
         },
         name: '审核员管理'
+      }]
+    },
+    //超级管理员界面
+    {
+      path: '/superadmin',
+      component: resolve => require(['../components/superAdminMain.vue'], resolve),
+      meta:{
+        /*isLogin: true*/
+      },
+      children:[{
+        path:'/superadmin/home',
+        component: resolve => require(['../pages/superAdmin/userManagement.vue'], resolve),
+        meta:{
+          /*isLogin: true*///需要登录
+        },
+        name: '用户管理'
+      },{
+        path:'/superadmin/manageAdmin',
+        component: resolve => require(['../pages/superAdmin/adminManagement.vue'], resolve),
+        meta:{
+          isLogin: true//需要登录
+        },
+        name: '管理员管理'
+      },{
+        path:'/superadmin/manageInstitute',
+        component: resolve => require(['../pages/superAdmin/instituteManagement.vue'], resolve),
+        meta:{
+          isLogin: true//需要登录
+        },
+        name: '机构管理'
       }]
     }
   ]
