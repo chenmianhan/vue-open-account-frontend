@@ -1,26 +1,42 @@
 <template>
 <div>
+  <span>{{shPoint}}  {{szPoint}}</span>
     <div class="search-bar">
       <div class="block">
       <span class="demonstration">所属机构</span>
-      <el-cascader
-        v-model="institute"
-        :options="ins_ops"
-        @change="handleChange"></el-cascader>
-    </div>
+      <el-select v-model="institute" placeholder="请选择">
+          <el-option
+            v-for="item in ins_ops"
+            :key="item.institute"
+            :label="item.label"
+            :value="item.institute">
+          </el-option>
+        </el-select>
+      </div>
       <div class="block">
-      <span class="demonstration">所属营业网点</span>
-      <el-cascader
-        v-model="stores"
-        :options="str_ops"
-        @change="handleChange"></el-cascader>
-    </div>
+        <span class="demonstration" v-show="institute!=''">所属营业网点</span>
+        <el-cascader v-show="institute=='sh'"
+          :options="shNet"
+          checkStrictly
+          v-model="shPoint"
+          props.expandTrigger="hover"
+          :show-all-levels='false'
+          class="wd400">
+          </el-cascader>
+        <el-cascader v-show="institute=='sz'"
+          :options="szNet"
+          checkStrictly
+          v-model="szPoint"
+          props.expandTrigger="hover"
+          :show-all-levels='false'
+          class="wd400">
+          </el-cascader>
+      </div>
       <div class="block">
-      <el-input v-model="input" placeholder="用户姓名"></el-input>
-    </div>
+        <el-input v-model="targetUser" placeholder="审核员姓名"></el-input>
+      </div>
       <!--<el-button type="primary" icon="el-icon-search">搜索</el-button>-->
       <el-button icon="el-icon-search" circle></el-button>
-
       <el-popover
         placement="bottom"
         v-model="visible1">
@@ -155,33 +171,31 @@
         return {
           visible1: false,
           visible2: false,
-          institute: [],
-          ins_ops: [{
-            institute: 'shanghai',
+          institute: '',
+          ins_ops: [{//机构显示列表
+            institute: 'sh',
             label: '上海',
           },{
-            institute: 'shenzhen',
+            institute: 'sz',
             label: '深圳',
           } ],
 
-          stores: [],
-          str_ops:[{
-            stores:'wangdian1',
-            label:'营业网点1'
-          },{
-            stores:'wangdian2',
-            label:'营业网点2'
-          }],
+          shNet: [],//后端传来的所有营业网点列表
+          szNet: [],
+          shPoint: [],//最终被选择的营业网点列表
+          szPoint: [],
 
-          input:'',
+          targetUser:'',//搜索的目标用户名称
 
-          tableData:[{
-            reviewer_id:'1',
+          tableData:[{//表格用户对象列表
+            user_id:'1',
             name:'whatever',
-            account:'123466876887',
-            password:'243546453',
+            gender:'男',
+            id_num:'123466876878987',
+            contact:'2435465767453',
             inst:'上海',
             str:'营业网点1',
+            date:'2019-6-10 13:20:45'
           }],
 
           modifyForm:{
@@ -206,16 +220,56 @@
         };
       },
       methods: {
-        handleChange(value) {
-          console.log(value);
-        },
         onSubmit() {
           console.log('submit!');
         },
         handleClick(tab, event) {
           console.log(tab, event);
+        },
+        getSHList(){
+            var that = this;
+            this.$axios.get('/api/security/get_securityall').then(function(response){
+                that.shNet = [];
+                that.shNet = response.data;
+                for(var i = 0; i < that.shNet.length; i++){
+                    for(var j = 0; j < that.shNet[i].children.length; j++){
+                        for(var t = 0; t < that.shNet[i].children[j].children.length; t++){
+                            if(that.shNet[i].children[j].children[t].type != '0'){
+                                that.shNet[i].children[j].children.splice(t,1);
+                                t--;
+                            }
+                        }
+                    }
+                }
+            });
+            console.log('get sh list');
+        },
+
+        getSZList(){
+            var that = this;
+            this.$axios.get('/api/security/get_securityall').then(function(response){
+                that.szNet = [];
+                that.szNet = response.data;
+                for(var i = 0; i < that.szNet.length; i++){
+                    for(var j = 0; j < that.szNet[i].children.length; j++){
+                        for(var t = 0; t < that.szNet[i].children[j].children.length; t++){
+                            if(that.szNet[i].children[j].children[t].type != '1'){
+                                that.szNet[i].children[j].children.splice(t,1);
+                                t--;
+                            }
+                        }
+                    }
+                }
+            });
+            console.log('get sz list');
         }
-      }
+      },
+
+      mounted(){
+          console.log('start to get net list');
+          this.getSHList();
+          this.getSZList();
+        }
     }
 </script>
 
@@ -228,8 +282,5 @@
   .block{
     display: inline-block;
     padding: 10px;
-  }
-  .results{
-    /*position: relative;*/
   }
 </style>
