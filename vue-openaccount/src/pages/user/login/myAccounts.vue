@@ -66,19 +66,19 @@
                 <el-card class="box-card" shadow='hover'>
                 <div slot="header" class="clearfix">
                     <span>上海证券交易所</span>
-                    <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
+                    <!-- <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button> -->
                 </div>
-                <div v-for="o in 4" :key="o" class="text item">
-                    {{'网点 ' + o }}
+                <div class="text item">
+                    {{netPoint.n_netpoint}}
                 </div>
                 </el-card>
                 <el-card class="box-card" shadow='hover'>
                 <div slot="header" class="clearfix">
                     <span>深圳证券交易所</span>
-                    <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
+                    <!-- <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button> -->
                 </div>
-                <div v-for="o in 4" :key="o" class="text item">
-                    {{'网点 ' + o }}
+                <div class="text item">
+                    {{netPoint.s_netpoint}}
                 </div>
                 </el-card>
             </el-tab-pane>
@@ -170,7 +170,7 @@ export default {
             rules: {
                 value: [
                     {required: true, message: '请输入金额', trigger: 'blur'},
-                    {min: 0, max: 10000, message: "每笔交易金额下限为0元，上限为10000元", trigger: 'blur'}
+                    {min: 0, message: "每笔交易金额下限为0元", trigger: 'blur'}
                 ],
                 password: [
                     {required: true, message: '请输入密码', trigger: 'blur'}
@@ -178,7 +178,8 @@ export default {
                 cardID: [
                     {required: true, message: '请输入卡号', trigger: 'blur'}
                 ]
-            }
+            },
+            netPoint: netPoint
         }
     },
     methods: {
@@ -391,7 +392,8 @@ export default {
 }
 .box-card{
     width:70%;
-    margin: 5px;
+    margin: 5px auto;
+    margin-top:40px;
 }
 .plus-button{
     padding:50px;
