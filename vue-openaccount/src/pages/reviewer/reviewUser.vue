@@ -4,11 +4,11 @@
         <span style="display:inline-block;width:200px;font-weight:bold;font-size:22px">用户开户信息审核</span>
         <!-- 审核的三个部分 -->
         <el-divider></el-divider>
-        <div class='review info'>
+        <div class='review-info'>
             <el-row :gutter="12">
                 <!-- 用户信息 -->
-                <el-col :span="8" class='box-card'>
-                    <el-card shadow="hover">
+                <el-col :span="8" >
+                    <el-card shadow="hover" class='box-card'>
                         <div slot="header" class="clearfix">
                             <span style='font-weight:bold;font-size:18px'>基本信息</span>
                         </div>
@@ -43,8 +43,8 @@
                     </div>
                 </el-col>
                 <!-- 风险测评结果 -->
-                <el-col :span="8" class='box-card'>
-                    <el-card shadow="hover">
+                <el-col :span="8">
+                    <el-card shadow="hover" class='box-card'>
                         <div slot="header" class="clearfix">
                             <span style='font-weight:bold;font-size:18px'>风险测评</span>
                         </div>
@@ -75,8 +75,8 @@
                     </div>
                 </el-col>
                 <!-- 身份证照片 -->
-                <el-col :span="8" class='box-card'>
-                    <el-card shadow="hover">
+                <el-col :span="8">
+                    <el-card shadow="hover" class='box-card'>
                         <div slot="header" class="clearfix">
                             <span style='font-weight:bold;font-size:18px'>身份证照片</span>
                         </div>
@@ -287,11 +287,15 @@ export default {
         clear: both
     }
 
-    /* .box-card {
+    .box-card {
+        height: 250px;
+    }
+
+    .review-info {
         height: 360px;
-        max-height: 360px;
-        min-height: 360px;
-    } */
+        /* max-height: 360px;
+        min-height: 360px; */
+    }
 
     .img-box{
         position:relative;
