@@ -149,56 +149,16 @@ export default {
     },
     methods:{
         getFullInfo(){//从后端获取当前审核用户的全部信息
-            this.getUserInfo;
-            this.getUserGrade;
-            this.getUserImage;
-        },
-
-        getUserInfo(){//用户信息
             const postData = {
                 reviewerId: this.reviewerId
             }
             var that = this;
-            this.$axios.post('/api/reviewUser/userInfo', this.$Qs.stringify(postData)
+            this.$axios.post('/api/reviewUser/getUserInfo', this.$Qs.stringify(postData)
             ).then(function(response){
                 console.log(response.data);
                 that.userInfo = response.data.userInfo;
-            }).catch(function(error){
-                console.log(error);
-                that.$msgbox({
-                    type: 'error',
-                    title: '连接异常',
-                    message:'获取待审核用户信息失败！'
-                })
-            })
-        },
-        getUserImage(){//用户身份证照片
-            const postData = {
-                reviewerId: this.reviewerId
-            }
-            var that = this;
-            this.$axios.post('/api/reviewUser/userImage', this.$Qs.stringify(postData)
-            ).then(function(response){
-                console.log(response.data);
                 that.imageUrl_1 = response.data.imageUrl_1;
                 that.imageUrl_2 = response.data.imageUrl_2;
-            }).catch(function(error){
-                console.log(error);
-                that.$msgbox({
-                    type: 'error',
-                    title: '连接异常',
-                    message:'获取待审核用户身份证照片失败！'
-                })
-            })
-        },
-        
-        getUserGrade(){//用户风险测评结果
-            const postData = {
-                reviewerId: this.reviewerId
-            }
-            var that = this;
-            this.$axios.post('/api/reviewUser/userGrade', that.$Qs.stringify(postData)
-            ).then(function(response){
                 that.userType = response.data.userType;
                 that.userGrade = response.data.userGrade;
             }).catch(function(error){
@@ -206,7 +166,7 @@ export default {
                 that.$msgbox({
                     type: 'error',
                     title: '连接异常',
-                    message:'获取待审核用户风险测评结果失败！'
+                    message:'获取待审核用户信息失败！'
                 })
             })
         },
