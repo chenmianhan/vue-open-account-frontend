@@ -123,13 +123,13 @@ export default new Router({
       path: '/admin',
       component: resolve => require(['../components/adminMain.vue'], resolve),
       meta:{
-        /*isLogin: true*/
+        isLogin: true
       },
       children:[{
         path:'/admin/home',
         component: resolve => require(['../pages/admin/userManagement.vue'], resolve),
         meta:{
-          /*isLogin: true*///需要登录
+          isLogin: true//需要登录
         },
         name: '用户管理'
       },{
