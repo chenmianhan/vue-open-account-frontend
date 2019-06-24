@@ -109,7 +109,7 @@
                 </el-form-item>
 
                 <el-form-item label="权限" prop="authority">
-                  <el-tabs v-model="modifyForm.inst" @tab-click="handleClick">
+                 <!-- <el-tabs v-model="modifyForm.inst" @tab-click="handleClick">
                     <el-tab-pane label="上海" name="first">
                       <el-checkbox-group v-model="modifyForm.str">
                         <el-checkbox label="营业网点1"></el-checkbox>
@@ -125,7 +125,35 @@
                         <el-checkbox label="营业网点3"></el-checkbox>
                       </el-checkbox-group>
                     </el-tab-pane>
-                  </el-tabs>
+                  </el-tabs>-->
+                  <!--选择机构-->
+                  <el-select v-model="institute" placeholder="请选择">
+                    <el-option
+                      v-for="item in ins_ops"
+                      :key="item.institute"
+                      :label="item.label"
+                      :value="item.institute">
+                    </el-option>
+                  </el-select>
+                 <!--选择地点-->
+                  <el-cascader v-show="institute=='sh'"
+                               :options="shNet"
+                               :props="props"
+                               checkStrictly
+                               v-model="shPoint"
+                               class="wd400"
+                               collapse-tags
+                               clearable></el-cascader>
+
+                  <el-cascader v-show="institute=='sz'"
+                               :options="szNet"
+                               :props="props"
+                               checkStrictly
+                               v-model="szPoint"
+                               class="wd400"
+                               collapse-tags
+                               clearable>
+                  </el-cascader>
                 </el-form-item>
 
                 <el-button size="mini" type="text" @click="visible2 = false">取消</el-button>
@@ -156,6 +184,20 @@
           input:'',
           visible1: false,
           visible2: false,
+          props: { multiple: true },
+
+          institute: '',
+          ins_ops: [{//机构显示列表
+            institute: 'sh',
+            label: '上海',
+          },{
+            institute: 'sz',
+            label: '深圳',
+          } ],
+          shNet: [],//后端传来的所有营业网点列表
+          szNet: [],
+          shPoint: [],//最终被选择的营业网点列表
+          szPoint: [],
 
           tableData:[{
             admin_id:'1',
@@ -293,6 +335,56 @@
           });
         },
 
+        getSHList(){
+          var that = this;
+          this.$axios.get('/api/security/get_securityall').then(function(response){
+            that.shNet = [];
+            that.shNet = response.data;
+            for(var i = 0; i < that.shNet.length; i++){
+              for(var j = 0; j < that.shNet[i].children.length; j++){
+                for(var t = 0; t < that.shNet[i].children[j].children.length; t++){
+                  if(that.shNet[i].children[j].children[t].type != '0'){
+                    that.shNet[i].children[j].children.splice(t,1);
+                    t--;
+                  }
+                }
+              }
+            }
+          });
+          console.log('get sh list');
+        },
+
+        getSZList(){
+          var that = this;
+          this.$axios.get('/api/security/get_securityall').then(function(response){
+            that.szNet = [];
+            that.szNet = response.data;
+            for(var i = 0; i < that.szNet.length; i++){
+              for(var j = 0; j < that.szNet[i].children.length; j++){
+                for(var t = 0; t < that.szNet[i].children[j].children.length; t++){
+                  if(that.szNet[i].children[j].children[t].type != '1'){
+                    that.szNet[i].children[j].children.splice(t,1);
+                    t--;
+                  }
+                }
+              }
+            }
+          });
+          console.log('get sz list');
+        },
+
+        handleCheckedSHChange(value) {
+          let checkedCount = value.length;
+          this.checkAll = checkedCount === this.shNet.length;
+          this.isIndeterminate = checkedCount > 0 && checkedCount < this.shNet.length;
+        }
+
+      },
+
+      mounted(){
+        console.log('start to get net list');
+        this.getSHList();
+        this.getSZList();
       }
     }
 </script>
@@ -305,5 +397,8 @@
     display: inline-block;
     padding: 10px;
   }
-
+  .wd400{
+    width: 100%;
+    padding: 10px;
+  }
 </style>

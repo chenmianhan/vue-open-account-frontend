@@ -3,17 +3,33 @@
     <div class="search-bar">
       <div class="block">
       <span class="demonstration">所属机构</span>
-      <el-cascader
-        v-model="institute"
-        :options="ins_ops"
-        @change="handleChange"></el-cascader>
+        <el-select v-model="institute" placeholder="请选择">
+          <el-option
+            v-for="item in ins_ops"
+            :key="item.institute"
+            :label="item.label"
+            :value="item.institute">
+          </el-option>
+        </el-select>
       </div>
       <div class="block">
       <span class="demonstration">所属营业网点</span>
-      <el-cascader
-        v-model="stores"
-        :options="str_ops"
-        @change="handleChange"></el-cascader>
+        <el-cascader v-show="institute=='sh'"
+                     :options="shNet"
+                     checkStrictly
+                     v-model="shPoint"
+                     props.expandTrigger="hover"
+                     :show-all-levels='false'
+                     class="wd400">
+        </el-cascader>
+        <el-cascader v-show="institute=='sz'"
+                     :options="szNet"
+                     checkStrictly
+                     v-model="szPoint"
+                     props.expandTrigger="hover"
+                     :show-all-levels='false'
+                     class="wd400">
+        </el-cascader>
       </div>
       <div class="block">
       <el-input v-model="input" placeholder="用户姓名"></el-input>
@@ -116,12 +132,12 @@
           address: areajson,
           visible : false,
 
-          institute: [],
-          ins_ops: [{
-            institute: '上海',
+          institute: '',
+          ins_ops: [{//机构显示列表
+            institute: 'sh',
             label: '上海',
           },{
-            institute: '深圳',
+            institute: 'sz',
             label: '深圳',
           } ],
 
@@ -239,12 +255,50 @@
             });
         },
 
-        created () {
-          querytable();
+        getSHList(){
+          var that = this;
+          this.$axios.get('/api/security/get_securityall').then(function(response){
+            that.shNet = [];
+            that.shNet = response.data;
+            for(var i = 0; i < that.shNet.length; i++){
+              for(var j = 0; j < that.shNet[i].children.length; j++){
+                for(var t = 0; t < that.shNet[i].children[j].children.length; t++){
+                  if(that.shNet[i].children[j].children[t].type != '0'){
+                    that.shNet[i].children[j].children.splice(t,1);
+                    t--;
+                  }
+                }
+              }
+            }
+          });
+          console.log('get sh list');
         },
 
+        getSZList(){
+          var that = this;
+          this.$axios.get('/api/security/get_securityall').then(function(response){
+            that.szNet = [];
+            that.szNet = response.data;
+            for(var i = 0; i < that.szNet.length; i++){
+              for(var j = 0; j < that.szNet[i].children.length; j++){
+                for(var t = 0; t < that.szNet[i].children[j].children.length; t++){
+                  if(that.szNet[i].children[j].children[t].type != '1'){
+                    that.szNet[i].children[j].children.splice(t,1);
+                    t--;
+                  }
+                }
+              }
+            }
+          });
+          console.log('get sz list');
+        },
 
+      },
 
+      mounted(){
+        console.log('start to get net list');
+        this.getSHList();
+        this.getSZList();
       }
     }
 </script>
