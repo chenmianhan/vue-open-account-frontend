@@ -77,9 +77,9 @@
             border style="width: 100%">
                 <el-table-column prop="userName" label="姓名" width="70">
                 </el-table-column>
-                <el-table-column prop="idCardNum" label="身份证号码" width='140'>
+                <el-table-column prop="idCardNum" label="身份证号码" width='160'>
                 </el-table-column>
-                <el-table-column prop="idValDate" label="证件有效期" width="95">
+                <el-table-column prop="idValDate" label="证件有效期" width="120">
                 </el-table-column>
                 <el-table-column prop="idInstitute" label="发证机关" width="80">
                 </el-table-column>
@@ -87,15 +87,11 @@
                 </el-table-column>
                 <el-table-column prop="education" label="学历" width="55">
                 </el-table-column>
-                <el-table-column prop="email" label="联系邮箱" width='80'>
+                <el-table-column prop="email" label="联系邮箱" width='110'>
                 </el-table-column>
-                <el-table-column prop="accExchangeName" label="开户机构" width='80'>
+                <el-table-column prop="bankName" label="银行" width="90">
                 </el-table-column>
-                <el-table-column prop="accBranchNetName" label="开户营业网点" width='110'>
-                </el-table-column>
-                <el-table-column prop="bankName" label="银行" width="60">
-                </el-table-column>
-                <el-table-column prop="bankCardNum" label="银行卡号" width="90">
+                <el-table-column prop="bankCardNum" label="银行卡号" width="160">
                 </el-table-column>
                 <el-table-column prop="accTime" sortable label="开户时间">
                 </el-table-column>
@@ -123,10 +119,8 @@ export default {
                 userJob: '医生',
                 education: '大学',
                 email: 'xxx@123.com',
-                accExchangeName:'上海',
-                accBranchNetName:'广发证券公司',
                 bankName: '工商银行',
-                bankCardNum: '48372614784591975522',
+                bankCardNum: '48372614784591975',
                 accTime:'2000-01-01 00:00:00'
             }],
              pickerOptions: {//日期选择器的快捷选项

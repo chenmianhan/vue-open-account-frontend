@@ -20,15 +20,9 @@ userInfo =[{
     title: '联系邮箱',
     content: 'xxx@123.com'
 }, {
-    title: '开户机构',
-    content: '上海'
-}, {
-    title: '开户营业网点',
-    content: '广发证券公司'
-},{
     title: '银行',
     content: '工商银行'
 }, {
     title: '银行卡号',
     content: '4401xxxxxxxxxxx5522'
-},  ]
+}]

@@ -118,7 +118,7 @@
                 </el-col>
             </el-row>
         </div>
-        <div style="padding: 50px;">
+        <div style="padding: 0px;">
             <el-button @click="confirmPost" type="primary" icon="el-icon-s-promotion">提交</el-button>
         </div>
     </div>
@@ -288,7 +288,7 @@ export default {
     }
 
     .box-card {
-        height: 290px;
+        height: 260px;
     }
 
     .review-info {
