@@ -288,7 +288,7 @@ export default {
     }
 
     .box-card {
-        height: 250px;
+        height: 290px;
     }
 
     .review-info {

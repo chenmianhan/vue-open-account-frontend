@@ -72,20 +72,30 @@
         可选择开户机构/营业网点进行排序
          -->
         <div style="padding: 14px;">
-            <el-table v-loading="loading" :data="tableData" 
+            <el-table v-loading='loading' :data="tableData" 
             :default-sort = "{prop: 'accTime', order: 'descending'}" 
             border style="width: 100%">
-                <el-table-column prop="userId" label="用户id" width="80">
+                <el-table-column prop="userName" label="姓名" width="70">
                 </el-table-column>
-                <el-table-column prop="userName" label="姓名" width="80">
+                <el-table-column prop="idCardNum" label="身份证号码" width='140'>
                 </el-table-column>
-                <el-table-column prop="idCardNum" label="身份证号码" width='180'>
+                <el-table-column prop="idValDate" label="证件有效期" width="95">
                 </el-table-column>
-                <el-table-column prop="contactNum" label="联系方式" width='140'>
+                <el-table-column prop="idInstitute" label="发证机关" width="80">
                 </el-table-column>
-                <el-table-column prop="accExchangeName" label="开户机构" sortable width='140'>
+                <el-table-column prop="userJob" label="职业" width="55">
                 </el-table-column>
-                <el-table-column prop="accBranchNetName" label="开户营业网点" sortable width='140'>
+                <el-table-column prop="education" label="学历" width="55">
+                </el-table-column>
+                <el-table-column prop="email" label="联系邮箱" width='80'>
+                </el-table-column>
+                <el-table-column prop="accExchangeName" label="开户机构" width='80'>
+                </el-table-column>
+                <el-table-column prop="accBranchNetName" label="开户营业网点" width='110'>
+                </el-table-column>
+                <el-table-column prop="bankName" label="银行" width="60">
+                </el-table-column>
+                <el-table-column prop="bankCardNum" label="银行卡号" width="90">
                 </el-table-column>
                 <el-table-column prop="accTime" sortable label="开户时间">
                 </el-table-column>
@@ -106,12 +116,17 @@ export default {
 
             dateValue:'', //字符串数组object,dateValue[0]/[1]为开始/结束日期yyyy-mm-dd
             tableData: [{//表格用户对象列表
-                userId: '1',
                 userName:'张三',
                 idCardNum:'510504199901010311',
-                contactNum:'13800000000',
-                accExchangeName:'上海证券交易所',
+                idValDate:'yyyy-mm-dd 至 yyyy-mm-dd',
+                idInstitute: 'xx市xx区派出所',
+                userJob: '医生',
+                education: '大学',
+                email: 'xxx@123.com',
+                accExchangeName:'上海',
                 accBranchNetName:'广发证券公司',
+                bankName: '工商银行',
+                bankCardNum: '48372614784591975522',
                 accTime:'2000-01-01 00:00:00'
             }],
              pickerOptions: {//日期选择器的快捷选项
@@ -125,7 +140,7 @@ export default {
                     }
                 }]
              },
-             loading: true
+             loading: false
           }
     },
 
