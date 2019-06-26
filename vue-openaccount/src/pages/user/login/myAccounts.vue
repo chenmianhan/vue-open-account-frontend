@@ -231,9 +231,11 @@ export default {
                 if(valid){
                     if(this.rechargeForm.password == '111111'){
                         account.balance += parseFloat(this.rechargeForm.value);
+                        account.balance = this.changeTwoDecimal_f(account.balance);
                         this.$message.success({
                             message: '充值成功'
                         });
+                        this.rechargeForm.password = '';
                         this.rechargeVisible = false;
                     } else {
                         this.$message.error({
@@ -253,9 +255,11 @@ export default {
                             });
                         } else{
                             account.balance -= parseFloat(this.withdrawForm.value);
+                            account.balance = this.changeTwoDecimal_f(account.balance);
                             this.$message.success({
                                 message: '提现成功，将在24小时内到账'
                             });
+                            this.withdrawForm.password = '';
                             this.withdrawVisible = false;
                         }
                     }else{
@@ -298,6 +302,27 @@ export default {
         },
         handleMoreDetail(){
             this.$router.push({path:'/user/lineDetail'});
+        },
+        changeTwoDecimal_f(x){
+            var f_x = parseFloat(x);
+            if (isNaN(f_x))
+            {
+                alert('function:changeTwoDecimal->parameter error');
+                return false;
+            }
+            f_x = Math.round(f_x*100)/100;
+            var s_x = f_x.toString();
+            var pos_decimal = s_x.indexOf('.');
+            if (pos_decimal < 0)
+            {
+                pos_decimal = s_x.length;
+                s_x += '.';
+            }
+            while (s_x.length <= pos_decimal + 2)
+            {
+                s_x += '0';
+            }
+            return s_x;
         }
     },
     mounted(){
