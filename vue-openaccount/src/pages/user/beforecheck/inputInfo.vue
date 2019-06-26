@@ -301,32 +301,37 @@ import area from '../../../assets/js/area.js'
           this.$refs[formName].validate((valid) => {
             // console.log(valid);
             if (valid) {
-              const postData ={
-                name: that.infoForm.name,
-                ID_number: that.infoForm.idNum,
-                ID_issuance_date: that.infoForm.begin,
-                ID_overdue_date:that.infoForm.expire,
-                ID_licensing_authority:that.infoForm.agency,
-                ID_address: that.infoForm.id_address,
+              let postData ={
+                account_info: {
+                  name: that.infoForm.name,
+                  id_number: that.infoForm.idNum,
+                  id_issuance_date: that.infoForm.begin,
+                  id_overdue_date:that.infoForm.expire,
+                  id_licensing_authority:that.infoForm.agency,
+                  profession:that.infoForm.job,
+                  education:that.infoForm.degree[0],
+                  email: that.infoForm.email,
+                  id_picture:that.infoForm.frontUrl,
+                  id_card_inverse_side:that.infoForm.backUrl,
+                  headshot:that.infoForm.headUrl,
+                  user_id: 1},
+                id_address: that.infoForm.id_address,
                 postal_address: that.infoForm.mail_address,
                 contact_address: that.infoForm.contact_address,
-                profession:that.infoForm.job,
-                education:that.infoForm.degree,
-                email: that.infoForm.email,
-                ID_picture:that.infoForm.frontUrl,
-                ID_card_inverse_side:that.infoForm.backUrl,
-                headshot:that.infoForm.headUrl,
-                user_id: 1
               };
+
 
               // var that = this;
               console.log(postData);
-              this.$axios.post('/api/addAccountInfo',postData)
-                .then(function (response) {
+              this.$axios.post('/api/addAccountInfo', postData)
+                .then(/*function (response) {
                   // if(response.data.)
                 console.log(response);
                 that.$router.push('/user/evaluation');
-              })
+              }*/
+                  res=>{
+                    console.log('res=>',res);
+                  })
                 .catch(function (error) {
                   that.$msgbox({
                     title: '连接失败',

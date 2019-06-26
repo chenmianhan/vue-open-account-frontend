@@ -87,11 +87,11 @@
               placement="bottom"
               v-model="visible">
               <div style="text-align:center; width: 300px">
-                <el-form ref="form" :model="modifyForm" label-width="100px" size="mini">
-                  <el-form-item label="姓名">
+                <el-form ref="modifyForm" :model="modifyForm" :rules="rules" label-width="100px" size="mini">
+                  <el-form-item label="姓名" prop="name">
                     <el-input v-model="modifyForm.name"></el-input>
                   </el-form-item>
-                  <el-form-item label="身份证号码">
+                  <el-form-item label="身份证号码" prop="idNum">
                     <el-input v-model="modifyForm.idNum"></el-input>
                   </el-form-item>
                   <el-form-item label="联系地址" prop="contact_address">
@@ -103,10 +103,21 @@
                       class="wd400">
                     </el-cascader>
                   </el-form-item>
-                  <el-form-item label="联系方式">
-                    <el-input v-model="modifyForm.contact"></el-input>
+
+                  <el-form-item label="上海网点" prop="store1">
+                    <el-cascader :options="shNet"
+                                 checkStrictly
+                                 v-model="modifyForm.shPoint1"
+                                 class="wd400"></el-cascader>
                   </el-form-item>
 
+                  <el-form-item label="深圳网点" prop="store2">
+                    <el-cascader :options="szNet"
+                                 checkStrictly
+                                 v-model="modifyForm.szPoint2"
+                                 class="wd400">
+                    </el-cascader>
+                  </el-form-item>
 
                   <el-button size="mini" type="text" @click="visible = false">取消</el-button>
                   <el-button type="primary" size="mini" @click="visible = false; submitModifyForm('modifyForm')">保存</el-button>
@@ -130,9 +141,39 @@
 
     export default {
       data() {
+
+        let validID=(rule,value,callback)=>{
+          if(value==''||value==undefined){
+            callback()
+          }else{
+            //const reg=/^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$|^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}([0-9]|X)$/;
+            const reg=/^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/
+            if(reg.test(value)){
+              callback();
+            }else{
+              return callback(new Error('身份证号码不正确'));
+            }
+          }
+        };
+
+        var checkPhone = (rule, value, callback) => {
+          if (!value) {
+            return callback(new Error('手机号不能为空'));
+          } else {
+            const reg = /^1[3|4|5|7|8][0-9]\d{8}$/
+            // console.log(reg.test(value));
+            if (reg.test(value)) {
+              callback();
+            } else {
+              return callback(new Error('请输入正确的手机号'));
+            }
+          }
+        };
+
         return {
           address: areajson,
           visible : false,
+          props: { multiple: true },
 
           institute: '',
           ins_ops: [{//机构显示列表
@@ -142,6 +183,8 @@
             institute: 'sz',
             label: '深圳',
           } ],
+          shNet: [],//后端传来的所有营业网点列表
+          szNet: [],
 
           stores: [],
           str_ops:[{
@@ -155,6 +198,12 @@
           input:'',
 
           modifyForm:{
+            institute1: 'sh',
+            institute2: '',
+            shPoint1:[],
+            szPoint1:[],
+            shPoint2:[],
+            szPoint2:[],
             name:'',
             idNum:'',
             contact_address:'',
@@ -172,6 +221,17 @@
           }],
 
           userData:[],
+
+          rules: {
+            name: [
+              { required: true, message: '请输入姓名', trigger: 'blur' },
+              { min: 2, max: 6, message: '长度在 2 到 6 个字符', trigger: 'blur' }
+            ],
+            idNum: [
+              { required: true, message: '请输入身份证号', trigger: 'blur' },
+              { validator:validID, trigger: 'blur' }
+            ],
+          }
         };
       },
       methods: {
@@ -211,16 +271,14 @@
             if (valid) {
               const postData = {
                 name: that.modifyForm.name,
-                idNum: that.modifyForm.idNum,
+                ID_number: that.modifyForm.idNum,
                 contact_address: that.modifyForm.contact_address,
-                contact: that.modifyForm.contact,
+                user_id: 1
               };
 
               // var that = this;
               console.log(postData);
-              this.$axios.post('/api/modifyUser', this.$Qs.stringify(postData), {
-                headers: {'content-type': 'application/x-www-form-urlencoded'},
-              })
+              this.$axios.post('/api/updateAccountInfo', postData)
                 .then(function (response) {
                   console.log(response);
                   that.$msgbox({
@@ -318,5 +376,8 @@
   }
   .results{
     /*position: relative;*/
+  }
+  .wd400{
+    width: 100%;
   }
 </style>
