@@ -53,23 +53,11 @@
             </el-form-item>
 
             <el-form-item label="权限" prop="authority">
-              <el-tabs v-model="addForm.inst" @tab-click="handleClick">
-                <el-tab-pane label="上海" name="first">
-                  <el-radio-group v-model="addForm.str" >
-                    <el-radio label="营业网点1"></el-radio>
-                    <el-radio label="营业网点2"></el-radio>
-                    <el-radio label="营业网点3"></el-radio>
-                    <el-radio label="营业网点4"></el-radio>
-                  </el-radio-group>
-                </el-tab-pane>
-                <el-tab-pane label="深圳" name="second">
-                  <el-radio-group v-model="addForm.str" >
-                    <el-radio label="营业网点1"></el-radio>
-                    <el-radio label="营业网点2"></el-radio>
-                    <el-radio label="营业网点3"></el-radio>
-                  </el-radio-group>
-                </el-tab-pane>
-              </el-tabs>
+              <el-cascader :options="Net"
+                           checkStrictly
+                           v-model="addForm.str"
+                           class="wd400">
+              </el-cascader>
             </el-form-item>
 
             <el-button size="mini" type="text" @click="visible = false">取消</el-button>
@@ -131,23 +119,11 @@
                 </el-form-item>
 
                 <el-form-item label="权限" prop="authority">
-                  <el-tabs v-model="modifyForm.inst" @tab-click="handleClick">
-                    <el-tab-pane label="上海" name="first">
-                      <el-radio-group v-model="modifyForm.str" >
-                        <el-radio label="营业网点1"></el-radio>
-                        <el-radio label="营业网点2"></el-radio>
-                        <el-radio label="营业网点3"></el-radio>
-                        <el-radio label="营业网点4"></el-radio>
-                      </el-radio-group>
-                    </el-tab-pane>
-                    <el-tab-pane label="深圳" name="second">
-                      <el-radio-group v-model="modifyForm.str" >
-                        <el-radio label="营业网点1"></el-radio>
-                        <el-radio label="营业网点2"></el-radio>
-                        <el-radio label="营业网点3"></el-radio>
-                      </el-radio-group>
-                    </el-tab-pane>
-                  </el-tabs>
+                  <el-cascader :options="Net"
+                               checkStrictly
+                               v-model="modifyForm.str"
+                               class="wd400">
+                  </el-cascader>
                 </el-form-item>
 
                 <el-button size="mini" type="text" @click="visible = false">取消</el-button>
@@ -181,10 +157,7 @@
             label: '深圳',
           } ],
 
-          shNet: [],//后端传来的所有营业网点列表
-          szNet: [],
-          shPoint: [],//最终被选择的营业网点列表
-          szPoint: [],
+          Net: [],//后端传来的所有营业网点列表
 
           targetReviewer:'',//搜索的目标审核员名称
 
@@ -300,43 +273,25 @@
         handleClick(tab, event) {
           console.log(tab, event);
         },
-        getSHList(){
+        getNetList(){
             var that = this;
-            this.$axios.get('/api/security/get_securityall').then(function(response){
-                that.shNet = [];
-                that.shNet = response.data;
-                for(var i = 0; i < that.shNet.length; i++){
-                    for(var j = 0; j < that.shNet[i].children.length; j++){
-                        for(var t = 0; t < that.shNet[i].children[j].children.length; t++){
-                            if(that.shNet[i].children[j].children[t].type != '0'){
-                                that.shNet[i].children[j].children.splice(t,1);
-                                t--;
-                            }
-                        }
-                    }
-                }
+            this.$axios.get('/api/security/get_security',{
+              params:{reviewer_id : 1}
+            }).then(function(response){
+                that.Net = [];
+                that.Net = response.data;
+              if(that.Net[0].children[0].children[0].type == '0') {
+                that.modifyForm.inst = 'sh';
+                that.addForm.inst = 'sh';
+              }
+              else if(that.Net[0].children[0].children[0].type == '1') {
+                that.modifyForm.inst = 'sz';
+                that.addForm.inst = 'sz';
+              }
             });
-            console.log('get sh list');
+            console.log('get net list');
         },
 
-        getSZList(){
-            var that = this;
-            this.$axios.get('/api/security/get_securityall').then(function(response){
-                that.szNet = [];
-                that.szNet = response.data;
-                for(var i = 0; i < that.szNet.length; i++){
-                    for(var j = 0; j < that.szNet[i].children.length; j++){
-                        for(var t = 0; t < that.szNet[i].children[j].children.length; t++){
-                            if(that.szNet[i].children[j].children[t].type != '1'){
-                                that.szNet[i].children[j].children.splice(t,1);
-                                t--;
-                            }
-                        }
-                    }
-                }
-            });
-            console.log('get sz list');
-        }
       },
 
       mounted(){
