@@ -77,7 +77,7 @@
             border style="width: 100%">
                 <el-table-column prop="userName" label="姓名" width="70">
                 </el-table-column>
-                <el-table-column prop="idCardNum" label="身份证号码" width='160'>
+                <el-table-column prop="idCardNum" label="身份证号码" width='140'>
                 </el-table-column>
                 <el-table-column prop="idValDate" label="证件有效期" width="120">
                 </el-table-column>
@@ -131,6 +131,7 @@ export default {
                     const end = new Date();
                     const start = new Date();
                     start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+                    end.setTime(end.getTime() + 3600 * 1000 * 24);
                     picker.$emit('pick', [start, end]);
                     }
                 }]
@@ -178,7 +179,7 @@ export default {
             this.$axios.post('/api/api/statisitcData/getUserInfo', this.$Qs.stringify(postData)
             ).then(function(response){
                 console.log(response.data);
-                that.tableData = response.data.userInfoList;
+                that.tableData = response.data;
                 that.loading = false;
             }).catch(function(error){
                 console.log(error);
@@ -194,6 +195,7 @@ export default {
             const end = new Date();
             const start = new Date();
             start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+            end.setTime(end.getTime() + 3600 * 1000 * 24);
 
             var dateRange = new Array(start, end);
             var reg = new RegExp( '/' , "g" );
