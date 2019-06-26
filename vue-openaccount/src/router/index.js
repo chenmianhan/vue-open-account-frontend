@@ -31,6 +31,13 @@ export default new Router({
         },
         name: '待审核'
       }, {
+        path: '/user/notPass',
+        component: resolve => require(['../pages/user/notPass.vue'], resolve),
+        meta:{
+          isLogin: true//需要登录
+        },
+        name: '未通过'
+      }, {
         path: '/user/choose',
         component: resolve => require(['../pages/user/beforecheck/choose.vue'], resolve),
         meta:{

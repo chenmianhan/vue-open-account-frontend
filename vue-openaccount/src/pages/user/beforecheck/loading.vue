@@ -8,7 +8,7 @@
         </el-breadcrumb>
     </div> -->
   <div style="margin:0 auto;margin-top:50px;margin-bottom: 50px; width:70%;text-align: left;">
-    <el-steps :active="3" finish-status="success">
+    <el-steps :active="4" finish-status="success">
       <el-step title="填写用户信息"></el-step>
       <el-step title="风险测评"></el-step>
       <el-step title="选择营业网点"></el-step>

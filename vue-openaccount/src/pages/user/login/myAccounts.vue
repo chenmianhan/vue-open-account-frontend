@@ -121,12 +121,21 @@
         </el-dialog>
         <!-- 添加账户 -->
         <el-dialog title="添加账户" :visible.sync="addVisible" width="30%">
-        <el-form :model="addForm">
-            <el-form-item label="储蓄卡" :label-width="formLabelWidth">
+        <el-form :model="addForm" ref="addForm" :rules="rules">
+            <el-form-item label="储蓄卡" :label-width="formLabelWidth" prop="cardID">
             <el-input size="small" v-model="addForm.cardID" autocomplete="off"></el-input>
             </el-form-item>
-            <el-form-item label="账户密码" :label-width="formLabelWidth">
+            <el-form-item label="账户密码" :label-width="formLabelWidth" prop="password">
             <el-input size="small" type="password" v-model="addForm.password" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="姓名" :label-width="formLabelWidth" prop="name">
+            <el-input size="small" v-model="addForm.name" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="手机号" :label-width="formLabelWidth" prop="phone">
+            <el-input size="small" v-model="addForm.phone" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="开户行" :label-width="formLabelWidth" prop="bank">
+            <el-input size="small" v-model="addForm.bank" autocomplete="off"></el-input>
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -143,6 +152,16 @@ import Bill from '../../../assets/js/timeLine.js';
 import account from '../../../assets/js/myAccount';
 export default {
     data() {
+            var validatePhone = (rule, value, callback) => {
+                //验证手机号格式是否正确
+                const reg = /^1[3|4|5|7|8][0-9]\d{8}$/;
+                console.log(reg.test(value));
+                if (reg.test(value)) {//格式正确
+                    callback();
+                } else {//格式错误
+                    return callback(new Error('请输入格式正确的手机号（长度11位）'));
+                }
+            };
         return {
             accountName: 'first',
             primaryAccount: data.primaryAccount,
@@ -177,9 +196,19 @@ export default {
                 ],
                 cardID: [
                     {required: true, message: '请输入卡号', trigger: 'blur'}
+                ],
+                name: [
+                    {required: true, message:'请输入姓名', trigger: 'blur'}
+                ],
+                phone: [
+                    {required: true, message:'请输入手机号码',trigger:'blur'},
+                    {validator: validatePhone, trigger: 'blur'}
+                ],
+                bank: [
+                    {required: true, message:'请输入开户行',trigger:'blur'}
                 ]
             },
-            netPoint: netPoint
+            netPoint: data.netPoint
         }
     },
     methods: {
@@ -200,22 +229,30 @@ export default {
             });
         },
         handleAdd(){
-            var that = this;
-            this.$axios.post('', that.addForm.cardID).then(function(response){
-                if(this.addForm.password == '111111'){
-                    that.$message.success({
-                        message: '添加账户成功'
-                    });
-                    that.getData();
-                }else{
-                    that.$message.error({
-                        message: '密码错误'
+            this.$refs['addForm'].validate((valid) => {
+                if(valid){
+                    var that = this;
+                    const postData = {
+                        cardID: this.addForm.cardID,
+                        bank: this.addForm.bank
+                    }
+                    this.$axios.post('', postData).then(function(response){
+                        if(this.addForm.password == '111111'){
+                            that.$message.success({
+                                message: '添加账户成功'
+                            });
+                            that.getData();
+                        }else{
+                            that.$message.error({
+                                message: '密码错误'
+                            });
+                        }
+                    }).catch(() => {
+                        that.$message.error({
+                            message: '连接失败'
+                        });
                     });
                 }
-            }).catch(() => {
-                that.$message.error({
-                    message: '连接失败'
-                });
             });
         },
         handleClick(tab, event) {

@@ -1,7 +1,7 @@
 <template>
 <div>
   <div style="margin: 0 auto;width:70%;margin-top:50px;margin-bottom:50px;text-align:left;">
-    <el-steps :active="0" finish-status="success">
+    <el-steps :active="3" finish-status="success">
       <el-step title="用户信息填写"></el-step>
       <el-step title="风险测评"></el-step>
       <el-step title="选择营业网点"></el-step>

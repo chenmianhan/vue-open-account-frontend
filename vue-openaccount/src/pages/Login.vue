@@ -140,7 +140,7 @@
                                         that.$router.push('/admin/home');
                                         break;
                                     case '3'://超管成功登录
-                                        that.$router.push('');
+                                        that.$router.push('/superadmin/home');
                                 }
                             }
                             //登录失败密码或用户名错误
