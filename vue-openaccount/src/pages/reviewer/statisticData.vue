@@ -77,7 +77,7 @@
             border style="width: 100%">
                 <el-table-column prop="userName" label="姓名" width="70">
                 </el-table-column>
-                <el-table-column prop="idCardNum" label="身份证号码" width='160'>
+                <el-table-column prop="idCardNum" label="身份证号码" width='140'>
                 </el-table-column>
                 <el-table-column prop="idValDate" label="证件有效期" width="120">
                 </el-table-column>
@@ -131,6 +131,7 @@ export default {
                     const end = new Date();
                     const start = new Date();
                     start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+                    end.setTime(end.getTime() + 3600 * 1000 * 24);
                     picker.$emit('pick', [start, end]);
                     }
                 }]
@@ -148,7 +149,7 @@ export default {
             console.log(this.$Qs.stringify(postData));
             //向后端传输审核员的ID，后端返回审核员信息
             //,{headers:{'Content-Type':'application/json;charset=UTF-8'}}
-            this.$axios.post('/api/statisticData/getReviewerInfo', this.$Qs.stringify(postData)
+            this.$axios.post('/api/api/statisticData/getReviewerInfo', this.$Qs.stringify(postData)
             ).then(function(response) {
                 console.log(response.data);
                 that.exchangeName = response.data.exchangeName;
@@ -175,10 +176,10 @@ export default {
             console.log(this.$Qs.stringify(postData));
             //向后端传输日期范围，后端返回该范围中已审核的用户信息对象列表
             //一个对象元素对应一个用户信息
-            this.$axios.post('/api/statisitcData/getUserInfo', this.$Qs.stringify(postData)
+            this.$axios.post('/api/api/statisitcData/getUserInfo', this.$Qs.stringify(postData)
             ).then(function(response){
                 console.log(response.data);
-                that.tableData = response.data.userInfoList;
+                that.tableData = response.data;
                 that.loading = false;
             }).catch(function(error){
                 console.log(error);
@@ -194,6 +195,7 @@ export default {
             const end = new Date();
             const start = new Date();
             start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+            end.setTime(end.getTime() + 3600 * 1000 * 24);
 
             var dateRange = new Array(start, end);
             var reg = new RegExp( '/' , "g" );
