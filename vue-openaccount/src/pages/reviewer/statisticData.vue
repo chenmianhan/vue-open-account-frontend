@@ -104,7 +104,8 @@
 export default {
     data: function(){
         return {
-            reviewerId: localStorage.getItem('ms_username'),
+            //reviewerId: localStorage.getItem('ms_username'),
+            reviewerId: '9527',
             exchangeName: '上海证券交易所',
             branchNetName: '广发证券公司',
             toReviewNum: 0,
@@ -143,8 +144,10 @@ export default {
             var that = this;
             const postData = {
                 reviewerId: this.reviewerId
-            }
+            };
+            console.log(this.$Qs.stringify(postData));
             //向后端传输审核员的ID，后端返回审核员信息
+            //,{headers:{'Content-Type':'application/json;charset=UTF-8'}}
             this.$axios.post('/api/statisticData/getReviewerInfo', this.$Qs.stringify(postData)
             ).then(function(response) {
                 console.log(response.data);
@@ -169,7 +172,7 @@ export default {
                 end: this.dateValue[1]
             }
             var that = this;
-            console.log(postData);
+            console.log(this.$Qs.stringify(postData));
             //向后端传输日期范围，后端返回该范围中已审核的用户信息对象列表
             //一个对象元素对应一个用户信息
             this.$axios.post('/api/statisitcData/getUserInfo', this.$Qs.stringify(postData)
@@ -182,7 +185,7 @@ export default {
                 that.$msgbox({
                     type:'error',
                     title: '连接异常',
-                    meassage: '获取已审核用户信息失败！'
+                    message: '获取已审核用户信息失败！'
                 });
             });
         },
