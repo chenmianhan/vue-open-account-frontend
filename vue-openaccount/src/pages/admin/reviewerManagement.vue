@@ -157,6 +157,11 @@
             label: '深圳',
           } ],
 
+          shNet: [],//后端传来的所有营业网点列表
+          szNet: [],
+          shPoint: [],//最终被选择的营业网点列表
+          szPoint: [],
+
           Net: [],//后端传来的所有营业网点列表
 
           targetReviewer:'',//搜索的目标审核员名称
@@ -174,7 +179,6 @@
             name:'',
             account:'',
             password:'',
-            inst:'',
             str:''
           },
 
@@ -182,13 +186,12 @@
             name:'',
             account:'',
             password:'',
-            inst:'',
             str:''
           },
 
-          ins_radio:'上海',
+          /*ins_radio:'上海',
           str_radio1:'营业网点1',
-          str_radio2:'营业网点1',
+          str_radio2:'营业网点1',*/
         };
       },
       methods: {
@@ -270,24 +273,137 @@
         onSubmit() {
           console.log('submit!');
         },
+
+        submitModifyForm(formName) {
+          var that = this;
+          // console.log(this.infoForm);
+          // debugger;
+          this.$refs[formName].validate((valid) => {
+            // console.log(valid);
+            if (valid) {
+              const postData = {
+                name: that.modifyForm.name,
+                account: that.modifyForm.account,
+                password: that.modifyForm.password,
+                str: that.modifyForm.str,
+                auditor_id: 1
+              };
+
+              // var that = this;
+              console.log(postData);
+              this.$axios.post('/api/admin/modifyAuditor', postData)
+                .then(function (response) {
+                  console.log(response);
+                  that.$msgbox({
+                    title: '修改成功',
+                    type: 'succeed'
+                  });
+                })
+                .catch(function (error) {
+                  that.$msgbox({
+                    title: '连接失败',
+                    type: 'error'
+                  });
+                });
+            } else {
+              this.$msgbox({
+                message: '表单格式有误',
+                type: 'error'
+              });
+              // console.log('error submit!!');
+              return false;
+            }
+          });
+        },
+
+        submitAddForm(formName) {
+          var that = this;
+          // console.log(this.infoForm);
+          // debugger;
+          this.$refs[formName].validate((valid) => {
+            // console.log(valid);
+            if (valid) {
+              const postData = {
+                name: that.addForm.name,
+                account: that.addForm.account,
+                password: that.addForm.password,
+                str: that.addForm.str,
+              };
+
+              // var that = this;
+              console.log(postData);
+              this.$axios.post('/api/admin/addAuditor', postData)
+                .then(function (response) {
+                  console.log(response);
+                  that.$msgbox({
+                    title: '修改成功',
+                    type: 'succeed'
+                  });
+                })
+                .catch(function (error) {
+                  that.$msgbox({
+                    title: '连接失败',
+                    type: 'error'
+                  });
+                });
+            } else {
+              this.$msgbox({
+                message: '表单格式有误',
+                type: 'error'
+              });
+              // console.log('error submit!!');
+              return false;
+            }
+          });
+        },
         handleClick(tab, event) {
           console.log(tab, event);
         },
+        getSHList(){
+          var that = this;
+          this.$axios.get('/api/security/get_securityall').then(function(response){
+            that.shNet = [];
+            that.shNet = response.data;
+            for(var i = 0; i < that.shNet.length; i++){
+              for(var j = 0; j < that.shNet[i].children.length; j++){
+                for(var t = 0; t < that.shNet[i].children[j].children.length; t++){
+                  if(that.shNet[i].children[j].children[t].type != '0'){
+                    that.shNet[i].children[j].children.splice(t,1);
+                    t--;
+                  }
+                }
+              }
+            }
+          });
+          console.log('get sh list');
+        },
+
+        getSZList(){
+          var that = this;
+          this.$axios.get('/api/security/get_securityall').then(function(response){
+            that.szNet = [];
+            that.szNet = response.data;
+            for(var i = 0; i < that.szNet.length; i++){
+              for(var j = 0; j < that.szNet[i].children.length; j++){
+                for(var t = 0; t < that.szNet[i].children[j].children.length; t++){
+                  if(that.szNet[i].children[j].children[t].type != '1'){
+                    that.szNet[i].children[j].children.splice(t,1);
+                    t--;
+                  }
+                }
+              }
+            }
+          });
+          console.log('get sz list');
+        },
+
         getNetList(){
             var that = this;
-            this.$axios.get('/api/security/get_security',{
-              params:{reviewer_id : 1}
+            this.$axios.post('/api/admin/get_securityUnderAdmin',{
+              params:{admin_id : 8888}
             }).then(function(response){
                 that.Net = [];
                 that.Net = response.data;
-              if(that.Net[0].children[0].children[0].type == '0') {
-                that.modifyForm.inst = 'sh';
-                that.addForm.inst = 'sh';
-              }
-              else if(that.Net[0].children[0].children[0].type == '1') {
-                that.modifyForm.inst = 'sz';
-                that.addForm.inst = 'sz';
-              }
             });
             console.log('get net list');
         },
@@ -296,6 +412,7 @@
 
       mounted(){
           console.log('start to get net list');
+          this.getNetList();
           this.getSHList();
           this.getSZList();
         }
