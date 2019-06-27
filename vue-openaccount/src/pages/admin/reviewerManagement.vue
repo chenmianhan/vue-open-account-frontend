@@ -399,13 +399,14 @@
 
         getNetList(){
             var that = this;
-            this.$axios.post('/api/admin/get_securityUnderAdmin',{
+            this.$axios.get('/api/admin/get_securityUnderAdmin',{
               params:{admin_id : 8888}
             }).then(function(response){
                 that.Net = [];
                 that.Net = response.data;
             });
             console.log('get net list');
+          console.log(that.Net[0]);
         },
 
       },
