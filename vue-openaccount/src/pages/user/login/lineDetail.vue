@@ -47,10 +47,28 @@ export default {
         handleSearch(){
             var that = this;
             const postData = {
-                // startDate: that.startDate,
-                // endDate: that.endDate
+                startDate: that.startDate,
+                endDate: that.endDate,
                 customer_id: '000000000004'
             }
+            console.log(postData)
+            this.$axios.post('/api/timeline/get_optional_timeline', postData).then(function(response){
+                console.log(response.data)
+                that.moreBill = response.data;
+            }).catch(() => {
+                that.$message.error({
+                    message: '连接错误'
+                });
+            });
+        },
+        getData(){
+            var that = this;
+            const postData = {
+                // startDate: that.startDate,
+                // endDate: that.endDate,
+                customer_id: '000000000004'
+            }
+            console.log(postData)
             this.$axios.post('/api/timeline/get_timeline', postData).then(function(response){
                 console.log(response.data)
                 that.moreBill = response.data;
@@ -80,7 +98,7 @@ export default {
             } 
         });
 
-        this.handleSearch();
+        this.getData();
     }
 }
 </script>

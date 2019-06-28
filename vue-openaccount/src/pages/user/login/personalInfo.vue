@@ -4,10 +4,34 @@
             <img class="photo" src="../../../assets/image/user.jpg">
         </el-col>
         <el-col :span="16">
-            <div v-for="(item, index) in userInfo" :key='index' class="info-box">
+            <div class="info-box">
             <el-row>
-                <el-col :span="5"><span class="title">{{item.title}}：</span></el-col>
-                <el-col :span="11"><span class="content">{{item.content}}</span></el-col>
+                <el-col :span="5"><span class="title">姓名：</span></el-col>
+                <el-col :span="11"><span class="content">{{accountInfo.name}}</span></el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="5"><span class="title">储蓄卡：</span></el-col>
+                <el-col :span="11"><span class="content">{{accountInfo.deposit_account}}</span></el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="5"><span class="title">证件类型：</span></el-col>
+                <el-col :span="11"><span class="content">{{accountInfo.id_type}}</span></el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="5"><span class="title">证件号码：</span></el-col>
+                <el-col :span="11"><span class="content">{{accountInfo.id_number}}</span></el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="5"><span class="title">职业：</span></el-col>
+                <el-col :span="11"><span class="content">{{accountInfo.profession}}</span></el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="5"><span class="title">联系地址：</span></el-col>
+                <el-col :span="11"><span class="content">{{contactAddress.province}} / {{contactAddress.city}} / {{contactAddress.street}}</span></el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="5"><span class="title">邮寄地址：</span></el-col>
+                <el-col :span="11"><span class="content">{{postAddress.province}} / {{postAddress.city}} / {{postAddress.street}}</span></el-col>
             </el-row>
             </div>
             <el-row>
@@ -34,13 +58,27 @@ export default {
     data(){
         return {
             userInfo: userInfo,
-            visible: false
+            visible: false,
+            accountInfo: null,
+            contactAddress: null,
+            postAddress: null
         }
     },
     methods:{
         handleChange(){
             this.visible = true;
         }
+    },
+    mounted(){
+        var that = this;
+        this.$axios.get('/api/getAccountInfo', {
+            params:{user_id: 17}
+        }).then(function(response){
+            console.log(response.data);
+            that.accountInfo = response.data.account_info;
+            that.contactAddress = response.data.contact_address;
+            that.postAddress = response.data.postal_address;
+        })
     }
 }
 </script>
@@ -53,7 +91,7 @@ export default {
         margin: 40px;
     }
     .info-box{
-        margin-top: 30px;
+        margin-top: 50px;
         /* background-color: black; */
         width: 80%;
     }
@@ -64,5 +102,8 @@ export default {
     .content{
         float: left;
         /* margin: 50px; */
+    }
+    .el-row{
+        margin: 20px;
     }
 </style>

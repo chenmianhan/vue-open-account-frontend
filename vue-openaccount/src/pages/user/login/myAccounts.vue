@@ -17,7 +17,7 @@
                             <el-button class='button' type="text" @click="handleRecharge(primaryAccount)">充值</el-button>
                         </el-row>
                         <el-row class="primary-account">
-                            <img src="../../../assets/image/coin.png" class="primary-coin"><span class="title-money">余额：￥{{primaryAccount.balance}}</span>
+                            <img src="../../../assets/image/coin.png" class="primary-coin"><span class="title-money">余额：{{primaryAccount.balance.currency_type}}{{primaryAccount.balance.value}}</span>
                         </el-row>
                     </el-card>
                     <div v-for="item in secondaryAccount" :key='item.id'>
@@ -30,7 +30,7 @@
                                     </el-row>
                                     <el-row class="seco-account">
                                         <!-- <img src="../../assets/coin.png" class="secon-coin"> -->
-                                        <span class="second-money">余额：￥{{item.balance}}</span>
+                                        <span class="second-money">余额：{{item.balance.currency_type}}{{item.balance.value}}</span>
                                     </el-row>
                                 </el-card>
                             </el-col>
@@ -166,7 +166,7 @@ export default {
             accountName: 'first',
             primaryAccount: data.primaryAccount,
             secondaryAccount: data.secondaryAccount,
-            bill: billLittle,
+            bill: [],
             addVisible: false,
             rechargeVisible: false,
             withdrawVisible: false,
@@ -214,18 +214,33 @@ export default {
     methods: {
         getData(){
             var that = this;
-            this.$axios.get('').then(function(response){
+            // const postData = {
+            //     user_id: 17
+            // }
+            this.$axios.get('/api/account/accountDisplay', {
+                params: {user_id: 17}
+            }).then(function(response){
+                console.log(response.data);
                 that.primaryAccount = response.data.primaryAccount;
                 that.secondaryAccount = response.data.secondaryAccount;
-                if(response.data.bill.length >= 5){
-                    that.bill = response.data.bill.slice(0, 5);
-                }else{
-                    that.bill = response.data.bill;
-                }
             }).catch(() => {
                 that.$msgbox.error({
                     title: '连接失败'
                 });
+            });
+        },
+        getTimeLine(){
+            var that = this;
+            const postData = {
+                customer_id: '000000000004'
+            };
+            this.$axios.post('/api/timeline/get_timeline', postData).then(function(response){
+                console.log(response.data);
+                if(response.data.length >= 5){
+                    that.bill = response.data.slice(0, 5);
+                }else{
+                    that.bill = response.data;
+                }
             });
         },
         handleAdd(){
@@ -267,8 +282,8 @@ export default {
             this.$refs['rechargeForm'].validate((valid) => {
                 if(valid){
                     if(this.rechargeForm.password == '111111'){
-                        account.balance += parseFloat(this.rechargeForm.value);
-                        account.balance = this.changeTwoDecimal_f(account.balance);
+                        account.balance.value += parseFloat(this.rechargeForm.value);
+                        account.balance.value = this.changeTwoDecimal_f(account.balance.value);
                         this.$message.success({
                             message: '充值成功'
                         });
@@ -286,13 +301,13 @@ export default {
             this.$refs['withdrawForm'].validate((valid) => {
                 if(valid){
                     if(this.withdrawForm.password == '111111'){
-                        if(account.balance < parseFloat(this.withdrawForm.value)){
+                        if(account.balance.value < parseFloat(this.withdrawForm.value)){
                             this.$message.error({
                                 message: '余额不足'
                             });
                         } else{
-                            account.balance -= parseFloat(this.withdrawForm.value);
-                            account.balance = this.changeTwoDecimal_f(account.balance);
+                            account.balance.value -= parseFloat(this.withdrawForm.value);
+                            account.balance.value = this.changeTwoDecimal_f(account.balance.value);
                             this.$message.success({
                                 message: '提现成功，将在24小时内到账'
                             });
@@ -364,6 +379,7 @@ export default {
     },
     mounted(){
         // this.getData();
+        this.getTimeLine();
     }
 }
 </script>
