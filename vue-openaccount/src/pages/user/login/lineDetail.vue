@@ -5,6 +5,7 @@
         <!-- 选择器 -->
         <div>
             <el-date-picker
+            value-format="yyyy-MM-dd HH:mm:ss"
             v-model="startDate"
             type="date"
             placeholder="选择日期" 
@@ -12,6 +13,7 @@
             </el-date-picker>
             <span style="margin: 20px">至</span>
             <el-date-picker
+            value-format="yyyy-MM-dd HH:mm:ss"
             v-model="endDate"
             type="date"
             placeholder="选择日期" size="small">
@@ -29,13 +31,13 @@
 </template>
 
 <script>
-import Bill from '../../../assets/js/myAccount';
+import Bill from '../../../assets/js/timeLine.js';
 export default {
     data() {
         return {
             startDate: '',
             endDate: '',
-            moreBill: data.bill
+            moreBill: ''
         }
     },
     methods: {
@@ -45,11 +47,13 @@ export default {
         handleSearch(){
             var that = this;
             const postData = {
-                startDate: that.startDate,
-                endDate: that.endDate
+                // startDate: that.startDate,
+                // endDate: that.endDate
+                customer_id: '000000000004'
             }
-            this.$axios.post('', postData).then(function(response){
-                that.moreBill = response.data.bill;
+            this.$axios.post('/api/timeline/get_timeline', postData).then(function(response){
+                console.log(response.data)
+                that.moreBill = response.data;
             }).catch(() => {
                 that.$message.error({
                     message: '连接错误'
@@ -83,7 +87,8 @@ export default {
 
 <style scoped>
     .timeline{
-        margin: 50px;
+        margin: 50px auto;
         width: 50%;
+        /* overflow: hidden; */
     }
 </style>

@@ -60,8 +60,8 @@
               </el-cascader>
             </el-form-item>
 
-            <el-button size="mini" type="text" @click="visible = false">取消</el-button>
-            <el-button type="primary" size="mini" @click="visible = false; onSubmit">保存</el-button>
+            <el-button size="mini" type="text" @click="visible1 = false">取消</el-button>
+            <el-button type="primary" size="mini" @click="onSubmit">保存</el-button>
           </el-form>
         </div>
         <el-button slot="reference" type="primary" size="small" style="margin-left: 50px">添加</el-button>
@@ -126,8 +126,8 @@
                   </el-cascader>
                 </el-form-item>
 
-                <el-button size="mini" type="text" @click="visible = false">取消</el-button>
-                <el-button type="primary" size="mini" @click="visible = false; onSubmit">保存</el-button>
+                <el-button size="mini" type="text" @click="visible2 = false">取消</el-button>
+                <el-button type="primary" size="mini" @click="visible2 = false; onSubmit">保存</el-button>
               </el-form>
             </div>
             <el-button slot="reference">修改</el-button>
@@ -271,6 +271,11 @@
           }
         },
         onSubmit() {
+          this.visible1 = false; 
+          var that = this;
+          this.$axios.post('', that.addForm).then(function(response){
+            
+          })
           console.log('submit!');
         },
 
@@ -402,6 +407,7 @@
             this.$axios.get('/api/admin/get_securityUnderAdmin',{
               params:{admin_id : 8888}
             }).then(function(response){
+              console.log(response.data)
                 that.Net = [];
                 that.Net = response.data;
             });
