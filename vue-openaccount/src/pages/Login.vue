@@ -108,7 +108,7 @@
                     if (valid) {
                         //前->后端传输
                         const postData = {//打包传输数据，类型均为string
-                            phone: that.ruleForm.username,
+                            account: that.ruleForm.username,
                             password: that.ruleForm.password,
                             role: String(that.ruleForm.role)
                         }

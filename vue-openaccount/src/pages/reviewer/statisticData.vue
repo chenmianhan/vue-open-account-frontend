@@ -59,7 +59,9 @@
                 start-placeholder="开始日期"
                 end-placeholder="结束日期"
                 format="yyyy 年 MM 月 dd 日"
-                value-format="yyyy-MM-dd"
+                value-format="yyyy-MM-dd HH:mm:ss"
+                @change="checkRange()"
+                :default-time="['00:00:00', '23:59:59']"
                 :picker-options="pickerOptions">
             </el-date-picker>
             <el-tooltip class="item" effect="dark" content="所选日期范围最大为一周" placement="right">
@@ -72,7 +74,7 @@
         可选择开户机构/营业网点进行排序
          -->
         <div style="padding: 14px;">
-            <el-table v-loading='loading' :data="tableData" 
+            <el-table v-loading='loading' :data="tableData" stripe height='450'
             :default-sort = "{prop: 'accTime', order: 'descending'}" 
             border style="width: 100%">
                 <el-table-column prop="userName" label="姓名" width="70">
@@ -112,6 +114,9 @@ export default {
             reviewedNum: 0,
 
             dateValue:'', //字符串数组object,dateValue[0]/[1]为开始/结束日期yyyy-mm-dd
+            startDate:'',
+            endDate:'',
+
             tableData: [{//表格用户对象列表
                 userName:'张三',
                 idCardNum:'510504199901010311',
@@ -126,13 +131,13 @@ export default {
             }],
              pickerOptions: {//日期选择器的快捷选项
                 shortcuts: [{
-                    text: '最近一周',
-                    onClick(picker) {
-                    const end = new Date();
-                    const start = new Date();
-                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-                    end.setTime(end.getTime() + 3600 * 1000 * 24);
-                    picker.$emit('pick', [start, end]);
+                        text: '最近一周',
+                        onClick(picker) {
+                        const end = new Date();
+                        const start = new Date();
+                        start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+                        end.setTime(end.getTime() + 3600 * 1000 * 24);
+                        picker.$emit('pick', [start, end]);
                     }
                 }]
              },
@@ -194,20 +199,61 @@ export default {
         setDefaultDate(){//默认显示最近一周已审核用户信息
             const end = new Date();
             const start = new Date();
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-            end.setTime(end.getTime() + 3600 * 1000 * 24);
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 6);
+            end.setTime(end.getTime());
 
             var dateRange = new Array(start, end);
             var reg = new RegExp( '/' , "g" );
             dateRange[0] = dateRange[0].toLocaleDateString().replace(reg,'-');
             dateRange[1] = dateRange[1].toLocaleDateString().replace(reg,'-');
+            dateRange[0] += ' 00:00:00';
+            dateRange[1] += ' 23:59:59';
 
             this.dateValue = dateRange;
+            console.log(this.dateValue);
         },
 
         goToReview(){//跳转到开始审核界面
             this.$router.push('/reviewer/reviewUser');
         },
+
+        checkRange(){//检查选择的日期范围
+            var end = new Date(this.dateValue[1]);
+            var start = new Date(this.dateValue[0]);
+            var now = new Date();
+
+            now.setTime(now.getTime());
+            var reg = new RegExp( '/' , "g" );
+            now = now.toLocaleDateString().replace(reg, '-');
+            var hintDate = now;
+            now += ' 23:59:59';
+            now = new Date(now);
+
+            var dateRange = end.getTime() - start.getTime();
+            var isBeyond = now.getTime() - end.getTime();
+            console.log(dateRange);
+            console.log(isBeyond);
+            
+            if(isBeyond < 0){
+                this.$msgbox({
+                    type:'error',
+                    title: '超出范围',
+                    message: '结束日期不能超过今天（' + hintDate + '），请重新选择！'
+                });
+                this.dateValue = '';
+                return false;
+            }else if (dateRange >= 3600 * 1000 * 24 * 7){
+                this.$msgbox({
+                    type:'error',
+                    title: '超出范围',
+                    message: '所选日期范围不能超过一周，请重新选择！'
+                });
+                this.dateValue = '';
+                return false;
+            }else{
+                return true;
+            }
+        }
     },
 
     mounted(){
