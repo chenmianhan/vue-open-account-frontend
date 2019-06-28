@@ -59,6 +59,10 @@ export default {
     }
     .title{
         font-size: 18px;
+        float: left;
     }
-
+    .content{
+        float: left;
+        /* margin: 50px; */
+    }
 </style>
