@@ -7,7 +7,7 @@
         <div class='review-info'>
             <el-row :gutter="12">
                 <!-- 用户信息 -->
-                <el-col :span="8" >
+                <el-col :span="10" >
                     <el-card shadow="hover" class='box-card'>
                         <div slot="header" class="clearfix">
                             <span style='font-weight:bold;font-size:18px'>基本信息</span>
@@ -43,7 +43,7 @@
                     </div>
                 </el-col>
                 <!-- 风险测评结果 -->
-                <el-col :span="8">
+                <el-col :span="4">
                     <el-card shadow="hover" class='box-card'>
                         <div slot="header" class="clearfix">
                             <span style='font-weight:bold;font-size:18px'>风险测评</span>
@@ -75,19 +75,24 @@
                     </div>
                 </el-col>
                 <!-- 身份证照片 -->
-                <el-col :span="8">
+                <el-col :span="10">
                     <el-card shadow="hover" class='box-card'>
                         <div slot="header" class="clearfix">
                             <span style='font-weight:bold;font-size:18px'>身份证照片</span>
                         </div>
                         <div class="text item">
                             <div class="image__placeholder">
-                                <el-col :span='12'>
+                                <el-col :span='8'>
                                     <div class='img-box'>
                                         <img class="img-item" src="../../assets/image/user.jpg">
                                     </div>
                                 </el-col>
-                                <el-col :span='12'>
+                                <el-col :span='8'>
+                                    <div class='img-box'>
+                                        <img class="img-item" src="../../assets/image/user.jpg">
+                                    </div>
+                                </el-col>
+                                <el-col :span='8'>
                                     <div class='img-box'>
                                         <img class="img-item" src="../../assets/image/user.jpg">
                                     </div>
@@ -129,9 +134,11 @@ import Info from '../../assets/js/userInfo.js'
 export default {
     data: function(){
         return {
-            reviewerId: localStorage.getItem('ms_username'),
+            //reviewerId: localStorage.getItem('ms_username'),
+            reviewerId: '1000',
             imageUrl_1:'../../assets/image/user.jpg',
             imageUrl_2:'../../assets/image/user.jpg',
+            imageUrl_3:'../../assets/image/user.jpg',
             userType: '保守型',
             userGrade: 78,
             userInfo: userInfo,//属性中增加用户id
@@ -144,7 +151,8 @@ export default {
                 infoResult: '',
                 gradeResult: '',
                 imageResult: ''
-            }
+            },
+            isPost: false //是否提交成功
         }
     },
     methods:{
@@ -153,14 +161,34 @@ export default {
                 reviewerId: this.reviewerId
             }
             var that = this;
-            this.$axios.post('/api/reviewUser/getUserInfo', this.$Qs.stringify(postData)
+            this.$axios.post('/api/api/reviewUser/getUserInfo', this.$Qs.stringify(postData)
             ).then(function(response){
                 console.log(response.data);
                 that.userInfo = response.data.userInfo;
                 that.imageUrl_1 = response.data.imageUrl_1;
                 that.imageUrl_2 = response.data.imageUrl_2;
+                that.imageUrl_3 = response.data.imageUrl_3;
                 that.userType = response.data.userType;
                 that.userGrade = response.data.userGrade;
+                var code = response.data.code;
+                if (code == '205'){
+                    that.$msgbox({
+                        type: 'info',
+                        title: '审核已完成',
+                        message:'你已审核完目前所有的待审核用户！'
+                    });
+                }else if (code == '204'){
+                    that.$message({
+                        type: 'success',
+                        message: '已获取下一位待审核用户'
+                    });
+                }else {
+                    that.$msgbox({
+                        type: 'error',
+                        title: '系统异常',
+                        message:'未知状态码！'
+                    });
+                }
             }).catch(function(error){
                 console.log(error);
                 that.$msgbox({
@@ -210,15 +238,19 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                var isPost = this.postResult();//提交结果
-                if(isPost){
+                this.postResult();//提交结果
+                console.log(this.isPost);//控制台查看提交状态
+                if(this.isPost){
                     this.$message({
                         type: 'success',
                         message: '确认提交！'
                     });
+                    this.isPost = false;
+                    this.getFullInfo();//继续获取下一个待审核用户的信息
                 }
                 else{
                     this.$message.error('提交失败！');
+                    this.isPost = false;
                 }
             }).catch(() => {
                 this.$message({
@@ -234,21 +266,45 @@ export default {
             if (this.checked.info && this.checked.grade && this.checked.image){
                 var that = this;
                 const postData = {
-                    userId: this.userInfo.userId,
-                    reviewResult: this.reviewResult
+                    userId: this.userInfo[0].content,
+                    infoResult: this.reviewResult.infoResult,
+                    gradeResult: this.reviewResult.gradeResult,
+                    imageResult: this.reviewResult.imageResult
                 }
-                this.$axios.post('/api/reviewUser/reviewResult',that.$Qs.stringify(postData)
+                console.log(this.$Qs.stringify(postData));
+                this.$axios.post('/api/reviewUser/postResult',that.$Qs.stringify(postData)
                 ).then(function(response){
-                    console.log(response.data);
-                    that.getFullInfo();//继续获取下一个待审核用户的信息
-                    return true;
+                    console.log(response);
+                    if (response.data.code == '201'){
+                        that.isPost = true;
+                        return true;
+                    }else if (response.data.code == '202'){
+                        that.isPost = false;
+                        return false;
+                    }else if (response.data.code == '203'){
+                        that.isPost = true;
+                        that.$msgbox({
+                            type: 'error',
+                            title: '系统异常',
+                            message:'系统开户失败！'
+                        });
+                        return true; 
+                    }else{
+                        that.isPost = false;
+                        that.$msgbox({
+                            type: 'error',
+                            title: '系统异常',
+                            message:'未知状态码！'
+                        });
+                        return false;
+                    }
                 }).catch(function(error){
                     console.log(error);
                     that.$msgbox({
-                    type: 'error',
-                    title: '连接错误',
-                    message:'与后台服务器通讯失败！'
-                });
+                        type: 'error',
+                        title: '连接错误',
+                        message:'与后台服务器通讯失败！'
+                    });
                     return false;
                 });
             }
@@ -288,7 +344,7 @@ export default {
     }
 
     .box-card {
-        height: 260px;
+        height: 270px;
     }
 
     .review-info {
@@ -308,7 +364,7 @@ export default {
 
     .img-item{
         position: absolute;
-        max-width: 100%;
+        max-width: 90%;
         top:0;
         left:0;
         right: 0;

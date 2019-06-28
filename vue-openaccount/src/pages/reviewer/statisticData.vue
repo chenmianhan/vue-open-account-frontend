@@ -105,7 +105,7 @@ export default {
     data: function(){
         return {
             //reviewerId: localStorage.getItem('ms_username'),
-            reviewerId: '9527',
+            reviewerId: '1000',
             exchangeName: '上海证券交易所',
             branchNetName: '广发证券公司',
             toReviewNum: 0,
@@ -176,7 +176,7 @@ export default {
             console.log(this.$Qs.stringify(postData));
             //向后端传输日期范围，后端返回该范围中已审核的用户信息对象列表
             //一个对象元素对应一个用户信息
-            this.$axios.post('/api/api/statisitcData/getUserInfo', this.$Qs.stringify(postData)
+            this.$axios.post('/api/api/statisticData/getUserInfo', this.$Qs.stringify(postData)
             ).then(function(response){
                 console.log(response.data);
                 that.tableData = response.data;
