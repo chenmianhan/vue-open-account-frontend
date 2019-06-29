@@ -321,7 +321,7 @@ import area from '../../../assets/js/area.js'
               };
 
 
-              // var that = this;
+              
               console.log(postData);
               this.$axios.post('/api/addAccountInfo', postData)
                 .then(/*function (response) {
@@ -331,6 +331,7 @@ import area from '../../../assets/js/area.js'
               }*/
                   res=>{
                     console.log('res=>',res);
+                    that.$router.push({path: '/user/evaluation'});
                   })
                 .catch(function (error) {
                   that.$msgbox({

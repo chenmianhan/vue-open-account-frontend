@@ -238,9 +238,12 @@ export default {
                     that.netPoint.s_netpoint = null;
                 }
                 // that.netPoint = response.data.netPoint;
-            }).catch(() => {
-                that.$msgbox.error({
-                    title: '连接失败'
+            }).catch((error) => {
+                console.log(error);
+                that.$msgbox({
+                    type: 'error',
+                    title: '连接失败',
+                    message: '与后台服务器通讯失败！'
                 });
             });
         },
