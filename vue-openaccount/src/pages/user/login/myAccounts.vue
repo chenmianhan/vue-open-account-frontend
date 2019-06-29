@@ -1,11 +1,5 @@
 <template>
 <div>
-    <div class="bread">
-        <el-breadcrumb separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item>用户</el-breadcrumb-item>
-            <el-breadcrumb-item>我的账户</el-breadcrumb-item>
-        </el-breadcrumb>
-    </div>
     <div class="account-box">
         <el-tabs v-model="accountName" @tab-click='handleClick'>
             <el-tab-pane label="资金账户" name="first">
@@ -63,24 +57,51 @@
                 </el-col>
             </el-tab-pane>
             <el-tab-pane label="证券账户" name="second">
-                <el-card class="box-card" shadow='hover' v-show="netPoint.n_netpoint != null">
+                <!-- <el-card class="box-card" shadow='hover' v-show="netPoint.n_netpoint != null">
                 <div slot="header" class="clearfix">
-                    <span>上海证券交易所</span>
+                    <span>上海证券交易所</span> -->
                     <!-- <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button> -->
-                </div>
+                <!-- </div>
                 <div class="text item">
                     {{netPoint.n_netpoint}}
                 </div>
                 </el-card>
                 <el-card class="box-card" shadow='hover' v-show="netPoint.s_netpoint != null">
                 <div slot="header" class="clearfix">
-                    <span>深圳证券交易所</span>
+                    <span>深圳证券交易所</span> -->
                     <!-- <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button> -->
-                </div>
+                <!-- </div>
                 <div class="text item">
                     {{netPoint.s_netpoint}}
                 </div>
-                </el-card>
+                </el-card> -->
+                <el-row :gutter="100">
+                    <el-col :span="10" :offset="index > 0 ? 2 : 0">
+                        <el-card :body-style="{ padding: '0px' }" v-show="netPoint.n_netpoint!=null">
+                            <img src="../../../assets/image/sh.jpg" class="image">
+                            <div style="padding: 14px;">
+                                <span>{{netPoint.n_netpoint}}</span>
+                                <div class="bottom clearfix">
+                                <time class="time">上海证券交易所</time>
+                                <!-- <el-button type="text" class="button">详情</el-button> -->
+                                </div>
+                            </div>
+                        </el-card>
+                    </el-col>
+                    <el-col :span="10" :offset="index > 0 ? 2 : 0">
+                        <el-card :body-style="{ padding: '0px' }" v-show="netPoint.s_netpoint!=null">
+                            <img src="../../../assets/image/sz.jpg" class="image">
+                            <div style="padding: 14px;">
+                                <span>{{netPoint.s_netpoint}}</span>
+                                <div class="bottom clearfix">
+                                <time class="time">深圳证券交易所</time>
+                                <!-- <el-button type="text" class="button">详情</el-button> -->
+                                </div>
+                            </div>
+                        </el-card>
+                    </el-col>
+                </el-row>
+
             </el-tab-pane>
         </el-tabs>
         <!-- 对话框 -->
@@ -222,21 +243,21 @@ export default {
             }).then(function(response){
                 console.log(response.data);
                 that.primaryAccount = response.data.primaryAccount;
-                // that.primaryAccount.balance.balance = that.changeTwoDecimal_f(that.primaryAccount.balance.balance)
+                that.primaryAccount.balance.balance = that.changeTwoDecimal_f(that.primaryAccount.balance.balance)
                 that.secondaryAccount = response.data.secondaryAccount;
-                // for(var i = 0;i < response.data.secondaryAccount.length; i++){
-                //     that.secondaryAccount[i].balance.balance = that.changeTwoDecimal_f(that.secondaryAccount[i].balance.balance);
-                // }
-                // if(response.data.netPoint.n_netpoint != ''){
-                //     that.netPoint.n_netpoint = response.data.netPoint.n_netpoint;
-                // } else{
-                //     that.netPoint.n_netpoint = null;
-                // }
-                // if(response.data.netPoint.s_netpoint != ''){
-                //     that.netPoint.s_netpoint = response.data.netPoint.s_netpoint;
-                // } else{
-                //     that.netPoint.s_netpoint = null;
-                // }
+                for(var i = 0;i < response.data.secondaryAccount.length; i++){
+                    that.secondaryAccount[i].balance.balance = that.changeTwoDecimal_f(that.secondaryAccount[i].balance.balance);
+                }
+                if(response.data.netPoint.n_netpoint != ''){
+                    that.netPoint.n_netpoint = response.data.netPoint.n_netpoint;
+                } else{
+                    that.netPoint.n_netpoint = null;
+                }
+                if(response.data.netPoint.s_netpoint != ''){
+                    that.netPoint.s_netpoint = response.data.netPoint.s_netpoint;
+                } else{
+                    that.netPoint.s_netpoint = null;
+                }
                 // that.netPoint = response.data.netPoint;
             }).catch((error) => {
                 console.log(error);
@@ -300,7 +321,7 @@ export default {
             this.$refs['rechargeForm'].validate((valid) => {
                 if(valid){
                     if(this.rechargeForm.password == '111111'){
-                        account.balance.balance += parseFloat(this.rechargeForm.value);
+                        account.balance.balance = parseFloat(account.balance.balance) + parseFloat(this.rechargeForm.value);
                         // console.log(parseFloat(this.rechargeForm.value));
                         account.balance.balance = this.changeTwoDecimal_f(account.balance.balance);
                         this.$message.success({
@@ -325,7 +346,7 @@ export default {
                                 message: '余额不足'
                             });
                         } else{
-                            account.balance.balance -= parseFloat(this.withdrawForm.value);
+                            account.balance.balance = parseFloat(account.balance.balance) - parseFloat(this.withdrawForm.value);
                             account.balance.balance = this.changeTwoDecimal_f(account.balance.balance);
                             this.$message.success({
                                 message: '提现成功，将在24小时内到账'
@@ -504,4 +525,34 @@ export default {
 .plus{
     font-size:40px;
 }
+  .time {
+    font-size: 13px;
+    color: #999;
+  }
+  
+  .bottom {
+    margin-top: 13px;
+    line-height: 12px;
+  }
+
+  .button {
+    padding: 0;
+    float: right;
+  }
+
+  .image {
+    width: 100%;
+    display: block;
+  }
+
+  .clearfix:before,
+  .clearfix:after {
+      display: table;
+      content: "";
+  }
+  
+  .clearfix:after {
+      clear: both
+  }
+
 </style>
