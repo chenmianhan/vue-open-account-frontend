@@ -177,9 +177,9 @@ export default new Router({
         },
         name: '机构管理'
       }]
-    // },{
-    //   path: '*',
-    //   component: resolve => require(['../pages/404.vue'], resolve)
+    },{
+      path: '*',
+      component: resolve => require(['../pages/404.vue'], resolve)
     }
   ]
 })

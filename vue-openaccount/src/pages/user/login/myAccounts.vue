@@ -222,21 +222,21 @@ export default {
             }).then(function(response){
                 console.log(response.data);
                 that.primaryAccount = response.data.primaryAccount;
-                that.primaryAccount.balance.balance = that.changeTwoDecimal_f(that.primaryAccount.balance.balance)
+                // that.primaryAccount.balance.balance = that.changeTwoDecimal_f(that.primaryAccount.balance.balance)
                 that.secondaryAccount = response.data.secondaryAccount;
-                for(var i = 0;i < response.data.secondaryAccount.length; i++){
-                    that.secondaryAccount[i].balance.balance = that.changeTwoDecimal_f(that.secondaryAccount[i].balance.balance);
-                }
-                if(response.data.netPoint.n_netpoint != ''){
-                    that.netPoint.n_netpoint = response.data.netPoint.n_netpoint;
-                } else{
-                    that.netPoint.n_netpoint = null;
-                }
-                if(response.data.netPoint.s_netpoint != ''){
-                    that.netPoint.s_netpoint = response.data.netPoint.s_netpoint;
-                } else{
-                    that.netPoint.s_netpoint = null;
-                }
+                // for(var i = 0;i < response.data.secondaryAccount.length; i++){
+                //     that.secondaryAccount[i].balance.balance = that.changeTwoDecimal_f(that.secondaryAccount[i].balance.balance);
+                // }
+                // if(response.data.netPoint.n_netpoint != ''){
+                //     that.netPoint.n_netpoint = response.data.netPoint.n_netpoint;
+                // } else{
+                //     that.netPoint.n_netpoint = null;
+                // }
+                // if(response.data.netPoint.s_netpoint != ''){
+                //     that.netPoint.s_netpoint = response.data.netPoint.s_netpoint;
+                // } else{
+                //     that.netPoint.s_netpoint = null;
+                // }
                 // that.netPoint = response.data.netPoint;
             }).catch(() => {
                 that.$msgbox.error({
@@ -298,6 +298,7 @@ export default {
                 if(valid){
                     if(this.rechargeForm.password == '111111'){
                         account.balance.balance += parseFloat(this.rechargeForm.value);
+                        // console.log(parseFloat(this.rechargeForm.value));
                         account.balance.balance = this.changeTwoDecimal_f(account.balance.balance);
                         this.$message.success({
                             message: '充值成功'
