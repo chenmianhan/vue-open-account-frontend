@@ -8,7 +8,7 @@
                         <el-row>
                             <!-- <span style="float: left;">主资金账户</span> -->
                             <el-button class='button' type="text" @click="handleWithdraw(primaryAccount)">提现</el-button>
-                            <el-button class='button' type="text" @click="handleRecharge(primaryAccount)">充值</el-button>
+                            <el-button class='button' type="text" @click="handleRecharge(primaryAccount)">充值 | </el-button>
                         </el-row>
                         <el-row class="primary-account">
                             <img src="../../../assets/image/coin.png" class="primary-coin"><span class="title-money">余额：{{primaryAccount.balance.currency_type}}{{primaryAccount.balance.balance}}</span>
@@ -20,7 +20,7 @@
                                 <el-card class="secon-account" shadow='hover'>
                                     <el-row>
                                         <el-button class='button' type="text" @click="handleWithdraw(item)">提现</el-button>
-                                        <el-button class='button' type="text" @click="handleRecharge(item)">充值</el-button>
+                                        <el-button class='button' type="text" @click="handleRecharge(item)">充值 | </el-button>
                                     </el-row>
                                     <el-row class="seco-account">
                                         <!-- <img src="../../assets/coin.png" class="secon-coin"> -->
@@ -76,7 +76,7 @@
                 </div>
                 </el-card> -->
                 <el-row :gutter="100">
-                    <el-col :span="10" :offset="index > 0 ? 2 : 0">
+                    <el-col :span="10">
                         <el-card :body-style="{ padding: '0px' }" v-show="netPoint.n_netpoint!=null">
                             <img src="../../../assets/image/sh.jpg" class="image">
                             <div style="padding: 14px;">
@@ -88,7 +88,7 @@
                             </div>
                         </el-card>
                     </el-col>
-                    <el-col :span="10" :offset="index > 0 ? 2 : 0">
+                    <el-col :span="10">
                         <el-card :body-style="{ padding: '0px' }" v-show="netPoint.s_netpoint!=null">
                             <img src="../../../assets/image/sz.jpg" class="image">
                             <div style="padding: 14px;">
@@ -271,7 +271,7 @@ export default {
         getTimeLine(){
             var that = this;
             const postData = {
-                customer_id: '000000000004'
+                user_id: 44
             };
             this.$axios.post('/api/timeline/get_timeline', postData).then(function(response){
                 console.log(response.data);

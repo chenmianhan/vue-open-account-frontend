@@ -49,7 +49,7 @@ export default {
             const postData = {
                 startDate: that.startDate,
                 endDate: that.endDate,
-                customer_id: '000000000004'
+                user_id: 44
             }
             console.log(postData)
             this.$axios.post('/api/timeline/get_optional_timeline', postData).then(function(response){
@@ -66,7 +66,7 @@ export default {
             const postData = {
                 // startDate: that.startDate,
                 // endDate: that.endDate,
-                customer_id: '000000000004'
+                user_id: 44
             }
             console.log(postData)
             this.$axios.post('/api/timeline/get_timeline', postData).then(function(response){
