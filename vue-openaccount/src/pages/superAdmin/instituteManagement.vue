@@ -18,9 +18,6 @@
             <el-form-item label="营业网点名称">
               <el-input v-model="addForm.store"></el-input>
             </el-form-item>
-            <el-form-item label="所属机构">
-              <el-input v-model="addForm.institute"></el-input>
-            </el-form-item>
             <el-button size="mini" type="text" @click="visible = false">取消</el-button>
             <el-button type="primary" size="mini" @click="visible = false; submitAddForm('addForm')">保存</el-button>
           </el-form>
@@ -71,7 +68,6 @@
 
           addForm:{
             store:'',
-            institute:'',
           },
 
           instData:[{
@@ -92,14 +88,11 @@
             if (valid) {
               const postData = {
                 store: that.addForm.store,
-                institute: that.addForm.institute,
               };
 
               // var that = this;
               console.log(postData);
-              this.$axios.post('/api/addStore', this.$Qs.stringify(postData), {
-                headers: {'content-type': 'application/x-www-form-urlencoded'},
-              })
+              this.$axios.post('/api/addStore', postData)
                 .then(function (response) {
                   console.log(response);
                   that.$msgbox({
