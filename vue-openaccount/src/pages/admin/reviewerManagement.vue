@@ -436,4 +436,7 @@
     display: inline-block;
     padding: 10px;
   }
+  .wd400{
+    width: 100%;
+  }
 </style>
