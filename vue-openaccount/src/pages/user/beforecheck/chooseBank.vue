@@ -67,9 +67,9 @@
           },
 
           rules: {
-            check_account: [
-              { validator: checkAccount, trigger: 'blur' }
-            ]
+            // check_account: [
+            //   { validator: checkAccount, trigger: 'blur' }
+            // ]
           }
 
         }
@@ -85,20 +85,21 @@
                 bank_account: that.bankForm.bank_account,
                 bank_password: that.bankForm.bank_password,
               };
-              this.$axios.post('/api/chooseBank',this.$Qs.stringify(postData), {
-                headers: { 'content-type': 'application/x-www-form-urlencoded' },
-              })
-                .then(function (response) {
-                  // if(response.data.)
-                  console.log(response);
-                  that.$router.push('/user/loading');
-                })
-                .catch(function (error) {
-                  that.$msgbox({
-                    title: '连接失败',
-                    type: 'error'
-                  });
-                });
+              // this.$axios.post('/api/chooseBank',this.$Qs.stringify(postData), {
+              //   headers: { 'content-type': 'application/x-www-form-urlencoded' },
+              // })
+              //   .then(function (response) {
+              //     // if(response.data.)
+              //     console.log(response);
+              //     that.$router.push('/user/loading');
+              //   })
+              //   .catch(function (error) {
+              //     that.$msgbox({
+              //       title: '连接失败',
+              //       type: 'error'
+              //     });
+              //   });
+              that.$router.push('/user/loading');
             } else {
               console.log('error submit!!');
               return false;

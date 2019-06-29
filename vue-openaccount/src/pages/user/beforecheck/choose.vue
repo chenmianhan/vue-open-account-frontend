@@ -99,7 +99,7 @@ export default {
                         type: 'success',
                         message: '提交成功！已提交给审核员'
                     });
-                    that.$router.push({path: '/user/loading'});
+                    that.$router.push({path: '/user/chooseBank'});
                 });
                     // 否则
                     // that.$message.error('提交失败');

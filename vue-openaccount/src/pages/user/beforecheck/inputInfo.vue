@@ -233,6 +233,15 @@ import area from '../../../assets/js/area.js'
               { required: true, message: '请输入姓名', trigger: 'blur' },
               { min: 2, max: 6, message: '长度在 2 到 6 个字符', trigger: 'blur' }
             ],
+            id_address: [
+              { required: true, trigger: 'blur'}
+            ],
+            mail_address: [
+              { required: true, trigger: 'blur'}
+            ],
+            contact_address: [
+              { required: true, trigger: 'blur'}
+            ],
            /* begin: [
               { type: 'date', required: true, message: '请选择证件有效期', trigger: 'change' }
             ],
