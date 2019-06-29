@@ -20,7 +20,7 @@
 
     <img src="../../../assets/image/wait.gif" class="image">
     <h1>您的资料待审核......</h1>
-    <h3>如有问题，请联系客服：xxx-xxxx-xxxx</h3>
+    <h3>如有问题，请联系客服：400-5764-5687</h3>
 </div>
 </template>
 

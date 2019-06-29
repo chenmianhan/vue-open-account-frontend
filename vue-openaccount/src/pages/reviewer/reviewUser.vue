@@ -157,6 +157,10 @@ export default {
     },
     methods:{
         getFullInfo(){//从后端获取当前审核用户的全部信息
+            this.checked.info = false;
+            this.checked.grade = false;
+            this.checked.image = false;
+
             const postData = {
                 reviewerId: this.reviewerId
             }
@@ -177,6 +181,7 @@ export default {
                         title: '审核已完成',
                         message:'你已审核完目前所有的待审核用户！'
                     });
+                    that.$router.push('/reviewer/home');
                 }else if (code == '204'){
                     that.$message({
                         type: 'success',
@@ -239,19 +244,19 @@ export default {
                 type: 'warning'
             }).then(() => {
                 this.postResult();//提交结果
-                console.log(this.isPost);//控制台查看提交状态
-                if(this.isPost){
-                    this.$message({
-                        type: 'success',
-                        message: '确认提交！'
-                    });
-                    this.isPost = false;
-                    this.getFullInfo();//继续获取下一个待审核用户的信息
-                }
-                else{
-                    this.$message.error('提交失败！');
-                    this.isPost = false;
-                }
+                // console.log('提交状态:' + this.isPost);//控制台查看提交状态
+                // if(this.isPost){
+                //     this.$message({
+                //         type: 'success',
+                //         message: '确认提交！'
+                //     });
+                //     this.isPost = false;
+                //     this.getFullInfo();//继续获取下一个待审核用户的信息
+                // }
+                // else{
+                //     this.$message.error('提交失败！');
+                //     this.isPost = false;
+                // }
             }).catch(() => {
                 this.$message({
                     type: 'info',
@@ -277,10 +282,8 @@ export default {
                     console.log(response);
                     if (response.data.code == '201'){
                         that.isPost = true;
-                        return true;
                     }else if (response.data.code == '202'){
                         that.isPost = false;
-                        return false;
                     }else if (response.data.code == '203'){
                         that.isPost = true;
                         that.$msgbox({
@@ -288,7 +291,6 @@ export default {
                             title: '系统异常',
                             message:'系统开户失败！'
                         });
-                        return true; 
                     }else{
                         that.isPost = false;
                         that.$msgbox({
@@ -296,7 +298,19 @@ export default {
                             title: '系统异常',
                             message:'未知状态码！'
                         });
-                        return false;
+                    }
+                    console.log('提交状态:' + that.isPost);//控制台查看提交状态
+                    if(that.isPost){
+                        that.$message({
+                            type: 'success',
+                            message: '确认提交！'
+                        });
+                        that.isPost = false;
+                        that.getFullInfo();//继续获取下一个待审核用户的信息
+                    }
+                    else{
+                        that.$message.error('提交失败！');
+                        that.isPost = false;
                     }
                 }).catch(function(error){
                     console.log(error);
@@ -364,7 +378,7 @@ export default {
 
     .img-item{
         position: absolute;
-        max-width: 90%;
+        max-width: 85%;
         top:0;
         left:0;
         right: 0;
