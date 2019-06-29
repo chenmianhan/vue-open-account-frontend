@@ -17,51 +17,40 @@
     </el-steps>  
   </div>
     <el-divider><i class="el-icon-star-off"></i><i class="el-icon-star-off"></i><i class="el-icon-star-off"></i></el-divider>
-        <div class="title"><h1 style="font-size:20px;">请选择您要加入的营业网点（可多选）：</h1></div>
-        <div class="choose">
-            <el-col :span="12">
-            <el-card class="box-card">
-                <div slot="header" class="clearfix">
-                    <span>上海证券交易所</span>
-                </div>
-                <div>
-                    <el-cascader
-                    :options="shNet"
-                    checkStrictly
-                    v-model="shPoint"
-                    props.expandTrigger="hover"
-                    :show-all-levels='false'
-                    class="wd400">
-                    </el-cascader>
-                    <span>{{shPoint}}</span>
-                </div>
-            </el-card>    
-            </el-col>
-            <el-col :span="12">
-            <el-card class="box-card">
-                <div slot="header" class="clearfix">
-                    <span>深圳证券交易所</span>
-                    <!-- <el-checkbox :indeterminate="szIsIndeterminate" v-model="szCheckAll" @change="handleSZ" style="float: right; padding: 3px 0" type="text">全选</el-checkbox> -->
-                </div>
-                <div>
-                    <el-cascader
-                    :options="szNet"
-                    checkStrictly
-                    v-model="szPoint"
-                    props.expandTrigger="hover"
-                    :show-all-levels='false'
-                    class="wd400">
-                    </el-cascader>
-                    <span>{{szPoint}}</span>
-                </div>
-            </el-card>        
-            </el-col>
-            <span></span>
+        <el-row>
+        <el-col :span="12">
+        <div class="title">开通账户类型</div>
+        <div class="check">
+            <el-checkbox-group v-model="accountType">
+                <el-checkbox :label=0 border>沪市基金账户</el-checkbox>
+                <el-checkbox :label=1 border>深市基金账户</el-checkbox><br>
+                <el-checkbox :label=2 border>沪市A股账户</el-checkbox>
+                <el-checkbox :label=3 border>深市A股账户</el-checkbox>
+            </el-checkbox-group>
         </div>
-            <el-row style="height:50px;">
-                <el-button icon="el-icon-caret-left" round @click="$router.push({path:'/user/evaluation'})">上一步</el-button>
-                <el-button type="success" round @click="handleSubmit" :disabled="shPoint.length==0&&szPoint.length==0">提  交<i class="el-icon-success icon"></i></el-button>
-            </el-row>
+        </el-col>
+        <el-col :span="12">
+        <div class="title">选择营业网点</div>
+            <div style="width:60%;margin: 0 auto;">
+                <el-cascader
+                :options="shNet"
+                checkStrictly
+                v-model="shPoint"
+                props.expandTrigger="hover"
+                :show-all-levels='false'
+                class="wd400">
+                </el-cascader>
+                <span>{{shPoint}}</span>
+            </div>
+        </el-col>
+        </el-row>
+        <!-- <el-col :span="9">
+            <img class="img-style" src="../../../assets/image/hint1.jpg">
+        </el-col> -->
+        <el-row style="height:50px;">
+            <el-button icon="el-icon-caret-left" round @click="$router.push({path:'/user/evaluation'})">上一步</el-button>
+            <el-button type="success" round @click="handleSubmit" :disabled="shPoint.length==0&&szPoint.length==0">提  交<i class="el-icon-success icon"></i></el-button>
+        </el-row>
     </div>
 </template>
 
@@ -76,6 +65,7 @@ export default {
             szNet: [],
             shPoint: [],
             szPoint: [],
+            accountType: []
         }
     },
     methods: {
@@ -153,6 +143,9 @@ export default {
 </script>
 
 <style scoped>
+.check {
+    margin: 20px;
+}
     .box-card{
         width: 70%;
         margin: 0 auto;
@@ -175,5 +168,22 @@ export default {
     }
     .wd400{
         width: 100%;
+    }
+    .title{
+        font-size: 20px;
+        color: #606266;
+        font-weight: bold;
+        text-align: left;
+        width: 70%;
+        margin: 60px auto;
+        border-bottom: 1px solid #909399;
+        /* background: #000; */
+
+    }
+    .el-checkbox{
+        margin:10px;
+    }
+    .img-style{
+        width: 80%;
     }
 </style>

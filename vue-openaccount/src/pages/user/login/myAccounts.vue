@@ -8,7 +8,7 @@
                         <el-row>
                             <!-- <span style="float: left;">主资金账户</span> -->
                             <el-button class='button' type="text" @click="handleWithdraw(primaryAccount)">提现</el-button>
-                            <el-button class='button' type="text" @click="handleRecharge(primaryAccount)">充值 | </el-button>
+                            <el-button class='button' type="text" @click="handleRecharge(primaryAccount)">充值</el-button>
                         </el-row>
                         <el-row class="primary-account">
                             <img src="../../../assets/image/coin.png" class="primary-coin"><span class="title-money">余额：{{primaryAccount.balance.currency_type}}{{primaryAccount.balance.balance}}</span>
@@ -20,7 +20,7 @@
                                 <el-card class="secon-account" shadow='hover'>
                                     <el-row>
                                         <el-button class='button' type="text" @click="handleWithdraw(item)">提现</el-button>
-                                        <el-button class='button' type="text" @click="handleRecharge(item)">充值 | </el-button>
+                                        <el-button class='button' type="text" @click="handleRecharge(item)">充值</el-button>
                                     </el-row>
                                     <el-row class="seco-account">
                                         <!-- <img src="../../assets/coin.png" class="secon-coin"> -->
@@ -535,10 +535,10 @@ export default {
     line-height: 12px;
   }
 
-  .button {
+  /* .button {
     padding: 0;
     float: right;
-  }
+  } */
 
   .image {
     width: 100%;
