@@ -17,7 +17,7 @@
                             <el-button class='button' type="text" @click="handleRecharge(primaryAccount)">充值</el-button>
                         </el-row>
                         <el-row class="primary-account">
-                            <img src="../../../assets/image/coin.png" class="primary-coin"><span class="title-money">余额：{{primaryAccount.balance.currency_type}}{{primaryAccount.balance.value}}</span>
+                            <img src="../../../assets/image/coin.png" class="primary-coin"><span class="title-money">余额：{{primaryAccount.balance.currency_type}}{{primaryAccount.balance.balance}}</span>
                         </el-row>
                     </el-card>
                     <div v-for="item in secondaryAccount" :key='item.id'>
@@ -30,7 +30,7 @@
                                     </el-row>
                                     <el-row class="seco-account">
                                         <!-- <img src="../../assets/coin.png" class="secon-coin"> -->
-                                        <span class="second-money">余额：{{item.balance.currency_type}}{{item.balance.value}}</span>
+                                        <span class="second-money">余额：{{item.balance.currency_type}}{{item.balance.balance}}</span>
                                     </el-row>
                                 </el-card>
                             </el-col>
@@ -63,7 +63,7 @@
                 </el-col>
             </el-tab-pane>
             <el-tab-pane label="证券账户" name="second">
-                <el-card class="box-card" shadow='hover'>
+                <el-card class="box-card" shadow='hover' v-show="netPoint.n_netpoint != null">
                 <div slot="header" class="clearfix">
                     <span>上海证券交易所</span>
                     <!-- <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button> -->
@@ -72,7 +72,7 @@
                     {{netPoint.n_netpoint}}
                 </div>
                 </el-card>
-                <el-card class="box-card" shadow='hover'>
+                <el-card class="box-card" shadow='hover' v-show="netPoint.s_netpoint != null">
                 <div slot="header" class="clearfix">
                     <span>深圳证券交易所</span>
                     <!-- <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button> -->
@@ -222,7 +222,22 @@ export default {
             }).then(function(response){
                 console.log(response.data);
                 that.primaryAccount = response.data.primaryAccount;
+                that.primaryAccount.balance.balance = that.changeTwoDecimal_f(that.primaryAccount.balance.balance)
                 that.secondaryAccount = response.data.secondaryAccount;
+                for(var i = 0;i < response.data.secondaryAccount.length; i++){
+                    that.secondaryAccount[i].balance.balance = that.changeTwoDecimal_f(that.secondaryAccount[i].balance.balance);
+                }
+                if(response.data.netPoint.n_netpoint != ''){
+                    that.netPoint.n_netpoint = response.data.netPoint.n_netpoint;
+                } else{
+                    that.netPoint.n_netpoint = null;
+                }
+                if(response.data.netPoint.s_netpoint != ''){
+                    that.netPoint.s_netpoint = response.data.netPoint.s_netpoint;
+                } else{
+                    that.netPoint.s_netpoint = null;
+                }
+                // that.netPoint = response.data.netPoint;
             }).catch(() => {
                 that.$msgbox.error({
                     title: '连接失败'
@@ -282,8 +297,8 @@ export default {
             this.$refs['rechargeForm'].validate((valid) => {
                 if(valid){
                     if(this.rechargeForm.password == '111111'){
-                        account.balance.value += parseFloat(this.rechargeForm.value);
-                        account.balance.value = this.changeTwoDecimal_f(account.balance.value);
+                        account.balance.balance += parseFloat(this.rechargeForm.value);
+                        account.balance.balance = this.changeTwoDecimal_f(account.balance.balance);
                         this.$message.success({
                             message: '充值成功'
                         });
@@ -301,13 +316,13 @@ export default {
             this.$refs['withdrawForm'].validate((valid) => {
                 if(valid){
                     if(this.withdrawForm.password == '111111'){
-                        if(account.balance.value < parseFloat(this.withdrawForm.value)){
+                        if(account.balance.balance < parseFloat(this.withdrawForm.value)){
                             this.$message.error({
                                 message: '余额不足'
                             });
                         } else{
-                            account.balance.value -= parseFloat(this.withdrawForm.value);
-                            account.balance.value = this.changeTwoDecimal_f(account.balance.value);
+                            account.balance.balance -= parseFloat(this.withdrawForm.value);
+                            account.balance.balance = this.changeTwoDecimal_f(account.balance.balance);
                             this.$message.success({
                                 message: '提现成功，将在24小时内到账'
                             });
@@ -378,7 +393,7 @@ export default {
         }
     },
     mounted(){
-        // this.getData();
+        this.getData();
         this.getTimeLine();
     }
 }
