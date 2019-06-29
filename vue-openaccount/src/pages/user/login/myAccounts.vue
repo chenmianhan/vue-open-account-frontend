@@ -261,27 +261,27 @@ export default {
         handleAdd(){
             this.$refs['addForm'].validate((valid) => {
                 if(valid){
-                    var that = this;
-                    const postData = {
-                        cardID: this.addForm.cardID,
-                        bank: this.addForm.bank
-                    }
-                    this.$axios.post('', postData).then(function(response){
-                        if(this.addForm.password == '111111'){
-                            that.$message.success({
-                                message: '添加账户成功'
-                            });
-                            that.getData();
-                        }else{
-                            that.$message.error({
-                                message: '密码错误'
-                            });
+                    if(this.addForm.password == '111111'){
+                        var that = this;
+                        const postData = {
+                            cardID: this.addForm.cardID,
+                            bank: this.addForm.bank
                         }
-                    }).catch(() => {
-                        that.$message.error({
-                            message: '连接失败'
+                        this.$axios.post('', postData).then(function(response){
+                                that.$message.success({
+                                    message: '添加账户成功'
+                                });
+                                that.getData();
+                        }).catch(() => {
+                            that.$message.error({
+                                message: '连接失败'
+                            });
                         });
-                    });
+                    }else{
+                        that.$message.error({
+                            message: '密码错误'
+                        });
+                    } 
                 }
             });
         },
