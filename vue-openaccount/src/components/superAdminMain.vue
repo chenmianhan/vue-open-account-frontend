@@ -82,11 +82,36 @@ export default {
   data: data,
   methods: {
     handleCommand(command) {
+        var that = this;
         if(command == 'loginout'){
-            localStorage.removeItem('ms_username');
-            localStorage.removeItem('Flag');
-            localStorage.removeItem('Role');
-            this.$router.push('/login');
+            this.$axios.post('/api/logout'
+            ).then(function(response){
+                if(response.data.code == '104'){
+                    localStorage.removeItem('ms_username');
+                    localStorage.removeItem('Flag');
+                    localStorage.removeItem('Role');
+                    that.$router.push('/login');
+                }else if (response.data.code == '105'){
+                    that.$msgbox({
+                        type: 'error',
+                        title: '系统异常',
+                        message: '注销失败'
+                    })
+                }else {
+                    that.$msgbox({
+                        type: 'error',
+                        title: '系统异常',
+                        message: '未知状态码'
+                    })
+                }
+            }).catch(function(error){
+                console.log(error);
+                that.$msgbox({
+                    type: 'error',
+                    title: '系统异常',
+                    message: '与后台服务器通讯失败'
+                })
+            })
         }
     }
   },
