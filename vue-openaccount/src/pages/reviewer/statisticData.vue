@@ -57,42 +57,48 @@
             </el-row>
         </div>
         <!-- 下方的表格：
-        固定表头
         默认开户时间降序排列
-        可选择开户机构/营业网点进行排序
          -->
-        <div style="margin-top: 5px;width: 100%">
-            <el-table v-loading='loading' :data="tableData" stripe
+        <div style="margin-top: 5px;">
+            <el-table 
+            v-loading='loading' 
+            :data="tableData" 
+            stripe
             ref="filterTable"
             :default-sort = "{prop: 'accTime', order: 'descending'}" 
             style="width: 100%">
                 <el-table-column type="expand">
                     <template slot-scope="props">
                         <el-form label-position="left" inline class="demo-table-expand">
-                        <el-form-item label="证件有效期">
-                            <span>{{ props.row.idValDate }}</span>
-                        </el-form-item>
-                        <el-form-item label="发证机关">
-                            <span>{{ props.row.idInstitute }}</span>
-                        </el-form-item>
-                        <!-- <el-form-item label="职业">
-                            <span>{{ props.row.userJob }}</span>
-                        </el-form-item>
-                        <el-form-item label="学历">
-                            <span>{{ props.row.education }}</span>
-                        </el-form-item> -->
-                        <el-form-item label="联系邮箱">
-                            <span>{{ props.row.email }}</span>
-                        </el-form-item>
-                        <el-form-item label="银行">
-                            <span>{{ props.row.accTime }}</span>
-                        </el-form-item>
-                        <el-form-item label="银行卡号">
-                            <span>{{ props.row.bankCardNum }}</span>
-                        </el-form-item>
-                        <!-- <el-form-item label="开户时间">
-                            <span>{{ props.row.accTime }}</span>
-                        </el-form-item> -->
+                            <el-form-item>
+                                <span style='color: #99a9bf;'>证件有效期：</span>
+                                <span>{{ props.row.idValDate }}</span>
+                            </el-form-item>
+                            <el-form-item>
+                                <span style='color: #99a9bf;'>发证机关：</span>
+                                <span>{{ props.row.idInstitute }}</span>
+                            </el-form-item>
+                            <!-- <el-form-item label="职业">
+                                <span>{{ props.row.userJob }}</span>
+                            </el-form-item>
+                            <el-form-item label="学历">
+                                <span>{{ props.row.education }}</span>
+                            </el-form-item> -->
+                            <el-form-item>
+                                <span style='color: #99a9bf;'>联系邮箱：</span>
+                                <span>{{ props.row.email }}</span>
+                            </el-form-item>
+                            <el-form-item>
+                                <span style='color: #99a9bf;'>银行名称：</span>
+                                <span>{{ props.row.bankName }}</span>
+                            </el-form-item>
+                            <el-form-item>
+                                <span style='color: #99a9bf;'>银行卡号：</span>
+                                <span>{{ props.row.bankCardNum }}</span>
+                            </el-form-item>
+                            <!-- <el-form-item label="开户时间">
+                                <span>{{ props.row.accTime }}</span>
+                            </el-form-item> -->
                         </el-form>
                     </template>
                 </el-table-column>
@@ -126,7 +132,7 @@
                     filter-placement="bottom-end">
                     <template slot-scope="scope">
                         <el-tag
-                        :type="scope.row.reviewStatu === '通过' ? 'success' : 'primary'"
+                        :type="filterTagColor(scope.row.reviewStatu)"
                         disable-transitions>{{scope.row.reviewStatu}}</el-tag>
                     </template>
                 </el-table-column>
@@ -139,11 +145,9 @@
 export default {
     data: function(){
         return {
-            //reviewerId: localStorage.getItem('ms_username'),
-            reviewerId: '1000',
-            toReviewNum: 154,
-            reviewedNum: 50,
-            notPassNum: 70,
+            toReviewNum: 0,
+            reviewedNum: 0,
+            notPassNum: 0,
 
             dateValue:'', //字符串数组object,dateValue[0]/[1]为开始/结束日期yyyy-mm-dd
 
@@ -181,6 +185,18 @@ export default {
             return row.reviewStatu === value;
         },
 
+        filterTagColor(statu){ //标签颜色
+            if (statu === '通过'){
+                return 'success';
+            }else if (statu === '未通过'){
+                return 'danger';
+            }else if (statu === '待审核'){
+                return 'info';
+            }else{
+                return 'primary';
+            }
+        },
+
         getReviewerInfo(){//获取该审核员统计数据
             if(this.dateValue != ''){
                 var that = this;
@@ -205,40 +221,47 @@ export default {
                         message:'获取审核员信息和统计数据失败！'
                     });
                 });
-            }else{
-                this.$msgbox({
-                    type: 'error',
-                    title: '数据异常',
-                    message:'请先选择一个日期范围！'
-                });
+            }
+            else{
+                if(this.setDefaultDate()){
+                    this.getReviewerInfo();
+                }
             }
         },
 
         getTableData(){//根据选择日期范围显示用户信息
-            const postData = {
-                start: this.dateValue[0],
-                end: this.dateValue[1]
-            }
-            var that = this;
-            console.log(this.$Qs.stringify(postData));
-            //向后端传输日期范围，后端返回该范围中已审核的用户信息对象列表
-            //一个对象元素对应一个用户信息
-            this.$axios.post('/api/api/statisticData/getUserInfo', this.$Qs.stringify(postData)
-            ).then(function(response){
-                console.log(response.data);
-                that.tableData = response.data;
-                that.toReviewNum = response.data.toReviewNum;
-                that.reviewedNum = response.data.reviewedNum;
-                that.notPassNum = response.data.notPassNum;
-                that.loading = false;
-            }).catch(function(error){
-                console.log(error);
-                that.$msgbox({
-                    type:'error',
-                    title: '连接异常',
-                    message: '获取已审核用户信息失败！'
+            if(this.dateValue != ''){
+                console.log(this.dateValue);
+                const postData = {
+                    start: this.dateValue[0],
+                    end: this.dateValue[1]
+                }
+                var that = this;
+                console.log(this.$Qs.stringify(postData));
+                //向后端传输日期范围，后端返回该范围中已审核的用户信息对象列表
+                //一个对象元素对应一个用户信息
+                this.$axios.post('/api/api/statisticData/getUserInfo', this.$Qs.stringify(postData)
+                ).then(function(response){
+                    console.log(response.data);
+                    that.tableData = response.data;
+                    that.toReviewNum = response.data.toReviewNum;
+                    that.reviewedNum = response.data.reviewedNum;
+                    that.notPassNum = response.data.notPassNum;
+                    that.loading = false;
+                }).catch(function(error){
+                    console.log(error);
+                    that.$msgbox({
+                        type:'error',
+                        title: '连接异常',
+                        message: '获取已审核用户信息失败！'
+                    });
                 });
-            });
+            }
+            else{
+                if (this.setDefaultDate()){
+                    this.getTableData();
+                }
+            }
         },
 
         setDefaultDate(){//默认显示最近一周已审核用户信息
@@ -256,6 +279,7 @@ export default {
 
             this.dateValue = dateRange;
             console.log(this.dateValue);
+            return true;
         },
 
         goToReview(){//跳转到开始审核界面
@@ -310,14 +334,27 @@ export default {
 </script>
 
 <style scoped>
+    .demo-table-expand {
+        font-size: 0;
+        width: 100%;
+    }
+    /* .demo-table-expand label {
+        width: 90px;
+        color: #99a9bf;
+    } */
+    .demo-table-expand .el-form-item {
+        margin-right: 0;
+        margin-bottom: 0;
+        width: 100%;
+    }
     .statistic-item {
         margin-top: 40px;
         margin-left: 60px;
         margin-right: 70px;
     }
-    .text {
+    /* .text {
         font-size: 14px;
-    }
+    } */
 
     .item {
         margin-bottom: 18px;
@@ -335,19 +372,5 @@ export default {
         text-align: left;
         margin-top: 1px;
         margin-bottom: 35px;
-    }
-
-    .demo-table-expand {
-        font-size: 0;
-    }
-    .demo-table-expand label {
-        width: 90px;
-        /* color: #99a9bf; */
-        color:mediumvioletred;
-    }
-    .demo-table-expand .el-form-item {
-        margin-right: 0;
-        margin-bottom: 0;
-        width: 50%;
     }
 </style>

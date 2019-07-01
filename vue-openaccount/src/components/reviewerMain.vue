@@ -128,7 +128,7 @@ export default {
     },
   },
   mounted() {//获取页头信息：网点名称/审核员名称
-      this.getReviewerInfo();
+      //this.getReviewerInfo();
   },
 
   computed: {
