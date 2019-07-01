@@ -29,13 +29,12 @@
       <!--页眉-->
       <el-header class="header">
         <el-row>
-          <el-col :span="17" class="header-title">
+          <el-col :span="20" class="header-title">
             <span v-if="collapsed" class="system-name">{{systemName}}</span>
             <span v-else class="menu-button" @click.prevent="collapsed=!collapsed">
               <i class="el-icon-s-fold"></i>
             </span>
           </el-col>
-          <el-col :span="3"><span class="el-dropdown-link userinfo-inner">你好：{{reviewerName}}</span></el-col>
           <el-col :span="1">
             <div class="user-avator"><img src='../assets/image/user.jpg'></div>
           </el-col>

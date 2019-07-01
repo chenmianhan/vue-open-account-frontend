@@ -25,33 +25,30 @@
         <div class='show-item' style='float: center;'>
             <el-row :gutter="12">
                 <el-col :span="4">
-                        <div class="show-data-item">
-                            <span>审核通过</span>
-                        </div>
                         <div class="show-text-item" style="text-align: left;">
                             <el-row>{{ reviewedNum }} </el-row>
+                        </div>
+                        <div class="show-data-item">
+                            <span>审核通过</span>
                         </div>
                 </el-col>
                 <!-- <el-col :span='1'>
                     <el-divider direction='vertical'></el-divider>
                 </el-col> -->
                 <el-col :span="4">
-                        <div class="show-data-item">
-                            <span>审核不通过</span>
-                        </div>
                         <div class='show-text-item' style="color:maroon;">
                             <el-row>{{ notPassNum }}</el-row>
                         </div>
+                        <div class="show-data-item">
+                            <span>审核不通过</span>
+                        </div>
                 </el-col>
                 <el-col :span="4">
-                        <div class="show-data-item">
-                            <span>等待审核</span>
-                            <!-- <el-button @click='goToReview' size='mini' style="float: right; padding: 3px 0" type="text">
-                                立即前往<i class="el-icon-arrow-right el-icon--right"></i>
-                            </el-button> -->
-                        </div>
                         <div class="show-text-item" style="text-align: left;">
                             <el-row>{{ toReviewNum }} </el-row>
+                        </div>
+                        <div class="show-data-item">
+                            <span>等待审核</span>
                         </div>
                 </el-col>
             </el-row>
@@ -364,13 +361,13 @@ export default {
         /* font-weight:bold;  */
         text-align: left;
         color:gray;
+        margin-top: 0px;
+        margin-bottom: 35px;
     }
 
     .show-text-item {
         font-weight: bold;
         font-size: 50px;
         text-align: left;
-        margin-top: 1px;
-        margin-bottom: 35px;
     }
 </style>
