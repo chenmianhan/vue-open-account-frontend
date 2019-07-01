@@ -110,13 +110,6 @@
                   <el-input v-model="modifyForm.password"></el-input>
                 </el-form-item>
 
-                <el-form-item label="权限" prop="authority">
-                  <el-cascader :options="Net"
-                               checkStrictly
-                               v-model="modifyForm.str"
-                               class="wd400">
-                  </el-cascader>
-                </el-form-item>
 
                 <el-button size="mini" type="text" @click="visible2 = false">取消</el-button>
                 <el-button type="primary" size="mini" @click="visible2 = false; onSubmit">保存</el-button>

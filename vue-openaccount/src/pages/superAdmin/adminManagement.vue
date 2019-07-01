@@ -179,7 +179,6 @@
                 name: that.addForm.name,
                 account: that.addForm.account,
                 password: that.addForm.password,
-                store: that.addForm.store,
               };
 
               // var that = this;
@@ -222,8 +221,6 @@
                 name: that.modifyForm.name,
                 account: that.modifyForm.account,
                 password: that.modifyForm.password,
-                inst: that.modifyForm.inst,
-                str: that.modifyForm.str,
               };
 
               // var that = this;

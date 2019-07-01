@@ -66,13 +66,13 @@
         label="联系方式">
       </el-table-column>
       <el-table-column
-        prop="inst"
+        prop="apply_time"
         width="100px"
-        label="开户机构">
+        label="申请时间">
       </el-table-column>
       <el-table-column
-        prop="str"
-        label="开户营业网点">
+        prop="audit_time"
+        label="审核时间">
       </el-table-column>
      <!-- <el-table-column
         prop="date"
@@ -101,14 +101,6 @@
                       v-model="modifyForm.contact_address"
                       props.expandTrigger="hover"
                       class="wd400">
-                    </el-cascader>
-                  </el-form-item>
-
-                  <el-form-item label="所属营业网点" prop="store">
-                    <el-cascader :options="Net"
-                                 checkStrictly
-                                 v-model="modifyForm.store"
-                                 class="wd400">
                     </el-cascader>
                   </el-form-item>
 
@@ -193,11 +185,9 @@
           input:'',
 
           modifyForm:{
-            store:'',
             name:'',
             idNum:'',
             contact_address:'',
-            contact:'',
           },
 
           tableData:[{
@@ -206,21 +196,19 @@
             id_num:'123466876878987',
             contact_address:'北京市xx区',
             contact:'2435465767453',
-            inst:'上海',
-            str:'营业网点1',
           }],
 
           userData:[],
 
           rules: {
             name: [
-              { required: true, message: '请输入姓名', trigger: 'blur' },
+              { message: '请输入姓名', trigger: 'blur' },
               { min: 2, max: 6, message: '长度在 2 到 6 个字符', trigger: 'blur' }
             ],
             idNum: [
-              { required: true, message: '请输入身份证号', trigger: 'blur' },
+              { message: '请输入身份证号', trigger: 'blur' },
               { validator:validID, trigger: 'blur' }
-            ],
+            ]
           }
         };
       },
@@ -231,13 +219,13 @@
 
         handleDelete(index, row) {
           console.log(index, row);
-          var deleteId = row.user_id;
+          let deleteId = row.user_id;
             this.$confirm("确认删除该用户吗？", "提示", {
               confirmButtonText: '确定',
               cancelButtonText: '取消',
               type: 'warning'
             }).then(() => {
-              this.$axios.post('/api/admin/deleteUsers', deleteId)//post也可以改成get，但需要对应服务端的请求方法
+              this.$axios.post('/api/deleteUsers', {user_id: deleteId})//post也可以改成get，但需要对应服务端的请求方法
                 .then(function (response) {
                   console.log(response);
                 })
