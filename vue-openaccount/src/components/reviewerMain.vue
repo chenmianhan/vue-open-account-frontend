@@ -29,20 +29,19 @@
       <!--页眉-->
       <el-header class="header">
         <el-row>
-          <el-col :span="17" class="header-title">
+          <el-col :span="20" class="header-title">
             <span v-if="collapsed" class="system-name">{{systemName}}</span>
             <span v-else class="menu-button" @click.prevent="collapsed=!collapsed">
               <i class="el-icon-s-fold"></i>
             </span>
           </el-col>
-          <el-col :span="3"><span class="el-dropdown-link userinfo-inner">你好：{{userName}}</span></el-col>
           <el-col :span="1">
             <div class="user-avator"><img src='../assets/image/user.jpg'></div>
           </el-col>
           <el-col :span="3">
               <el-dropdown @command="handleCommand">
                 <span class="el-dropdown-link">
-                  {{userName}} <i class="el-icon-caret-bottom"></i>
+                  {{reviewerName}} <i class="el-icon-caret-bottom"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item command="loginout">退出登录</el-dropdown-item>
@@ -67,25 +66,70 @@ let data = () => {
   return {
     collapsed: false,
     systemName: '金证开户平台',
-    userName: 'xx审核员'
+    netName: 'xx营业网点',
+    reviewerName: 'xx审核员',
+    reviewerId: 1000
   }
 }
 
 export default {
   data: data,
+
   methods: {
     handleCommand(command) {
+        var that = this;
         if(command == 'loginout'){
-            localStorage.removeItem('ms_username');
-            localStorage.removeItem('Flag');
-            localStorage.removeItem('Role');
-            this.$router.push('/login');
+            this.$axios.post('/api/logout'
+            ).then(function(response){
+                if(response.data.code == '104'){
+                    localStorage.removeItem('ms_username');
+                    localStorage.removeItem('Flag');
+                    localStorage.removeItem('Role');
+                    that.$router.push('/login');
+                }else if (response.data.code == '105'){
+                    that.$msgbox({
+                        type: 'error',
+                        title: '系统异常',
+                        message: '注销失败'
+                    })
+                }else {
+                    that.$msgbox({
+                        type: 'error',
+                        title: '系统异常',
+                        message: '未知状态码'
+                    })
+                }
+            }).catch(function(error){
+                console.log(error);
+                that.$msgbox({
+                    type: 'error',
+                    title: '系统异常',
+                    message: '与后台服务器通讯失败'
+                })
+            })
         }
-    }
+    },
+    
+    getReviewerInfo(){
+        var that = this;
+        this.$axios.get('/api/reviewer'
+        ).then(function(response){
+            that.netName = response.data.netName;
+            that.reviewerName = response.data.reviewerName;
+        }).catch(function(error){
+            console.log(error);
+            that.$msgbox({
+              type:'error',
+              title: '连接失败',
+              message:'获取审核员信息失败'
+            })
+        })
+    },
   },
-  mounted: function() {
+  mounted() {//获取页头信息：网点名称/审核员名称
+      //this.getReviewerInfo();
+  },
 
-  },
   computed: {
     onRoutes(){
       return this.$route.path;
