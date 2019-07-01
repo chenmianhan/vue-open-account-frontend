@@ -1,54 +1,7 @@
 <template>
-    <div class='statistic item'>
-        <!-- 页头 -->
-        <el-row :gutter="12">
-            <el-col :span="6">
-                <el-card shadow="hover">
-                    <div slot="header" class="clearfix" style="font-weight:bold">
-                        <span>你所负责的机构</span>
-                    </div>
-                    <div class='text item'>
-                        <el-row>{{ exchangeName }}</el-row>
-                    </div>
-                </el-card>
-            </el-col>
-            <el-col :span="6">
-                <el-card shadow="hover">
-                    <div slot="header" class="clearfix" style="font-weight:bold">
-                        <span>你所负责的网点</span>
-                    </div>
-                    <div class='text item'>
-                        <el-row>{{ branchNetName }}</el-row>
-                    </div>
-                </el-card>
-            </el-col>
-            <el-col :span="6">
-                <el-card shadow="hover">
-                    <div slot="header" class="clearfix" style="font-weight:bold">
-                        <span>已审核人数</span>
-                    </div>
-                    <div class="text item">
-                        <el-row>{{ reviewedNum }} </el-row>
-                    </div>
-                </el-card>
-            </el-col>
-            <el-col :span="6">
-                <el-card shadow="hover">
-                    <div slot="header" class="clearfix" style="font-weight:bold">
-                        <span>待审核人数</span>
-                        <el-button @click='goToReview' size='mini' style="float: right; padding: 3px 0" type="text">
-                            立即前往<i class="el-icon-arrow-right el-icon--right"></i>
-                        </el-button>
-                    </div>
-                    <div class="text item">
-                        <el-row>{{ toReviewNum }} </el-row>
-                    </div>
-                </el-card>
-            </el-col>
-        </el-row>
-        <el-divider></el-divider>
+    <div class='statistic-item'>
         <!-- 日期查询 -->
-        <div style="padding: 5px; text-align: center;">
+        <div style="margin-bottom: 35px; text-align: left;">
             <!-- <p>{{ dateValue[0] }} + {{ dateValue[1] }}</p> -->
             <el-date-picker
                 v-model="dateValue"
@@ -68,34 +21,114 @@
                 <el-button @click='getTableData' icon='el-icon-search' type='primary' round>查询</el-button>
             </el-tooltip>
         </div>
+        <!-- 页头 -->
+        <div class='show-item' style='float: center;'>
+            <el-row :gutter="12">
+                <el-col :span="4">
+                        <div class="show-data-item">
+                            <span>审核通过</span>
+                        </div>
+                        <div class="show-text-item" style="text-align: left;">
+                            <el-row>{{ reviewedNum }} </el-row>
+                        </div>
+                </el-col>
+                <!-- <el-col :span='1'>
+                    <el-divider direction='vertical'></el-divider>
+                </el-col> -->
+                <el-col :span="4">
+                        <div class="show-data-item">
+                            <span>审核不通过</span>
+                        </div>
+                        <div class='show-text-item' style="color:maroon;">
+                            <el-row>{{ notPassNum }}</el-row>
+                        </div>
+                </el-col>
+                <el-col :span="4">
+                        <div class="show-data-item">
+                            <span>等待审核</span>
+                            <!-- <el-button @click='goToReview' size='mini' style="float: right; padding: 3px 0" type="text">
+                                立即前往<i class="el-icon-arrow-right el-icon--right"></i>
+                            </el-button> -->
+                        </div>
+                        <div class="show-text-item" style="text-align: left;">
+                            <el-row>{{ toReviewNum }} </el-row>
+                        </div>
+                </el-col>
+            </el-row>
+        </div>
         <!-- 下方的表格：
         固定表头
         默认开户时间降序排列
         可选择开户机构/营业网点进行排序
          -->
-        <div style="padding: 14px;">
-            <el-table v-loading='loading' :data="tableData" stripe height='450'
+        <div style="margin-top: 5px;width: 100%">
+            <el-table v-loading='loading' :data="tableData" stripe
+            ref="filterTable"
             :default-sort = "{prop: 'accTime', order: 'descending'}" 
-            border style="width: 100%">
-                <el-table-column prop="userName" label="姓名" width="70">
+            style="width: 100%">
+                <el-table-column type="expand">
+                    <template slot-scope="props">
+                        <el-form label-position="left" inline class="demo-table-expand">
+                        <el-form-item label="证件有效期">
+                            <span>{{ props.row.idValDate }}</span>
+                        </el-form-item>
+                        <el-form-item label="发证机关">
+                            <span>{{ props.row.idInstitute }}</span>
+                        </el-form-item>
+                        <!-- <el-form-item label="职业">
+                            <span>{{ props.row.userJob }}</span>
+                        </el-form-item>
+                        <el-form-item label="学历">
+                            <span>{{ props.row.education }}</span>
+                        </el-form-item> -->
+                        <el-form-item label="联系邮箱">
+                            <span>{{ props.row.email }}</span>
+                        </el-form-item>
+                        <el-form-item label="银行">
+                            <span>{{ props.row.accTime }}</span>
+                        </el-form-item>
+                        <el-form-item label="银行卡号">
+                            <span>{{ props.row.bankCardNum }}</span>
+                        </el-form-item>
+                        <!-- <el-form-item label="开户时间">
+                            <span>{{ props.row.accTime }}</span>
+                        </el-form-item> -->
+                        </el-form>
+                    </template>
                 </el-table-column>
-                <el-table-column prop="idCardNum" label="身份证号码" width='140'>
+                <el-table-column prop="userName" label="姓名" width="100">
                 </el-table-column>
-                <el-table-column prop="idValDate" label="证件有效期" width="120">
+                <el-table-column prop="idCardNum" label="身份证号码" width='180'>
+                </el-table-column>
+                <!-- <el-table-column prop="idValDate" label="证件有效期" width="120">
                 </el-table-column>
                 <el-table-column prop="idInstitute" label="发证机关" width="80">
+                </el-table-column>-->
+                <el-table-column prop="userJob" label="职业" width="100">
                 </el-table-column>
-                <el-table-column prop="userJob" label="职业" width="55">
+                <el-table-column prop="education" label="学历" width="100">
                 </el-table-column>
-                <el-table-column prop="education" label="学历" width="55">
-                </el-table-column>
-                <el-table-column prop="email" label="联系邮箱" width='110'>
+                <!--<el-table-column prop="email" label="联系邮箱" width='110'>
                 </el-table-column>
                 <el-table-column prop="bankName" label="银行" width="90">
                 </el-table-column>
                 <el-table-column prop="bankCardNum" label="银行卡号" width="160">
-                </el-table-column>
+                </el-table-column>-->
                 <el-table-column prop="accTime" sortable label="开户时间">
+                </el-table-column>
+                <el-table-column
+                    prop="reviewStatu"
+                    label="审核状态"
+                    width="100"
+                    :filters="[{ text: '通过', value: '通过' }, { text: '未通过', value: '未通过' }
+                    , { text: '待审核', value: '待审核' }]"
+                    :filter-method="filterTag"
+                    filter-placement="bottom-end">
+                    <template slot-scope="scope">
+                        <el-tag
+                        :type="scope.row.reviewStatu === '通过' ? 'success' : 'primary'"
+                        disable-transitions>{{scope.row.reviewStatu}}</el-tag>
+                    </template>
                 </el-table-column>
             </el-table>
         </div>
@@ -108,14 +141,11 @@ export default {
         return {
             //reviewerId: localStorage.getItem('ms_username'),
             reviewerId: '1000',
-            exchangeName: '上海证券交易所',
-            branchNetName: '广发证券公司',
-            toReviewNum: 0,
-            reviewedNum: 0,
+            toReviewNum: 154,
+            reviewedNum: 50,
+            notPassNum: 70,
 
             dateValue:'', //字符串数组object,dateValue[0]/[1]为开始/结束日期yyyy-mm-dd
-            startDate:'',
-            endDate:'',
 
             tableData: [{//表格用户对象列表
                 userName:'张三',
@@ -127,7 +157,8 @@ export default {
                 email: 'xxx@123.com',
                 bankName: '工商银行',
                 bankCardNum: '48372614784591975',
-                accTime:'2000-01-01 00:00:00'
+                accTime:'2000-01-01 00:00:00',
+                reviewStatu:'通过'
             }],
              pickerOptions: {//日期选择器的快捷选项
                 shortcuts: [{
@@ -146,34 +177,45 @@ export default {
     },
 
     methods: {
-        getReviewerInfo(){//获取从属机构名称以及该审核员统计数据
-            var that = this;
-            const postData = {
-                reviewerId: this.reviewerId
-            };
-            console.log(this.$Qs.stringify(postData));
-            //向后端传输审核员的ID，后端返回审核员信息
-            //,{headers:{'Content-Type':'application/json;charset=UTF-8'}}
-            this.$axios.post('/api/api/statisticData/getReviewerInfo', this.$Qs.stringify(postData)
-            ).then(function(response) {
-                console.log(response.data);
-                that.exchangeName = response.data.exchangeName;
-                that.branchNetName = response.data.branchNetName;
-                that.toReviewNum = response.data.toReviewNum;
-                that.reviewedNum = response.data.reviewedNum;
-            }).catch(function(error){
-                console.log(error);
-                that.$msgbox({
-                    type: 'error',
-                    title: '连接异常',
-                    message:'获取审核员信息和统计数据失败！'
+        filterTag(value, row) {//过滤标签
+            return row.reviewStatu === value;
+        },
+
+        getReviewerInfo(){//获取该审核员统计数据
+            if(this.dateValue != ''){
+                var that = this;
+                const postData = {
+                    start: this.dateValue[0],
+                    end: this.dateValue[1]
+                };
+                console.log(this.$Qs.stringify(postData));
+
+                //向后端传输审核员的ID，后端返回审核员信息
+                this.$axios.post('/api/api/statisticData/getReviewerInfo', this.$Qs.stringify(postData)
+                ).then(function(response) {
+                    console.log(response.data);
+                    that.toReviewNum = response.data.toReviewNum;
+                    that.reviewedNum = response.data.reviewedNum;
+                    that.notPassNum = response.data.notPassNum;
+                }).catch(function(error){
+                    console.log(error);
+                    that.$msgbox({
+                        type: 'error',
+                        title: '连接异常',
+                        message:'获取审核员信息和统计数据失败！'
+                    });
                 });
-            });
+            }else{
+                this.$msgbox({
+                    type: 'error',
+                    title: '数据异常',
+                    message:'请先选择一个日期范围！'
+                });
+            }
         },
 
         getTableData(){//根据选择日期范围显示用户信息
             const postData = {
-                reviewerId: this.reviewerId,
                 start: this.dateValue[0],
                 end: this.dateValue[1]
             }
@@ -185,6 +227,9 @@ export default {
             ).then(function(response){
                 console.log(response.data);
                 that.tableData = response.data;
+                that.toReviewNum = response.data.toReviewNum;
+                that.reviewedNum = response.data.reviewedNum;
+                that.notPassNum = response.data.notPassNum;
                 that.loading = false;
             }).catch(function(error){
                 console.log(error);
@@ -257,14 +302,19 @@ export default {
     },
 
     mounted(){
-        this.getReviewerInfo();
         this.setDefaultDate();
+        this.getReviewerInfo();
         this.getTableData(); 
     }
 }
 </script>
 
 <style scoped>
+    .statistic-item {
+        margin-top: 40px;
+        margin-left: 60px;
+        margin-right: 70px;
+    }
     .text {
         font-size: 14px;
     }
@@ -273,20 +323,31 @@ export default {
         margin-bottom: 18px;
     }
 
-    .clearfix:before,
-    .clearfix:after {
-        display: table;
-        content: "";
-    }
-    .clearfix:after {
-        clear: both
+    .show-data-item {
+        /* font-weight:bold;  */
+        text-align: left;
+        color:gray;
     }
 
-    .box-card {
-        width: 480px;
+    .show-text-item {
+        font-weight: bold;
+        font-size: 50px;
+        text-align: left;
+        margin-top: 1px;
+        margin-bottom: 35px;
     }
 
-    .card-box {
-        height: 100px;
+    .demo-table-expand {
+        font-size: 0;
+    }
+    .demo-table-expand label {
+        width: 90px;
+        /* color: #99a9bf; */
+        color:mediumvioletred;
+    }
+    .demo-table-expand .el-form-item {
+        margin-right: 0;
+        margin-bottom: 0;
+        width: 50%;
     }
 </style>

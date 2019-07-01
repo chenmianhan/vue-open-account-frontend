@@ -161,11 +161,11 @@ export default {
             this.checked.grade = false;
             this.checked.image = false;
 
-            const postData = {
-                reviewerId: this.reviewerId
-            }
+            // const postData = {
+            //     reviewerId: this.reviewerId
+            // }
             var that = this;
-            this.$axios.post('/api/api/reviewUser/getUserInfo', this.$Qs.stringify(postData)
+            this.$axios.post('/api/api/reviewUser/getUserInfo'
             ).then(function(response){
                 console.log(response.data);
                 that.userInfo = response.data.userInfo;

@@ -35,14 +35,14 @@
               <i class="el-icon-s-fold"></i>
             </span>
           </el-col>
-          <el-col :span="3"><span class="el-dropdown-link userinfo-inner">你好：{{userName}}</span></el-col>
+          <el-col :span="3"><span class="el-dropdown-link userinfo-inner">你好：{{reviewerName}}</span></el-col>
           <el-col :span="1">
             <div class="user-avator"><img src='../assets/image/user.jpg'></div>
           </el-col>
           <el-col :span="3">
               <el-dropdown @command="handleCommand">
                 <span class="el-dropdown-link">
-                  {{userName}} <i class="el-icon-caret-bottom"></i>
+                  {{reviewerName}} <i class="el-icon-caret-bottom"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item command="loginout">退出登录</el-dropdown-item>
@@ -67,12 +67,15 @@ let data = () => {
   return {
     collapsed: false,
     systemName: '金证开户平台',
-    userName: 'xx审核员'
+    netName: 'xx营业网点',
+    reviewerName: 'xx审核员',
+    reviewerId: 1000
   }
 }
 
 export default {
   data: data,
+
   methods: {
     handleCommand(command) {
         if(command == 'loginout'){
@@ -81,11 +84,28 @@ export default {
             localStorage.removeItem('Role');
             this.$router.push('/login');
         }
-    }
+    },
+    
+    getReviewerInfo(){
+        var that = this;
+        this.$axios.get('/api/reviewer'
+        ).then(function(response){
+            that.netName = response.data.netName;
+            that.reviewerName = response.data.reviewerName;
+        }).catch(function(error){
+            console.log(error);
+            that.$msgbox({
+              type:'error',
+              title: '连接失败',
+              message:'获取审核员信息失败'
+            })
+        })
+    },
   },
-  mounted: function() {
+  mounted() {//获取页头信息：网点名称/审核员名称
+      this.getReviewerInfo();
+  },
 
-  },
   computed: {
     onRoutes(){
       return this.$route.path;
