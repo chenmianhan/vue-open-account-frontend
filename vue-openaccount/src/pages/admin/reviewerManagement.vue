@@ -52,14 +52,6 @@
               <el-input v-model="addForm.password"></el-input>
             </el-form-item>
 
-            <el-form-item label="权限" prop="authority">
-              <el-cascader :options="Net"
-                           checkStrictly
-                           v-model="addForm.str"
-                           class="wd400">
-              </el-cascader>
-            </el-form-item>
-
             <el-button size="mini" type="text" @click="visible1 = false">取消</el-button>
             <el-button type="primary" size="mini" @click="onSubmit">保存</el-button>
           </el-form>
@@ -130,9 +122,10 @@
                 <el-button type="primary" size="mini" @click="visible2 = false; onSubmit">保存</el-button>
               </el-form>
             </div>
-            <el-button slot="reference">修改</el-button>
+            <el-button slot="reference" size="mini">修改</el-button>
           </el-popover>
 
+          <el-button type="danger" size="mini" style="margin-left: 15px" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -162,7 +155,6 @@
           shPoint: [],//最终被选择的营业网点列表
           szPoint: [],
 
-          Net: [],//后端传来的所有营业网点列表
 
           targetReviewer:'',//搜索的目标审核员名称
 
@@ -179,19 +171,14 @@
             name:'',
             account:'',
             password:'',
-            str:''
           },
 
           addForm:{
             name:'',
             account:'',
             password:'',
-            str:''
           },
 
-          /*ins_radio:'上海',
-          str_radio1:'营业网点1',
-          str_radio2:'营业网点1',*/
         };
       },
       methods: {

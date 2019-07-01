@@ -73,12 +73,50 @@
         label="开户日期">
       </el-table-column>
       <el-table-column
-        label="操作">
-        <template> 
-          <el-button size="mini">修改</el-button>
+        label="操作"
+        width="200">
+        <template slot-scope="scope">
+          <el-popover
+            placement="bottom"
+            v-model="visible">
+            <div style="text-align:center; width: 300px">
+              <el-form ref="modifyForm" :model="modifyForm" :rules="rules" label-width="100px" size="mini">
+                <el-form-item label="姓名" prop="name">
+                  <el-input v-model="modifyForm.name"></el-input>
+                </el-form-item>
+                <el-form-item label="身份证号码" prop="idNum">
+                  <el-input v-model="modifyForm.idNum"></el-input>
+                </el-form-item>
+                <el-form-item label="联系地址" prop="contact_address">
+                  <el-cascader
+                    :options="address"
+                    props.checkStrictly
+                    v-model="modifyForm.contact_address"
+                    props.expandTrigger="hover"
+                    class="wd400">
+                  </el-cascader>
+                </el-form-item>
+
+                <el-form-item label="所属营业网点" prop="store">
+                  <el-cascader :options="Net"
+                               checkStrictly
+                               v-model="modifyForm.store"
+                               class="wd400">
+                  </el-cascader>
+                </el-form-item>
+
+                <el-button size="mini" type="text" @click="visible = false">取消</el-button>
+                <el-button type="primary" size="mini" @click="visible = false; submitModifyForm('modifyForm')">保存</el-button>
+              </el-form>
+            </div>
+            <el-button slot="reference" size="mini">修改</el-button>
+          </el-popover>
+
           <el-button type="danger" size="mini">删除</el-button>
         </template>
       </el-table-column>
+
+
     </el-table>
     </div>
   </div>
@@ -89,6 +127,8 @@
     export default {
       data() {
         return {
+          visible : false,
+
           institute: '',
           ins_ops: [{//机构显示列表
             institute: 'sh',
@@ -97,13 +137,22 @@
             institute: 'sz',
             label: '深圳',
           } ],
-
           shNet: [],//后端传来的所有营业网点列表
           szNet: [],
           shPoint: [],//最终被选择的营业网点列表
           szPoint: [],
 
+          Net:[],
+
           targetUser:'',//搜索的目标用户名称
+
+          modifyForm:{
+            store:'',
+            name:'',
+            idNum:'',
+            contact_address:'',
+            contact:'',
+          },
 
           tableData:[{//表格用户对象列表
             user_id:'1',
@@ -113,7 +162,7 @@
             inst:'上海',
             str:'营业网点1',
             date:'2019-6-10 13:20:45'
-          }]
+          }],
         };
       },
       methods: {

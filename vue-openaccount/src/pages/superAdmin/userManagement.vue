@@ -104,17 +104,10 @@
                     </el-cascader>
                   </el-form-item>
 
-                  <el-form-item label="上海网点" prop="store1">
-                    <el-cascader :options="shNet"
+                  <el-form-item label="所属营业网点" prop="store">
+                    <el-cascader :options="Net"
                                  checkStrictly
-                                 v-model="modifyForm.shPoint1"
-                                 class="wd400"></el-cascader>
-                  </el-form-item>
-
-                  <el-form-item label="深圳网点" prop="store2">
-                    <el-cascader :options="szNet"
-                                 checkStrictly
-                                 v-model="modifyForm.szPoint2"
+                                 v-model="modifyForm.store"
                                  class="wd400">
                     </el-cascader>
                   </el-form-item>
@@ -173,7 +166,7 @@
         return {
           address: areajson,
           visible : false,
-          props: { multiple: true },
+          /*props: { multiple: true },*/
 
           institute: '',
           ins_ops: [{//机构显示列表
@@ -185,6 +178,8 @@
           } ],
           shNet: [],//后端传来的所有营业网点列表
           szNet: [],
+
+          Net:[],
 
           stores: [],
           str_ops:[{
@@ -198,12 +193,7 @@
           input:'',
 
           modifyForm:{
-            institute1: 'sh',
-            institute2: '',
-            shPoint1:[],
-            szPoint1:[],
-            shPoint2:[],
-            szPoint2:[],
+            store:'',
             name:'',
             idNum:'',
             contact_address:'',
