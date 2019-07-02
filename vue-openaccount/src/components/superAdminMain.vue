@@ -24,9 +24,9 @@
               <i class="el-icon-user"></i>
               <span slot="title">机构管理</span>
             </el-menu-item>
-            <el-menu-item>
+            <el-menu-item index="/superadmin/manageAttribute">
               <i class="el-icon-user"></i>
-              <span slot="title">公关参数管理</span>
+              <span slot="title">公共参数管理</span>
             </el-menu-item>
           </el-menu>
         </el-main>
