@@ -50,6 +50,11 @@ export default {
     },
 
     mounted(){
+        console.log(sessionStorage);
+        if(sessionStorage.getItem('Flag') != 'isLogin'
+        || sessionStorage.getItem('status') != '4'){
+            this.$router.push({path: '/403'});
+        }
         this.getContactNum();
     }
 }

@@ -89,9 +89,6 @@
                   <el-form-item label="身份证号码" prop="idNum">
                     <el-input v-model="modifyForm.idNum"></el-input>
                   </el-form-item>
-                  <el-form-item label="联系方式" prop="contact">
-                    <el-input v-model="modifyForm.contact"></el-input>
-                  </el-form-item>
                   <el-form-item label="联系地址" prop="contact_address">
                     <el-cascader
                       :options="address"
@@ -100,15 +97,16 @@
                       props.expandTrigger="hover"
                       class="wd400">
                     </el-cascader>
+                    <el-input v-model="modifyForm.contact_address_detail" class="wd400" style="padding-top: 10px" placeholder="详细地址"></el-input>
                   </el-form-item>
 
                   <el-button size="mini" type="text" @click="visible = false">取消</el-button>
-                  <el-button type="primary" size="mini" @click="visible = false; submitModifyForm('modifyForm')">保存</el-button>
+                  <el-button type="primary" size="mini" @click="visible = false; submitModifyForm('modifyForm',scope.row)">保存</el-button>
                 </el-form>
               </div>
               <el-button slot="reference" size="mini">修改</el-button>
             </el-popover>
-            <el-button type="danger" size="mini">删除</el-button>
+            <el-button type="danger" size="mini" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -118,9 +116,26 @@
 
 
 <script>
+  import area from '../../assets/js/area.js'
+
     export default {
       data() {
+        let validID=(rule,value,callback)=>{
+          if(value==''||value==undefined){
+            callback()
+          }else{
+            //const reg=/^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$|^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}([0-9]|X)$/;
+            const reg=/^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/
+            if(reg.test(value)){
+              callback();
+            }else{
+              return callback(new Error('身份证号码不正确'));
+            }
+          }
+        };
+
         return {
+          address: areajson,
           visible : false,
 
           way: 'date',
@@ -145,7 +160,16 @@
             name:'',
             idNum:'',
             contact_address:'',
-            contact:'',
+            contact_address_detail:'',
+          },
+
+          rules: {
+            name: [
+              { min: 2, max: 6, message: '长度在 2 到 6 个字符', trigger: 'blur' }
+            ],
+            idNum: [
+              { validator:validID, message: '请输入身份证号', trigger: 'blur' }
+            ]
           },
 
           tableData:[{//表格用户对象列表
@@ -156,6 +180,7 @@
             address:'广东省广州市大学城',
             date:'2019-01-01 00:00:00'
           }],
+
           pickerOptions: {//日期选择器的快捷选项
                 shortcuts: [{
                         text: '最近一周',
@@ -326,6 +351,71 @@
           return (state) => {
             return (state.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
           };
+        },
+
+        submitModifyForm(formName, row) {
+          var that = this;
+          this.$refs[formName].validate((valid) => {
+            if (valid) {
+              const postData = {
+                name: that.modifyForm.name,
+                ID_number: that.modifyForm.idNum,
+                contact_address: that.modifyForm.contact_address,
+                contact_address_detail: that.modifyForm.contact_address_detail,
+                user_id:row.user_id,
+              };
+
+              // var that = this;
+              console.log(postData);
+              this.$axios.post('/api/updateAccountInfo', postData)
+                .then(function (response) {
+                  console.log(response);
+                  that.$msgbox({
+                    title: '修改成功',
+                    type: 'succeed'
+                  });
+                  that.querytable();
+                })
+                .catch(function (error) {
+                  that.$msgbox({
+                    title: '连接失败',
+                    type: 'error'
+                  });
+                });
+            } else {
+              this.$msgbox({
+                message: '表单格式有误',
+                type: 'error'
+              });
+              // console.log('error submit!!');
+              return false;
+            }
+          });
+        },
+
+        handleDelete(index, row) {
+          console.log(index, row);
+          let deleteId = row.user_id;
+          var that = this;
+          this.$confirm("确认删除该用户吗？", "提示", {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.$axios.post('/api/deleteUsers', {user_id: deleteId})//post也可以改成get，但需要对应服务端的请求方法
+              .then(function (response) {
+                console.log(response);
+                that.querytable();
+              })
+              .catch(function (error) {
+                alert(error);
+              });
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消'
+            });
+          });
         },
 
         handleSelect(item) {

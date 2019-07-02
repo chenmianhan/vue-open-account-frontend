@@ -349,7 +349,7 @@
 
 
 
-<style>
+<style scoped>
   .search-bar{
     /*position: relative;*/
     float:left;

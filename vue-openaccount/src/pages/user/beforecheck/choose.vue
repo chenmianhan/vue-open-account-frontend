@@ -35,12 +35,12 @@
                 <el-cascader
                 :options="shNet"
                 checkStrictly
-                v-model="shPoint"
+                v-model="point"
                 props.expandTrigger="hover"
                 :show-all-levels='false'
                 class="wd400">
                 </el-cascader>
-                <span>{{shPoint}}</span>
+                <span>{{point}}</span>
             </div>
         </el-col>
         </el-row>
@@ -49,7 +49,7 @@
         </el-col> -->
         <el-row style="height:50px;">
             <el-button icon="el-icon-caret-left" round @click="$router.push({path:'/login/evaluation'})">上一步</el-button>
-            <el-button type="primary" round @click="handleSubmit" :disabled="shPoint.length==0&&szPoint.length==0">下一步<i class="el-icon-caret-right icon"></i></el-button>
+            <el-button type="primary" round @click="handleSubmit">下一步<i class="el-icon-caret-right icon"></i></el-button>
         </el-row>
     </div>
 </template>
@@ -63,7 +63,7 @@ export default {
             Netpoint: netPoint,
             shNet: [],
             szNet: [],
-            shPoint: [],
+            point: [],
             szPoint: [],
             accountType: []
         }
@@ -75,20 +75,17 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                // var point = [parseInt(this.shPoint[2]), parseInt(this.szPoint[2])];
                 const postData = {
-                    n_security_id: parseInt(this.shPoint[2]),
-                    s_security_id: parseInt(this.szPoint[2]),
-                    userId: 1
+                    accountType: this.accountType,
+                    point: this.point
                 };
                 console.log(postData)
                 var that = this;
                 this.$axios.put('/api/updateSecurity', postData).then(function(response){
                     // 成功的话
-                    that.$message({
-                        type: 'success',
-                        message: '提交成功！已提交给审核员'
-                    });
+                    if(parseInt(sessionStorage.getItem('status')) < 3){
+                        sessionStorage.setItem('status', 3);
+                    }
                     that.$router.push({path: '/login/chooseBank'});
                 });
                     // 否则
@@ -142,8 +139,12 @@ export default {
         }
     },
     mounted(){
-        // this.getSHList();
-        // this.getSZList();
+        console.log(sessionStorage)
+        if(sessionStorage.getItem('Flag') != 'isLogin' 
+        || (sessionStorage.getItem('status') != '2' 
+        && sessionStorage.getItem('status') != '3')){
+            this.$router.push({path: '/403'});
+        }
         this.getList();
     }
 }

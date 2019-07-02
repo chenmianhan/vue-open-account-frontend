@@ -1,12 +1,5 @@
 <template>
     <div>
-    <!-- 面包屑 -->
-    <!-- <div class="bread">
-        <el-breadcrumb separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item>开户</el-breadcrumb-item>
-            <el-breadcrumb-item>风险测评</el-breadcrumb-item>
-        </el-breadcrumb>
-    </div> -->
   <div style="margin:0 auto;margin-top:50px;margin-bottom: 50px; width:70%;text-align: left;">
     <el-steps :active="1" finish-status="success">
       <el-step title="填写用户信息"></el-step>
@@ -30,19 +23,6 @@
             <p>本公司在此承诺，对于您在本问卷中所提供的一切信息，本公司将严格按照法律法规要求承担保密义务。除法律法规规定的有权机关依法定程序进行查询以外，本公司保证不会将涉及您的任何信息提供、泄露给任何第三方，或者将相关信息用于违法、不当用途。</p>
         </div>
         <el-divider><i class="el-icon-edit"></i></el-divider>
-        <!-- <div v-for="(block, index) in test" :key="index" class="test">
-            <h3>{{block.title}}</h3>
-            <div v-for="(question, subIndex) in block.content" :key="subIndex">
-                <p>{{subIndex + 1}}. {{question.subtitle}}</p>
-                <ul v-for="(choice, i) in question.subcontent" :key="i">
-                    <el-radio-group v-model="answer[index][subIndex]">
-                        <el-radio :label='String(index) + String(subIndex) + String(i)'>
-                        {{choice}}
-                        </el-radio>
-                    </el-radio-group>
-                </ul>
-            </div>
-        </div> -->
         <div v-for="question in test" :key="question.RE_id" class="test">
             <p>{{question.content}}<span v-if="question.is_radio">（单选）</span><span v-else>（多选）</span></p>
             <div v-if="question.is_radio">
@@ -61,7 +41,6 @@
             </div>
         </div>
     </div>
-    <!-- <span>{{answer}}</span> -->
     <el-dialog title='您的风险评级为' :visible.sync='dialogVisible' width="30%">
         <div style="margin: 0 auto;font-size:25px;background-color:#E4E7ED;width:50%;border-radius:7px;">{{grade}}</div>
         <span style="font-size:15px;line-height:60px">得分为{{mark}}分</span>
@@ -75,7 +54,7 @@
     <div id="footer">
         <el-row>
             <el-button icon="el-icon-caret-left" round @click="$router.push({path:'/login/inputInfo'})">上一步</el-button>
-            <el-button type="primary" :disabled="!haveSubmit" round @click="$router.push({path:'/login/choose'})">下一步<i class="el-icon-caret-right icon"></i></el-button>
+            <el-button type="primary" :disabled="!haveSubmit" round @click="nextStep()">下一步<i class="el-icon-caret-right icon"></i></el-button>
         </el-row>
     </div>
     </div>
@@ -108,7 +87,6 @@ export default {
                 let postData = {
                     answers: that.answer
                 };
-                // console.log(postData);
                 this.$axios.post('/api/risk_evaluation/get_grade', postData).then(function(response){
                     that.haveSubmit = true;
                     localStorage.removeItem('answerTemp');
@@ -139,37 +117,47 @@ export default {
                 type: 'success',
                 message: '已成功保存，请尽快答完问卷'
             });
-            // console.log(localStorage);
+
+},
+        nextStep(){
+            if(parseInt(sessionStorage.getItem('status')) < 2){
+                sessionStorage.setItem('status', 2);
+            }
+            this.$router.push({path: '/login/choose'});
+        },
+        getData(){
+            var that = this;
+            this.$axios.get('/api/risk_evaluation/get_questions').then(function(response) {
+                that.test = response.data;
+                // 获取答案
+                if(localStorage.getItem('answerTemp') != null){
+                    that.answer = JSON.parse(localStorage.getItem('answerTemp'));
+                }else{            
+                    that.answer = [];
+                    for(var i = 0; i < that.test.length; i++){
+                        var obj = {}
+                        obj.RE_id = that.test[i].RE_id;
+                        obj.answer = [];
+                        that.answer.push(obj);
+                    }
+                }
+            }).catch(() => {
+                that.$msgbox({
+                    type: 'error',
+                    title: '连接异常',
+                    message:'获取题目失败'
+                });
+            });
         }
     },
     mounted(){
-        // localStorage.removeItem('answerTemp');
-        var that = this;
-        this.$axios.get('/api/risk_evaluation/get_questions').then(function(response) {
-            console.log(response.data);
-            that.test = response.data;
-            // that.test = evaluateTest;
-            // that.answer = answers;
-            // 获取答案
-            if(localStorage.getItem('answerTemp') != null){
-                that.answer = JSON.parse(localStorage.getItem('answerTemp'));
-            }else{            
-                that.answer = [];
-                for(var i = 0; i < that.test.length; i++){
-                    // that.answer[i] = {};
-                    var obj = {}
-                    obj.RE_id = that.test[i].RE_id;
-                    obj.answer = [];
-                    that.answer.push(obj);
-                }
-            }
-        }).catch(() => {
-            that.$msgbox({
-                type: 'error',
-                title: '连接异常',
-                message:'获取题目失败'
-            });
-        });
+        console.log(sessionStorage);
+        if(sessionStorage.getItem('Flag') != 'isLogin' 
+        || sessionStorage.getItem('status') == '0' 
+        || parseInt(sessionStorage.getItem('status')) > 3){
+            this.$router.push({path: '/403'});
+        }
+        this.getData();
     }
 }
 </script>

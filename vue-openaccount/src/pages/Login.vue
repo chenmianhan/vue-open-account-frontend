@@ -121,15 +121,17 @@
                             console.log(response);
                             //成功登录后根据不同的身份标签跳转页面
                             if (response.data.code == '100' || response.data.code == '102'){
-                                localStorage.setItem('Flag', 'isLogin');//存储登录状态
-                                localStorage.setItem('Role', postData.role); //存储身份标识
-                                console.log(localStorage.getItem('Flag'));
-                                console.log(localStorage.getItem('Role'));
+                                sessionStorage.setItem('Flag', 'isLogin');//存储登录状态
+                                sessionStorage.setItem('Role', postData.role); //存储身份标识
+                                console.log(sessionStorage.getItem('Flag'));
+                                console.log(sessionStorage.getItem('Role'));
 
                                 switch(postData.role){
                                     case '0'://用户成功登录
-                                        if (response.data.code == '102')//新
+                                        if (response.data.code == '102'){//新
+                                            sessionStorage.setItem('status', 0);
                                             that.$router.push('/login/warning');
+                                        }
                                         else{  //旧用户
                                             that.goPage();
                                         }
@@ -158,7 +160,7 @@
                             console.log(error);
                         })
                         //将用户名缓存
-                        localStorage.setItem('ms_username',this.ruleForm.account);
+                        sessionStorage.setItem('ms_username',this.ruleForm.account);
                         //this.$router.push('/login/warning');//暂时直接跳转风险提示界面
                         //console.log('submit!');
                     } else {
@@ -173,25 +175,32 @@
                     console.log(response.data);
                     switch(response.data.status){
                         case '0':
+                            sessionStorage.setItem('status', 0)
                             that.$router.push({path: '/login/warning'});
                             break;
                         case '1':
+                            sessionStorage.setItem('status', 1)
                             that.$router.push({path: '/login/evaluation'});
                             break;
                         case '2':
+                            sessionStorage.setItem('status', 2)
                             that.$router.push({path: '/login/choose'});
                             break;
                         case '3':
+                            sessionStorage.setItem('status', 3)
                             that.$router.push({path: '/login/chooseBank'});
                             break;
                         case '4':
                         case '5':
+                            sessionStorage.setItem('status', 4)
                             that.$router.push({path: '/login/loading'});
                             break;
                         case '6':
+                            sessionStorage.setItem('status', 5)
                             that.$router.push({path: '/login/notPass'});
                             break;
                         case '7':
+                            sessionStorage.setItem('status', 7)
                             that.$router.push({path: '/user/home'});
                     }
                 });
@@ -199,6 +208,7 @@
         },
         //登录即注册提示
         mounted: function(){
+            console.log(sessionStorage);
             if(this.notifyInstance) {
                 this.notifyInstance.close();
             }

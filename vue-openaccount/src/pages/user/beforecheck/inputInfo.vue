@@ -342,6 +342,9 @@ import area from '../../../assets/js/area.js'
                 .then(
                   res=>{
                     console.log('res=>',res);
+                    if(parseInt(sessionStorage.getItem('status')) < 1){
+                      sessionStorage.setItem('status', 1);
+                    }
                     that.$router.push({path: '/login/evaluation'});
                   })
                 .catch(function (error) {
@@ -364,6 +367,14 @@ import area from '../../../assets/js/area.js'
 
         }
 
+      },
+      mounted(){
+        console.log(sessionStorage)
+        if(sessionStorage.getItem('Flag') != 'isLogin' 
+        || parseInt(sessionStorage.getItem('status')) > 3 
+        || sessionStorage.getItem('status') == '0'){
+        this.$router.push({path: '/403'});
+        }
       }
     }
 </script>
