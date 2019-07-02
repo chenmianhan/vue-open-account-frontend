@@ -41,9 +41,9 @@ export default {
             this.$axios.post('/api/logout'
             ).then(function(response){
                 if(response.data.code == '104'){
-                    localStorage.removeItem('ms_username');
-                    localStorage.removeItem('Flag');
-                    localStorage.removeItem('Role');
+                    sessionStorage.removeItem('ms_username');
+                    sessionStorage.removeItem('Flag');
+                    sessionStorage.removeItem('Role');
                     that.$router.push('/login');
                 }else if (response.data.code == '105'){
                     that.$msgbox({

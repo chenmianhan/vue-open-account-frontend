@@ -33,7 +33,8 @@ export default {
             message: '您的XXXXXXX都没有通过'
         }
     },
-    mounted(){
+    methods:{
+        getMsg(){
         var that = this;
         this.$axios.post('/api/getReviewResult').then(function(response){
             console.log(response.data)
@@ -43,6 +44,15 @@ export default {
                 title: '连接失败'
             });
         });
+        }
+    },
+    mounted(){
+        console.log(sessionStorage);
+        if(sessionStorage.getItem('Flag') != 'isLogin'
+        || sessionStorage.getItem('status') != '5'){
+            this.$router.push({path: '/403'});
+        }
+        this.getMsg();
     }
 }
 </script>

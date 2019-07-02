@@ -35,21 +35,16 @@ export default {
   //退出登录
   data: data,
   methods: {
-    handleCommand(command) {
-        if(command == 'loginout'){
-            localStorage.removeItem('ms_username')
-            localStorage.removeItem('Flag')
-            localStorage.removeItem('Role')
-            this.$router.push('/login');
-        }
-    },
     //下一步按钮跳转资料填写界面
     nextStepToInfo(){
       this.$router.push('/login/inputInfo');
     }
   },
   mounted: function() {
-
+    console.log(sessionStorage)
+    if(sessionStorage.getItem('Flag') != 'isLogin' || parseInt(sessionStorage.getItem('status')) > 3){
+      this.$router.push({path: '/403'});
+    }
   },
   computed: {
     onRoutes(){

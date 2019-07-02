@@ -34,13 +34,9 @@
       <el-form-item label="密码" prop="bank_password">
         <el-input type="password" v-model="bankForm.bank_password" aria-placeholder="输入取款密码" class="wd400"></el-input>
       </el-form-item>
-<!-- 
-      <el-form-item>
-        <el-button icon="el-icon-caret-left" round @click="$router.push({path:'/log/choose'})">上一步</el-button>
-        <el-button type="primary" round @click="submitForm('bankForm')">下一步<i class="el-icon-caret-right icon"></i></el-button>
-      </el-form-item> -->
     </el-form>
   </div>
+
     <div id="footer">
         <el-row>
             <el-button icon="el-icon-caret-left" round @click="$router.push({path:'/login/choose'})">上一步</el-button>
@@ -105,6 +101,9 @@
                  .then(
                    res=>{
                      console.log('res=>',res);
+                      if(parseInt(sessionStorage.getItem('status')) < 4){
+                          sessionStorage.setItem('status', 4);
+                      }
                      that.$router.push({path: '/login/loading'});
                    })
                  .catch(function (error) {
@@ -119,6 +118,13 @@
             }
           });
         },
+      },
+      mounted(){
+        console.log(sessionStorage)
+        if(sessionStorage.getItem('Flag') != 'isLogin'
+        || sessionStorage.getItem('status') != '3'){
+          this.$router.push({path: '/403'});
+        }
       }
     }
 </script>

@@ -187,6 +187,9 @@ export default new Router({
     },{
       path: '*',
       component: resolve => require(['../pages/404.vue'], resolve)
+    },{
+      path: '/403',
+      component: resolve => require(['../pages/403.vue'], resolve)
     }
   ]
 })
