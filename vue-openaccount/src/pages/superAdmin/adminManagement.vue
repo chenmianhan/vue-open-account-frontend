@@ -275,6 +275,19 @@
           });
         },
 
+        getNetList(){
+          var that = this;
+          this.$axios.get('/api/admin/get_securityUnderAdmin',{
+            params:{admin_id : 8888}
+          }).then(function(response){
+            console.log(response.data)
+            that.Net = [];
+            that.Net = response.data;
+          });
+          console.log('get net list');
+          console.log(that.Net[0]);
+        },
+
         getSHList(){
           var that = this;
           this.$axios.get('/api/security/get_securityall').then(function(response){
@@ -293,7 +306,6 @@
           });
           console.log('get sh list');
         },
-
         getSZList(){
           var that = this;
           this.$axios.get('/api/security/get_securityall').then(function(response){

@@ -1,8 +1,8 @@
 <template>
 <div>
-  <span>{{shPoint}}  {{szPoint}}</span>
+  <h1>你所负责的营业网点：  {{store}}</h1>
     <div class="search-bar">
-      <div class="block">
+      <!--<div class="block">
       <span class="demonstration">所属机构</span>
       <el-select v-model="institute" placeholder="请选择">
           <el-option
@@ -35,8 +35,8 @@
       <div class="block">
         <el-input v-model="targetReviewer" placeholder="审核员姓名"></el-input>
       </div>
-      <!--<el-button type="primary" icon="el-icon-search">搜索</el-button>-->
-      <el-button icon="el-icon-search" circle></el-button>
+      <el-button icon="el-icon-search" circle></el-button>-->
+
       <el-popover
         placement="bottom"
         v-model="visible1">
@@ -58,12 +58,55 @@
         </div>
         <el-button slot="reference" type="primary" size="small" style="margin-left: 50px">添加</el-button>
       </el-popover>
-
   </div>
     <div class="results">
       <el-table
-      :data="tableData"
-      style="width: 100%">
+        v-loading='loading'
+        :data="tableData"
+        stripe
+        ref="filterTable"
+        :default-sort = "{prop: 'accTime', order: 'descending'}"
+        style="width: 100%">
+
+        <el-table-column type="expand">
+
+          <template slot-scope="props">
+            <el-date-picker
+              v-model="dateValue"
+              type="daterange"
+              align="right"
+              unlink-panels
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+              format="yyyy 年 MM 月 dd 日"
+              value-format="yyyy-MM-dd HH:mm:ss"
+              @change="checkRange()"
+              :default-time="['00:00:00', '23:59:59']"
+              :picker-options="pickerOptions">
+            </el-date-picker>
+            <el-tooltip class="item" effect="dark" content="所选日期范围最大为一周" placement="right">
+              <el-button @click='getReviewerInfo' icon='el-icon-search' type='primary' round>查询</el-button>
+            </el-tooltip>
+
+            <el-form label-position="left" inline class="demo-table-expand">
+              <el-form-item>
+                <span style='color: #99a9bf;'>已审核通过：</span>
+                <span>{{ props.row.reviewedNum }}</span>
+              </el-form-item>
+              <el-form-item>
+                <span style='color: #99a9bf;'>已审核不通过：</span>
+                <span>{{ props.row.notPassNum }}</span>
+              </el-form-item>
+
+              <el-form-item>
+                <span style='color: #99a9bf;'>未审核：</span>
+                <span>{{ props.row.toReviewNum }}</span>
+              </el-form-item>
+            </el-form>
+          </template>
+        </el-table-column>
+
       <el-table-column
         prop="reviewer_id"
         width="100px"
@@ -71,7 +114,6 @@
       </el-table-column>
       <el-table-column
         prop="name"
-        width="100px"
         label="审核员名称">
       </el-table-column>
       <el-table-column
@@ -81,14 +123,6 @@
       <el-table-column
         prop="password"
         label="密码">
-      </el-table-column>
-      <el-table-column
-        prop="inst"
-        label="负责机构">
-      </el-table-column>
-      <el-table-column
-        prop="str"
-        label="负责营业网点">
       </el-table-column>
       <el-table-column
         label="操作"
@@ -133,20 +167,21 @@
         return {
           visible1: false,
           visible2: false,
+          loading: false,
 
-          institute: '',
-          ins_ops: [{//机构显示列表
-            institute: 'sh',
-            label: '上海',
-          },{
-            institute: 'sz',
-            label: '深圳',
-          } ],
 
-          shNet: [],//后端传来的所有营业网点列表
-          szNet: [],
-          shPoint: [],//最终被选择的营业网点列表
-          szPoint: [],
+          pickerOptions: {//日期选择器的快捷选项
+            shortcuts: [{
+              text: '最近一周',
+              onClick(picker) {
+                const end = new Date();
+                const start = new Date();
+                start.setTime(start.getTime() - 3600 * 1000 * 24 * 6);
+                end.setTime(end.getTime());
+                picker.$emit('pick', [start, end]);
+              }
+            }]
+          },
 
 
           targetReviewer:'',//搜索的目标审核员名称
@@ -156,8 +191,10 @@
             name:'whatever',
             account:'abc',
             password:'123456',
-            inst:'上海',
-            str:'营业网点1'
+            dateValue:'',
+            toReviewNum: 0,
+            reviewedNum: 0,
+            notPassNum: 0,
           }],
 
           modifyForm:{
@@ -250,6 +287,7 @@
             });
           }
         },
+
         onSubmit() {
           this.visible1 = false; 
           var that = this;
@@ -344,6 +382,40 @@
         handleClick(tab, event) {
           console.log(tab, event);
         },
+
+        getReviewerInfo(){//获取该审核员统计数据
+          if(this.tableData.dateValue != ''){
+            var that = this;
+            const postData = {
+              reviewer_id:this.tableData.reviewer_id,
+              start: this.tableData.dateValue[0],
+              end: this.tableData.dateValue[1]
+            };
+            console.log(this.$Qs.stringify(postData));
+
+            //向后端传输审核员的ID，后端返回审核员信息
+            this.$axios.post('/api/api/statisticData/getReviewerInfo', this.$Qs.stringify(postData)
+            ).then(function(response) {
+              console.log(response.data);
+              that.tableData.toReviewNum = response.data.toReviewNum;
+              that.tableData.reviewedNum = response.data.reviewedNum;
+              that.tableData.notPassNum = response.data.notPassNum;
+            }).catch(function(error){
+              console.log(error);
+              that.$msgbox({
+                type: 'error',
+                title: '连接异常',
+                message:'获取审核员信息和统计数据失败！'
+              });
+            });
+          }
+          else{
+            if(this.setDefaultDate()){
+              this.getReviewerInfo();
+            }
+          }
+        },
+
         getSHList(){
           var that = this;
           this.$axios.get('/api/security/get_securityall').then(function(response){
@@ -362,7 +434,6 @@
           });
           console.log('get sh list');
         },
-
         getSZList(){
           var that = this;
           this.$axios.get('/api/security/get_securityall').then(function(response){
@@ -382,24 +453,12 @@
           console.log('get sz list');
         },
 
-        getNetList(){
-            var that = this;
-            this.$axios.get('/api/admin/get_securityUnderAdmin',{
-              params:{admin_id : 8888}
-            }).then(function(response){
-              console.log(response.data)
-                that.Net = [];
-                that.Net = response.data;
-            });
-            console.log('get net list');
-          console.log(that.Net[0]);
-        },
+
 
       },
 
       mounted(){
           console.log('start to get net list');
-          this.getNetList();
           this.getSHList();
           this.getSZList();
         }

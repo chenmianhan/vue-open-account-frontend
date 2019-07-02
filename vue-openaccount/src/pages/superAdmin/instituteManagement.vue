@@ -46,8 +46,12 @@
           label="网点名称">
         </el-table-column>
         <el-table-column
-          prop="inst"
-          label="所属机构">
+          prop="province"
+          label="省份">
+        </el-table-column>
+        <el-table-column
+          prop="city"
+          label="城市">
         </el-table-column>
         <el-table-column
           prop="store"
