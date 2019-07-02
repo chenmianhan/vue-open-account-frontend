@@ -83,6 +83,7 @@ export default {
                     sessionStorage.removeItem('ms_username');
                     sessionStorage.removeItem('Flag');
                     sessionStorage.removeItem('Role');
+                    sessionStorage.removeItem('status');
                     that.$router.push('/login');
                 }else if (response.data.code == '105'){
                     that.$msgbox({
