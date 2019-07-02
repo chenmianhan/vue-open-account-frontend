@@ -76,8 +76,8 @@ export default {
                 type: 'warning'
             }).then(() => {
                 const postData = {
-                    accountType: this.accountType,
-                    point: this.point
+                    trade_type: this.accountType,
+                    security_id: 50
                 };
                 console.log(postData)
                 var that = this;
