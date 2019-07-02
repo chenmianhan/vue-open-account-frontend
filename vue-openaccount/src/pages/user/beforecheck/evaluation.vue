@@ -74,8 +74,8 @@
     </div>
     <div id="footer">
         <el-row>
-            <el-button icon="el-icon-caret-left" round @click="$router.push({path:'/user/inputInfo'})">上一步</el-button>
-            <el-button type="primary" :disabled="!haveSubmit" round @click="$router.push({path:'/user/choose'})">下一步<i class="el-icon-caret-right icon"></i></el-button>
+            <el-button icon="el-icon-caret-left" round @click="$router.push({path:'/login/inputInfo'})">上一步</el-button>
+            <el-button type="primary" :disabled="!haveSubmit" round @click="$router.push({path:'/login/choose'})">下一步<i class="el-icon-caret-right icon"></i></el-button>
         </el-row>
     </div>
     </div>

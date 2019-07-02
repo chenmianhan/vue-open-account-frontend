@@ -130,8 +130,9 @@
                                     case '0'://用户成功登录
                                         if (response.data.code == '102')//新
                                             that.$router.push('/login/warning');
-                                        else//旧
-                                            that.$router.push('/user/home');
+                                        else{  //旧用户
+                                            that.goPage();
+                                        }
                                         break;
                                     case '1'://审核员成功登录
                                         that.$router.push('/reviewer/home');
@@ -163,6 +164,35 @@
                     } else {
                         console.log('error submit!!');
                         return false;
+                    }
+                });
+            },
+            goPage(){
+                var that = this;
+                this.$axios.post('/api/getReviewResult').then(function(response){
+                    console.log(response.data);
+                    switch(response.data.status){
+                        case '0':
+                            that.$router.push({path: '/login/warning'});
+                            break;
+                        case '1':
+                            that.$router.push({path: '/login/evaluation'});
+                            break;
+                        case '2':
+                            that.$router.push({path: '/login/choose'});
+                            break;
+                        case '3':
+                            that.$router.push({path: '/login/chooseBank'});
+                            break;
+                        case '4':
+                        case '5':
+                            that.$router.push({path: '/login/loading'});
+                            break;
+                        case '6':
+                            that.$router.push({path: '/login/notPass'});
+                            break;
+                        case '7':
+                            that.$router.push({path: '/user/home'});
                     }
                 });
             }

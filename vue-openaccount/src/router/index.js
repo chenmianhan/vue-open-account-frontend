@@ -18,41 +18,41 @@ export default new Router({
       },
       name: '登录'
     },{
-      path: '/user',
+      path: '/login',
       component: resolve => require(['../components/beforecheckMain.vue'], resolve),
       meta:{
         //isLogin: true
       },
       children: [{
-        path: '/user/loading',
+        path: '/login/loading',
         component: resolve => require(['../pages/user/beforecheck/loading.vue'], resolve),
         meta:{
           //isLogin: true//需要登录
         },
         name: '待审核'
       }, {
-        path: '/user/notPass',
+        path: '/login/notPass',
         component: resolve => require(['../pages/user/notPass.vue'], resolve),
         meta:{
           //isLogin: true//需要登录
         },
         name: '未通过'
       }, {
-        path: '/user/choose',
+        path: '/login/choose',
         component: resolve => require(['../pages/user/beforecheck/choose.vue'], resolve),
         meta:{
           //isLogin: true//需要登录
         },
         name: '选择营业网点'
       }, {
-        path: '/user/evaluation',
+        path: '/login/evaluation',
         component: resolve => require(['../pages/user/beforecheck/evaluation.vue'], resolve),
         meta:{
           //isLogin: true//需要登录
         },
         name: '风险测评'
       },{
-        path: '/user/inputInfo',
+        path: '/login/inputInfo',
         component: resolve => require(['../pages/user/beforecheck/inputInfo.vue'], resolve),
         meta:{
           //isLogin: true//需要登录
@@ -66,7 +66,7 @@ export default new Router({
       },
       name: '风险提示'
     },{
-        path: '/user/chooseBank',
+        path: '/login/chooseBank',
         component: resolve => require(['../pages/user/beforecheck/chooseBank.vue'], resolve),
         meta:{
           //isLogin: true//需要登录
