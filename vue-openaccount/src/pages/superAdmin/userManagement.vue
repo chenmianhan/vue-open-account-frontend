@@ -102,7 +102,7 @@
                       props.expandTrigger="hover"
                       class="wd400">
                     </el-cascader>
-                    <el-input v-model="modifyForm.contact_address_detail" class="wd400" style="padding: 10px" placeholder="详细地址"></el-input>
+                    <el-input v-model="modifyForm.contact_address_detail" class="wd400" style="padding-top: 10px" placeholder="详细地址"></el-input>
                   </el-form-item>
 
                   <el-button size="mini" type="text" @click="visible = false">取消</el-button>
@@ -222,6 +222,7 @@
         handleDelete(index, row) {
           console.log(index, row);
           let deleteId = row.user_id;
+          var that = this;
             this.$confirm("确认删除该用户吗？", "提示", {
               confirmButtonText: '确定',
               cancelButtonText: '取消',
@@ -230,6 +231,7 @@
               this.$axios.post('/api/deleteUsers', {user_id: deleteId})//post也可以改成get，但需要对应服务端的请求方法
                 .then(function (response) {
                   console.log(response);
+                  that.querytable();
                 })
                 .catch(function (error) {
                   alert(error);
@@ -266,6 +268,7 @@
                     title: '修改成功',
                     type: 'succeed'
                   });
+                  that.querytable();
                 })
                 .catch(function (error) {
                   that.$msgbox({
