@@ -2,7 +2,7 @@
   <div>
     <span>{{shPoint}}  {{szPoint}}</span>
     <div class="search-bar">
-      <div class="block">
+      <!-- <div class="block">
         <span class="demonstration">所属机构</span>
         <el-select v-model="institute" placeholder="请选择">
           <el-option
@@ -31,7 +31,7 @@
           :show-all-levels='false'
           class="wd400">
           </el-cascader>
-      </div>
+      </div> -->
       <div class="block">
         <el-input v-model="targetUser" placeholder="用户姓名"></el-input>
       </div>

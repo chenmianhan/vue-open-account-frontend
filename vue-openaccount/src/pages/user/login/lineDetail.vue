@@ -4,7 +4,7 @@
         </el-page-header>
         <!-- 选择器 -->
         <div>
-            <el-date-picker
+            <!-- <el-date-picker
             value-format="yyyy-MM-dd HH:mm:ss"
             v-model="startDate"
             type="date"
@@ -17,7 +17,20 @@
             v-model="endDate"
             type="date"
             placeholder="选择日期" size="small">
+            </el-date-picker> -->
+            <el-date-picker
+                v-model="date"
+                type="daterange"
+                align="right"
+                unlink-panels
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+                format="yyyy 年 MM 月 dd 日"
+                value-format="yyyy-MM-dd HH:mm:ss"
+                :default-time="['00:00:00', '23:59:59']">
             </el-date-picker>
+            <!-- <span>{{date}}</span> -->
             <el-button style="margin-left:30px;" type="primary" icon="el-icon-search" circle @click="handleSearch"></el-button>
         </div>
         <div class="timeline">
@@ -35,8 +48,7 @@ import Bill from '../../../assets/js/timeLine.js';
 export default {
     data() {
         return {
-            startDate: '',
-            endDate: '',
+            date: [],
             moreBill: ''
         }
     },
@@ -47,8 +59,8 @@ export default {
         handleSearch(){
             var that = this;
             const postData = {
-                startDate: that.startDate,
-                endDate: that.endDate,
+                startDate: that.date[0],
+                endDate: that.date[1],
                 user_id: 44
             }
             console.log(postData)
