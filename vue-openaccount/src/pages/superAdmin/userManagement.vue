@@ -102,10 +102,11 @@
                       props.expandTrigger="hover"
                       class="wd400">
                     </el-cascader>
+                    <el-input v-model="modifyForm.contact_address_detail" class="wd400" style="padding: 10px" placeholder="详细地址"></el-input>
                   </el-form-item>
 
                   <el-button size="mini" type="text" @click="visible = false">取消</el-button>
-                  <el-button type="primary" size="mini" @click="visible = false; submitModifyForm('modifyForm')">保存</el-button>
+                  <el-button type="primary" size="mini" @click="visible = false; submitModifyForm('modifyForm',scope.row)">保存</el-button>
                 </el-form>
               </div>
               <el-button slot="reference" size="mini">修改</el-button>
@@ -188,6 +189,7 @@
             name:'',
             idNum:'',
             contact_address:'',
+            contact_address_detail:'',
           },
 
           tableData:[{
@@ -240,7 +242,7 @@
             });
         },
 
-        submitModifyForm(formName) {
+        submitModifyForm(formName, row) {
           var that = this;
           // console.log(this.infoForm);
           // debugger;
@@ -251,7 +253,8 @@
                 name: that.modifyForm.name,
                 ID_number: that.modifyForm.idNum,
                 contact_address: that.modifyForm.contact_address,
-                user_id: 1
+                contact_address_detail: that.modifyForm.contact_address_detail,
+                user_id:row.user_id,
               };
 
               // var that = this;
