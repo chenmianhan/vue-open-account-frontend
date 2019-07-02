@@ -1,58 +1,84 @@
 <template>
     <div class='statistic-item'>
-        <!-- 日期查询 -->
-        <div style="margin-bottom: 35px; text-align: left;">
-            <!-- <p>{{ dateValue[0] }} + {{ dateValue[1] }}</p> -->
-            <el-date-picker
-                v-model="dateValue"
-                type="daterange"
-                align="right"
-                unlink-panels
-                range-separator="至"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
-                format="yyyy 年 MM 月 dd 日"
-                value-format="yyyy-MM-dd HH:mm:ss"
-                @change="checkRange()"
-                :default-time="['00:00:00', '23:59:59']"
-                :picker-options="pickerOptions">
-            </el-date-picker>
-            <el-tooltip class="item" effect="dark" content="所选日期范围最大为一周" placement="right">
-                <el-button @click='getTableData' icon='el-icon-search' type='primary' round>查询</el-button>
-            </el-tooltip>
-        </div>
+        <el-row>
+            <div class='search-bar'>
+            <!-- 查询方式选择 -->
+                <div class='block' style="margin-bottom: 35px; text-align: left;">
+                    <el-select v-model="way" placeholder="请选择">
+                        <el-option
+                            v-for="item in wayOptions"
+                            :key="item.way"
+                            :label="item.label"
+                            :value="item.way">
+                        </el-option>
+                    </el-select>
+                <!-- 日期查询 -->
+                    <div class='block' v-show="way == 'date'">
+                        <el-date-picker
+                            v-model="dateValue"
+                            type="daterange"
+                            align="right"
+                            unlink-panels
+                            range-separator="至"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期"
+                            format="yyyy 年 MM 月 dd 日"
+                            value-format="yyyy-MM-dd HH:mm:ss"
+                            @change="checkRange()"
+                            :default-time="['00:00:00', '23:59:59']"
+                            :picker-options="pickerOptions">
+                        </el-date-picker>
+                        <!-- <el-tooltip class="item" effect="dark" content="所选日期范围最大为一周" placement="right">
+                            <el-button @click='getTableData' icon='el-icon-search' type='primary' round>查询</el-button>
+                        </el-tooltip> -->
+                    </div>
+                    <!-- 按用户姓名查询 -->
+                    <div class="block" v-show="way == 'name'">
+                        <el-autocomplete
+                            v-model="state"
+                            :fetch-suggestions="querySearchAsync"
+                            placeholder="请输入用户姓名"
+                            @select="handleSelect"
+                        ></el-autocomplete>
+                    </div>
+                    <el-button @click="queryTable" icon="el-icon-search" circle></el-button>
+                </div>
+            </div>
+        </el-row>
         <!-- 页头 -->
-        <div class='show-item' style='float: center;'>
-            <el-row :gutter="12">
-                <el-col :span="4">
-                        <div class="show-text-item" style="text-align: left;">
-                            <el-row>{{ reviewedNum }} </el-row>
-                        </div>
-                        <div class="show-data-item">
-                            <span>审核通过</span>
-                        </div>
-                </el-col>
-                <!-- <el-col :span='1'>
-                    <el-divider direction='vertical'></el-divider>
-                </el-col> -->
-                <el-col :span="4">
-                        <div class='show-text-item' style="color:maroon;">
-                            <el-row>{{ notPassNum }}</el-row>
-                        </div>
-                        <div class="show-data-item">
-                            <span>审核不通过</span>
-                        </div>
-                </el-col>
-                <el-col :span="4">
-                        <div class="show-text-item" style="text-align: left;">
-                            <el-row>{{ toReviewNum }} </el-row>
-                        </div>
-                        <div class="show-data-item">
-                            <span>等待审核</span>
-                        </div>
-                </el-col>
-            </el-row>
-        </div>
+        <el-row style="float:center;" v-show="way=='date'">
+            <div class='show-item'>
+                <el-row :gutter="12">
+                    <el-col :span="4">
+                            <div class="show-text-item" style="text-align: left;">
+                                <el-row>{{ reviewedNum }} </el-row>
+                            </div>
+                            <div class="show-data-item">
+                                <span>审核通过</span>
+                            </div>
+                    </el-col>
+                    <!-- <el-col :span='1'>
+                        <el-divider direction='vertical'></el-divider>
+                    </el-col> -->
+                    <el-col :span="4">
+                            <div class='show-text-item' style="color:maroon;">
+                                <el-row>{{ notPassNum }}</el-row>
+                            </div>
+                            <div class="show-data-item">
+                                <span>审核不通过</span>
+                            </div>
+                    </el-col>
+                    <el-col :span="4">
+                            <div class="show-text-item" style="text-align: left;">
+                                <el-row>{{ toReviewNum }} </el-row>
+                            </div>
+                            <div class="show-data-item">
+                                <span>等待审核</span>
+                            </div>
+                    </el-col>
+                </el-row>
+            </div>
+        </el-row>
         <!-- 下方的表格：
         默认开户时间降序排列
          -->
@@ -146,7 +172,24 @@ export default {
             reviewedNum: 0,
             notPassNum: 0,
 
-            dateValue:'', //字符串数组object,dateValue[0]/[1]为开始/结束日期yyyy-mm-dd
+            way: 'date',//默认日期
+
+            username: [],
+            state: '',
+            timeout:  null,
+
+            wayOptions:[{
+                way: 'date',
+                label:'按日期查询',
+            },{
+                way:'name',
+                label:'按用户姓名查询',
+            }],
+
+            dateValue:'', //查询日期条件
+
+            targetUser:'',//搜索的目标用户名称
+
 
             tableData: [{//表格用户对象列表
                 userName:'张三',
@@ -227,7 +270,15 @@ export default {
             }
         },
 
-        getTableData(){//根据选择日期范围显示用户信息
+        queryTable(){
+            if(this.way=='date'){
+              this.queryDate();
+            }else if (this.way=='name'){
+              this.queryName();
+            }
+        },
+
+        queryDate(){
             if(this.dateValue != ''){
                 console.log(this.dateValue);
                 const postData = {
@@ -236,9 +287,9 @@ export default {
                 }
                 var that = this;
                 console.log(this.$Qs.stringify(postData));
-                //向后端传输日期范围，后端返回该范围中已审核的用户信息对象列表
+                //向后端传输日期范围，后端返回该范围中所有用户信息对象列表
                 //一个对象元素对应一个用户信息
-                this.$axios.post('/api/reviewer/getAllUserInfo', this.$Qs.stringify(postData)
+                this.$axios.post('/api/reviewer/getUserByDate', this.$Qs.stringify(postData)
                 ).then(function(response){
                     console.log(response.data);
                     that.tableData = response.data;
@@ -251,15 +302,92 @@ export default {
                     that.$msgbox({
                         type:'error',
                         title: '连接异常',
-                        message: '获取已审核用户信息失败！'
+                        message: '获取用户信息失败！'
                     });
                 });
             }
             else{
                 if (this.setDefaultDate()){
-                    this.getTableData();
+                    this.queryDate();
                 }
             }
+        },
+
+        queryName(){
+           if (this.state != ''){
+              console.log(this.state);
+              const postData = {
+                  username: this.state
+              };
+              var that = this;
+              console.log(this.$Qs.stringify(postData));
+              this.$axios.post('/api/reviewer/getUserByName', this.$Qs.stringify(postData)
+              ).then(function(response){
+                  that.tableData = response.data;
+              }).catch(function(error){
+                  console.log(error);
+                  that.$msgbox({
+                    type: 'error',
+                    title: '连接失败',
+                    message: '获取用户信息失败！'
+                  })
+              })
+           }else{
+             this.$msgbox({
+                type: 'info',
+                title: '信息不完全',
+                message: '请输入你想要搜索的用户姓名！'
+             })
+           }
+        },
+
+        loadAll(){
+          var that = this;
+          //后端传回用户姓名和ID对应的列表
+          this.$axios.get('/api/reviewer/getUserId'
+          ).then(function(response){
+              this.username = response.data;
+          }).catch(function(error){
+              console.log(error);
+              that.$msgbox({
+                  type: 'error',
+                  title: '连接失败',
+                  message: '获取用户ID失败！'
+              })
+          })
+        },
+
+        querySearchAsync(queryString, cb) {
+          var username = this.username;
+          var results = queryString ? username.filter(this.createStateFilter(queryString)) : username;
+
+          clearTimeout(this.timeout);
+          this.timeout = setTimeout(() => {
+            cb(results);
+          }, 3000 * Math.random());
+        },
+
+        createStateFilter(queryString) {
+          return (state) => {
+            return (state.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+          };
+        },
+
+        handleSelect(item) {
+          console.log(item);
+          var that = this;
+
+          this.$axios.get('/api/reviewer/getUserInfo', params={userId: item.address}
+          ).then(function(response){
+              that.tableData = response.data;
+          }).catch(function(error){
+              console.log(error);
+              that.$msgbox({
+                  type: 'error',
+                  title:'连接失败',
+                  message: '获取用户信息失败！'
+              })
+          })
         },
 
         setDefaultDate(){//默认显示最近一周已审核用户信息
@@ -326,7 +454,7 @@ export default {
     mounted(){
         this.setDefaultDate();
         this.getReviewerInfo();
-        this.getTableData(); 
+        this.queryTable(); 
     }
 }
 </script>
@@ -340,6 +468,15 @@ export default {
         width: 90px;
         color: #99a9bf;
     } */
+    .search-bar{
+        /*position: relative;*/
+        float:left;
+    }
+    
+    .block{
+        display: inline-block;
+    }
+
     .demo-table-expand .el-form-item {
         margin-right: 0;
         margin-bottom: 0;
@@ -356,6 +493,11 @@ export default {
 
     .item {
         margin-bottom: 18px;
+    }
+    
+    .show-item {
+        text-align: left;
+        float: center;
     }
 
     .show-data-item {
