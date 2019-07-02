@@ -165,7 +165,7 @@ export default {
             //     reviewerId: this.reviewerId
             // }
             var that = this;
-            this.$axios.post('/api/api/reviewUser/getUserInfo'
+            this.$axios.post('/api/reviewer/getUserInfo'
             ).then(function(response){
                 console.log(response.data);
                 that.userInfo = response.data.userInfo;
@@ -264,7 +264,7 @@ export default {
                     imageResult: this.reviewResult.imageResult
                 }
                 console.log(this.$Qs.stringify(postData));
-                this.$axios.post('/api/reviewUser/postResult',that.$Qs.stringify(postData)
+                this.$axios.post('/api/reviewer/postResult',that.$Qs.stringify(postData)
                 ).then(function(response){
                     console.log(response);
                     if (response.data.code == '201'){
