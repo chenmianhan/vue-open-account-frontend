@@ -199,12 +199,13 @@ export default {
                 var that = this;
                 const postData = {
                     start: this.dateValue[0],
-                    end: this.dateValue[1]
+                    end: this.dateValue[1],
+                    reviewerId: ''
                 };
                 console.log(this.$Qs.stringify(postData));
 
                 //向后端传输审核员的ID，后端返回审核员信息
-                this.$axios.post('/api/api/statisticData/getReviewerInfo', this.$Qs.stringify(postData)
+                this.$axios.post('/api/reviewer/getReviewerInfo', this.$Qs.stringify(postData)
                 ).then(function(response) {
                     console.log(response.data);
                     that.toReviewNum = response.data.toReviewNum;
@@ -237,7 +238,7 @@ export default {
                 console.log(this.$Qs.stringify(postData));
                 //向后端传输日期范围，后端返回该范围中已审核的用户信息对象列表
                 //一个对象元素对应一个用户信息
-                this.$axios.post('/api/api/statisticData/getUserInfo', this.$Qs.stringify(postData)
+                this.$axios.post('/api/reviewer/getAllUserInfo', this.$Qs.stringify(postData)
                 ).then(function(response){
                     console.log(response.data);
                     that.tableData = response.data;
@@ -346,8 +347,8 @@ export default {
     }
     .statistic-item {
         margin-top: 40px;
-        margin-left: 60px;
-        margin-right: 70px;
+        margin-left: 120px;
+        margin-right: 120px;
     }
     /* .text {
         font-size: 14px;
