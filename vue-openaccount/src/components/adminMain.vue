@@ -66,6 +66,7 @@ let data = () => {
   return {
     collapsed: false,
     systemName: '金证开户平台',
+    netName: 'xx营业网点',
     adminName: 'xx管理员'
   }
 }
@@ -105,10 +106,26 @@ export default {
                 })
             })
         }
-    }
+    },
+
+    getAdminInfo(){
+        var that = this;
+        this.$axios.get('/api/admin'
+        ).then(function(response){
+            that.netName = response.data.netName;
+            that.adminName = response.data.adminName;
+        }).catch(function(error){
+            console.log(error);
+            that.$msgbox({
+              type:'error',
+              title: '连接失败',
+              message:'获取管理员信息失败'
+            })
+        })
+    },
   },
   mounted: function() {
-
+      //this.getAdminInfo();
   },
   computed: {
     onRoutes(){

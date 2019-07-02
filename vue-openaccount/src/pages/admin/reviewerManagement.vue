@@ -1,42 +1,17 @@
 <template>
 <div>
-  <h1 style="float: left">你所负责的营业网点：  {{store}}</h1>
     <div class="search-bar">
       <div class="block">
-      <span class="demonstration">所属机构</span>
-      <el-select v-model="institute" placeholder="请选择">
-          <el-option
-            v-for="item in ins_ops"
-            :key="item.institute"
-            :label="item.label"
-            :value="item.institute">
-          </el-option>
-        </el-select>
-      </div>
-      <div class="block">
-        <span class="demonstration" v-show="institute!=''">所属营业网点</span>
-        <el-cascader v-show="institute=='sh'"
-          :options="shNet"
-          checkStrictly
-          v-model="shPoint"
-          props.expandTrigger="hover"
-          :show-all-levels='false'
-          class="wd400">
-          </el-cascader>
-        <el-cascader v-show="institute=='sz'"
-          :options="szNet"
-          checkStrictly
-          v-model="szPoint"
-          props.expandTrigger="hover"
-          :show-all-levels='false'
-          class="wd400">
-          </el-cascader>
-      </div>
-      <div class="block">
-        <el-input v-model="targetReviewer" placeholder="审核员姓名"></el-input>
+        <el-autocomplete
+            v-model="state"
+            :fetch-suggestions="querySearchAsync"
+            placeholder="请输入审核员姓名"
+            @select="handleSelect"
+          ></el-autocomplete>
       </div>
       <el-button icon="el-icon-search" circle></el-button>
-
+    </div>
+    <div class="add-button">
       <el-popover
         placement="bottom"
         v-model="visible1">
@@ -58,7 +33,7 @@
         </div>
         <el-button slot="reference" type="primary" size="small" style="float: right; margin-right: 20px">添加</el-button>
       </el-popover>
-  </div>
+    </div>
     <div class="results">
       <el-table
         v-loading='loading'
@@ -170,8 +145,6 @@
           visible2: false,
           loading: false,
 
-          store:'',
-
           pickerOptions: {//日期选择器的快捷选项
             shortcuts: [{
               text: '最近一周',
@@ -185,8 +158,9 @@
             }]
           },
 
-
-          targetReviewer:'',//搜索的目标审核员名称
+          reviewerName: [],
+          state: '',
+          timeout:  null,
 
           tableData:[{//表格审核员对象列表
             reviewer_id:'1',
@@ -214,80 +188,81 @@
         };
       },
       methods: {
-        querytable(){//查询指定网点的审核员
-          var that = this;
-
-          if (this.institute != '' && this.shPoint.length > 0 && this.szPoint.length > 0){
-            if (institute == 'sh'){
+        queryName(){
+           if (this.state != ''){
+              console.log(this.state);
               const postData = {
-                institue: this.institute,
-                net: this.shPoint[0]
+                  reviewerName: this.state
               };
-            }else{
-              const postData = {
-                institute: this.institute,
-                net: this.szPoint[0]
-              }
-            }
-            this.$axios.post('/api/admin/getAllReviewers', this.$Qs.stringify(postData)
-              ).then(function (response) {
-                //将返回的数据存入页面中声明的data中
-                that.tableData = response.data.tableData;
-              }).catch(function (error) {
-                console.log(error);
-                that.$msgbox({
-                      type: 'error',
-                      title: '连接异常',
-                      message:'获取目标网点审核员信息失败！'
+              var that = this;
+              console.log(this.$Qs.stringify(postData));
+              this.$axios.post('/api/admin/getReviewerByName', this.$Qs.stringify(postData)
+              ).then(function(response){
+                  that.tableData = response.data;
+              }).catch(function(error){
+                  console.log(error);
+                  that.$msgbox({
+                    type: 'error',
+                    title: '连接失败',
+                    message: '获取审核员信息失败！'
                   })
-              });
-          }else{
-            this.$msgbox({
-              type: 'error',
-              title: '信息不完全',
-              message: '未选择机构或网点!'
-            });
-          }
+              })
+           }else{
+             this.$msgbox({
+                type: 'info',
+                title: '信息不完全',
+                message: '请输入你想要搜索的审核员姓名！'
+             })
+           }
         },
 
-        queryUser(){//查询指定姓名的审核员
+        loadAll(){
+          var that = this;
+          //后端传回用户姓名和ID对应的列表
+          this.$axios.get('/api/admin/getReviewerId'
+          ).then(function(response){
+              this.reviewerName = response.data;
+          }).catch(function(error){
+              console.log(error);
+              that.$msgbox({
+                  type: 'error',
+                  title: '连接失败',
+                  message: '获取审核员ID失败！'
+              })
+          })
+        },
+
+        querySearchAsync(queryString, cb) {
+          var reviewerName = this.reviewerName;
+          var results = queryString ? reviewerName.filter(this.createStateFilter(queryString)) : reviewerName;
+
+          clearTimeout(this.timeout);
+          this.timeout = setTimeout(() => {
+            cb(results);
+          }, 3000 * Math.random());
+        },
+
+        createStateFilter(queryString) {
+          return (state) => {
+            return (state.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+          };
+        },
+
+        handleSelect(item) {
+          console.log(item);
           var that = this;
 
-          if (this.institute != '' && this.shPoint.length > 0 && this.szPoint.length > 0){
-            if (this.institute == 'sh'){
-              const postData = {
-                institue: this.institute,
-                net: this.shPoint[0],
-                username: this.targetReviewer
-              };
-            }else{
-              const postData = {
-                institute: this.institute,
-                net: this.szPoint[0],
-                username: this.targetReviewer
-              };
-            }
-
-            this.$axios.post('/api/admin/getTargetReviewer', this.$Qs.stringify(postData)
-              ).then(function (response) {
-                //将返回的数据存入页面中声明的data中
-                that.tableData = response.data.tableData;
+          this.$axios.get('/api/admin/getReviewerInfo', params={reviewerId: item.address}
+          ).then(function(response){
+              that.tableData = response.data;
+          }).catch(function(error){
+              console.log(error);
+              that.$msgbox({
+                  type: 'error',
+                  title:'连接失败',
+                  message: '获取审核员信息失败！'
               })
-              .catch(function (error) {
-                console.log(error);
-                that.$msgbox({
-                      type: 'error',
-                      title: '连接异常',
-                      message:'获取目标审核员信息失败！'
-                  })
-              });
-          }else{
-            this.$msgbox({
-              type: 'error',
-              title: '信息不完全',
-              message: '未选择机构或网点!'
-            });
-          }
+          })
         },
 
         onSubmit() {
@@ -443,52 +418,10 @@
             });
           });
         },
-
-        getSHList(){
-          var that = this;
-          this.$axios.get('/api/security/get_securityall').then(function(response){
-            that.shNet = [];
-            that.shNet = response.data;
-            for(var i = 0; i < that.shNet.length; i++){
-              for(var j = 0; j < that.shNet[i].children.length; j++){
-                for(var t = 0; t < that.shNet[i].children[j].children.length; t++){
-                  if(that.shNet[i].children[j].children[t].type != '0'){
-                    that.shNet[i].children[j].children.splice(t,1);
-                    t--;
-                  }
-                }
-              }
-            }
-          });
-          console.log('get sh list');
-        },
-        getSZList(){
-          var that = this;
-          this.$axios.get('/api/security/get_securityall').then(function(response){
-            that.szNet = [];
-            that.szNet = response.data;
-            for(var i = 0; i < that.szNet.length; i++){
-              for(var j = 0; j < that.szNet[i].children.length; j++){
-                for(var t = 0; t < that.szNet[i].children[j].children.length; t++){
-                  if(that.szNet[i].children[j].children[t].type != '1'){
-                    that.szNet[i].children[j].children.splice(t,1);
-                    t--;
-                  }
-                }
-              }
-            }
-          });
-          console.log('get sz list');
-        },
-
-
-
       },
 
       mounted(){
-          console.log('start to get net list');
-          this.getSHList();
-          this.getSZList();
+
         }
     }
 </script>
@@ -497,12 +430,15 @@
 
 <style scoped>
   .search-bar{
-    float: left;
-    width: 100%;
+    /*position: relative;*/
+    float:left;
   }
   .block{
     display: inline-block;
     padding: 10px;
+  }
+  .add-button{
+    float:right;
   }
   .wd400{
     width: 100%;
