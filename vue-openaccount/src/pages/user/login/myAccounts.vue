@@ -271,7 +271,7 @@ export default {
         getTimeLine(){
             var that = this;
             const postData = {
-                user_id: 44
+                user_id: 17
             };
             this.$axios.post('/api/timeline/get_timeline', postData).then(function(response){
                 console.log(response.data);

@@ -11,7 +11,7 @@
         placement="bottom"
         v-model="visible1">
         <div style="text-align:center; width: 300px">
-          <el-form ref="form" :model="addForm" label-width="100px" size="mini">
+          <el-form ref="addForm" :model="addForm" :rules="rules" label-width="100px" size="mini">
             <el-form-item label="管理员名称">
               <el-input v-model="addForm.name"></el-input>
             </el-form-item>
@@ -63,16 +63,6 @@
       <el-table-column
         prop="authority"
         label="权限">
-        <template slot-scope="scope">
-          <el-popover trigger="hover" placement="top">
-            <p>上海：</p>
-            <!--<p>{{ scope.row. }}</p>-->
-            <p>深圳：</p>
-            <div slot="reference" class="name-wrapper">
-              <el-tag size="medium">查看权限信息</el-tag>
-            </div>
-          </el-popover>
-        </template>
       </el-table-column>
       <el-table-column
         label="操作"
@@ -83,7 +73,7 @@
             placement="bottom"
             v-model="visible2">
             <div style="text-align:center; width: 300px">
-              <el-form ref="form" :model="modifyForm" label-width="100px" size="mini">
+              <el-form ref="modifyForm" :model="modifyForm" :rules="rules" label-width="100px" size="mini">
                 <el-form-item label="管理员名称">
                   <el-input v-model="modifyForm.name"></el-input>
                 </el-form-item>
@@ -132,16 +122,6 @@
           visible2: false,
           props: { multiple: true },
 
-          institute: '',
-          ins_ops: [{//机构显示列表
-            institute: 'sh',
-            label: '上海',
-          },{
-            institute: 'sz',
-            label: '深圳',
-          } ],
-          shNet: [],//后端传来的所有营业网点列表
-          szNet: [],
 
           Net:[], //后端传来的所有营业网点列表
 
@@ -164,14 +144,25 @@
             password:'',
             store:'',
           },
+
+          rules: {
+            name: [
+              { require: true , message: '请输入姓名', trigger: 'blur' },
+              { min: 2, max: 6, message: '长度在 2 到 6 个字符', trigger: 'blur' }
+            ],
+            account: [
+              { require: true , trigger: 'blur' },
+            ],
+            password: [
+              { require: true , trigger: 'blur' },
+            ],
+          }
         }
       },
       methods: {
 
         submitAddForm(formName) {
           var that = this;
-          // console.log(this.infoForm);
-          // debugger;
           this.$refs[formName].validate((valid) => {
             // console.log(valid);
             if (valid) {
@@ -183,9 +174,7 @@
 
               // var that = this;
               console.log(postData);
-              this.$axios.post('/api/addAdmin', this.$Qs.stringify(postData), {
-                headers: {'content-type': 'application/x-www-form-urlencoded'},
-              })
+              this.$axios.post('/api/superadmin/addAdmin',postData)
                 .then(function (response) {
                   console.log(response);
                   that.$msgbox({
@@ -212,8 +201,6 @@
 
         submitModifyForm(formName) {
           var that = this;
-          // console.log(this.infoForm);
-          // debugger;
           this.$refs[formName].validate((valid) => {
             // console.log(valid);
             if (valid) {
@@ -225,9 +212,7 @@
 
               // var that = this;
               console.log(postData);
-              this.$axios.post('/api/modifyAdmin', this.$Qs.stringify(postData), {
-                headers: {'content-type': 'application/x-www-form-urlencoded'},
-              })
+              this.$axios.post('/api/superadmin/modifyAdmin', postData)
                 .then(function (response) {
                   console.log(response);
                   that.$msgbox({
@@ -254,13 +239,15 @@
 
         handleDelete(index, row) {
           console.log(index, row);
-          var deleteId = row.admin_id;
+          const postData = {
+            admin_id:  row.admin_id,
+          };
           this.$confirm("确认删除该管理员吗？", "提示", {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            this.$axios.post('/api/superadmin/deleteAdmin', deleteId)//post也可以改成get，但需要对应服务端的请求方法
+            this.$axios.post('/api/superadmin/deleteAdmin', postData)//post也可以改成get，但需要对应服务端的请求方法
               .then(function (response) {
                 console.log(response);
               })
@@ -277,52 +264,14 @@
 
         getNetList(){
           var that = this;
-          this.$axios.get('/api/admin/get_securityUnderAdmin',{
-            params:{admin_id : 8888}
-          }).then(function(response){
+          this.$axios.get('/api/superadmin/get_securityUnderAdmin')
+            .then(function(response){
             console.log(response.data)
             that.Net = [];
             that.Net = response.data;
           });
           console.log('get net list');
           console.log(that.Net[0]);
-        },
-
-        getSHList(){
-          var that = this;
-          this.$axios.get('/api/security/get_securityall').then(function(response){
-            that.shNet = [];
-            that.shNet = response.data;
-            for(var i = 0; i < that.shNet.length; i++){
-              for(var j = 0; j < that.shNet[i].children.length; j++){
-                for(var t = 0; t < that.shNet[i].children[j].children.length; t++){
-                  if(that.shNet[i].children[j].children[t].type != '0'){
-                    that.shNet[i].children[j].children.splice(t,1);
-                    t--;
-                  }
-                }
-              }
-            }
-          });
-          console.log('get sh list');
-        },
-        getSZList(){
-          var that = this;
-          this.$axios.get('/api/security/get_securityall').then(function(response){
-            that.szNet = [];
-            that.szNet = response.data;
-            for(var i = 0; i < that.szNet.length; i++){
-              for(var j = 0; j < that.szNet[i].children.length; j++){
-                for(var t = 0; t < that.szNet[i].children[j].children.length; t++){
-                  if(that.szNet[i].children[j].children[t].type != '1'){
-                    that.szNet[i].children[j].children.splice(t,1);
-                    t--;
-                  }
-                }
-              }
-            }
-          });
-          console.log('get sz list');
         },
 
         handleCheckedSHChange(value) {
@@ -335,8 +284,7 @@
 
       mounted(){
         console.log('start to get net list');
-        this.getSHList();
-        this.getSZList();
+        this.getNetList();
       }
     }
 </script>

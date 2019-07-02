@@ -45,7 +45,7 @@ export default {
     },
     //下一步按钮跳转资料填写界面
     nextStepToInfo(){
-      this.$router.push('/user/inputInfo');
+      this.$router.push('/login/inputInfo');
     }
   },
   mounted: function() {

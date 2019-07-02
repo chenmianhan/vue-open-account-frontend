@@ -34,14 +34,15 @@ export default {
         }
     },
     mounted(){
-        // var that = this;
-        // this.$axios.get('').then(function(response){
-        //     that.message = response.data;
-        // }).catch(()=>{
-        //     that.$msgbox.error({
-        //         title: '连接失败'
-        //     });
-        // });
+        var that = this;
+        this.$axios.post('/api/getReviewResult').then(function(response){
+            console.log(response.data)
+            that.message = response.data.msg;
+        }).catch(()=>{
+            that.$msgbox.error({
+                title: '连接失败'
+            });
+        });
     }
 }
 </script>

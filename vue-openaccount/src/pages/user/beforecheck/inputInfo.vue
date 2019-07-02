@@ -1,13 +1,13 @@
 <template>
 <div>
   <div style="margin: 0 auto;width:70%;margin-top:50px;margin-bottom:50px;text-align:left;">
-  <el-steps :active="0" finish-status="success">
-    <el-step title="用户信息填写"></el-step>
-    <el-step title="风险测评"></el-step>
-    <el-step title="选择营业网点"></el-step>
-    <el-step title="选择银行"></el-step>
-    <el-step title="审核"></el-step>
-  </el-steps>  
+    <el-steps :active="0" finish-status="success">
+      <el-step title="用户信息填写"></el-step>
+      <el-step title="风险测评"></el-step>
+      <el-step title="选择营业网点"></el-step>
+      <el-step title="选择银行"></el-step>
+      <el-step title="审核"></el-step>
+    </el-steps>  
   </div>
   <el-divider><i class="el-icon-star-off"></i><i class="el-icon-star-off"></i><i class="el-icon-star-off"></i></el-divider>
   <div class="questions">
@@ -32,7 +32,6 @@
         </el-cascader>
         <el-input v-model="infoForm.id_address_detail" class="wd400" style="padding: 10px" placeholder="详细地址"></el-input>
       </el-form-item>
-
 
       <el-form-item label="证件有效期" prop="dates">
         <el-date-picker type="date" placeholder="选择日期" v-model="infoForm.begin" value-format="yyyy-MM-dd HH:mm:ss" style="width: 300px;"></el-date-picker>
@@ -138,18 +137,12 @@
           <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
         </el-upload>
       </el-form-item>
-
-      <el-form-item>
-        <el-button icon="el-icon-caret-left" round @click="$router.push({path:'/login/warning'})">上一步</el-button>
-        <el-button type="primary" round @click="submitForm('infoForm')">下一步<i class="el-icon-caret-right icon"></i></el-button>
-      </el-form-item>
-
-      <!--<span>{{infoForm.contact_address}}</span>-->
-
     </el-form>
-
-
   </div>
+    <el-row style="height:50px;">
+        <el-button class="button" icon="el-icon-caret-left" round @click="$router.push({path:'/login/warning'})">上一步</el-button>
+        <el-button class="button" type="primary" round @click="submitForm('infoForm')">下一步<i class="el-icon-caret-right icon"></i></el-button>
+    </el-row>
 </div>
 </template>
 <script>
@@ -346,14 +339,10 @@ import area from '../../../assets/js/area.js'
               
               console.log(postData);
               this.$axios.post('/api/addAccountInfo', postData)
-                .then(/*function (response) {
-                  // if(response.data.)
-                console.log(response);
-                that.$router.push('/user/evaluation');
-              }*/
+                .then(
                   res=>{
                     console.log('res=>',res);
-                    that.$router.push({path: '/user/evaluation'});
+                    that.$router.push({path: '/login/evaluation'});
                   })
                 .catch(function (error) {
                   that.$msgbox({
@@ -378,7 +367,7 @@ import area from '../../../assets/js/area.js'
       }
     }
 </script>
-<style>
+<style scoped>
 .questions{
   width:40%;
   /* float:left; */
@@ -389,5 +378,8 @@ import area from '../../../assets/js/area.js'
 }
 .icon{
     margin-left:6px;
+}
+  .button{
+    margin: 80px;
 }
 </style>
