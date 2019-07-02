@@ -495,7 +495,7 @@
 
 
 
-<style>
+<style scoped>
   .search-bar{
     float: left;
     width: 100%;
