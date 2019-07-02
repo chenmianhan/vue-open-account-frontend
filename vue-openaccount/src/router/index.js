@@ -176,6 +176,13 @@ export default new Router({
           //isLogin: true//需要登录
         },
         name: '机构管理'
+      },{
+        path:'/superadmin/manageAttribute',
+        component: resolve => require(['../pages/superAdmin/attributeManagement.vue'], resolve),
+        meta:{
+          //isLogin: true//需要登录
+        },
+        name: '公共参数管理'
       }]
     },{
       path: '*',
