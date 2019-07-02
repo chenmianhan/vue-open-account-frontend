@@ -30,7 +30,7 @@
           props.expandTrigger="hover"
           class="wd400">
         </el-cascader>
-        <!-- <el-input v-model="infoForm.address" class="wd400"></!-->
+        <el-input v-model="infoForm.id_address_detail" class="wd400" style="padding: 10px" placeholder="详细地址"></el-input>
       </el-form-item>
 
 
@@ -55,7 +55,7 @@
         props.expandTrigger="hover"
         class="wd400">
       </el-cascader>
-      <!-- <el-input v-model="infoForm.address" class="wd400"></!-->
+       <el-input v-model="infoForm.contact_address_detail" class="wd400" style="padding: 10px" placeholder="详细地址"></el-input>
     </el-form-item>
 
 
@@ -67,7 +67,7 @@
           props.expandTrigger="hover"
           class="wd400">
         </el-cascader>
-        <!-- <el-input v-model="infoForm.address" class="wd400"></!-->
+        <el-input v-model="infoForm.mail_address_detail" class="wd400" style="padding: 10px" placeholder="详细地址"></el-input>
       </el-form-item>
 
 
@@ -80,7 +80,8 @@
         <el-cascader
           :options="degree"
           props.checkStrictly
-          v-model="infoForm.degree">
+          v-model="infoForm.degree"
+          class="wd400">
         </el-cascader>
         <!-- <el-input v-model="infoForm.address" class="wd400"></!-->
       </el-form-item>
@@ -188,6 +189,10 @@ import area from '../../../assets/js/area.js'
           dialogVisible: false,
           address: areajson,
 
+          src1:'',
+          scr2:'',
+          scr3:'',
+
           infoForm: {
             name: '',
             begin: '2000-01-01 00:00:00',
@@ -196,8 +201,11 @@ import area from '../../../assets/js/area.js'
             idNum: '',
             agency:'',
             id_address: '',
+            id_address_detail: '',
             mail_address: '',
+            mail_address_detail: '',
             contact_address: '',
+            contact_address_detail: '',
             job:'',
             degree:'',
             front: [],
@@ -208,22 +216,24 @@ import area from '../../../assets/js/area.js'
             headUrl: ''
           },
 
-          degree:[{
-            value: '小学',
-            label: '小学',}
-            ,{
-              value: '中学',
-              label: '中学',}
-            ,{
-            value: '高中',
-            label: '高中',}
-            , {
-              value: '大学',
-              label: '大学',}
-            ,{
+          degree:[
+            {value: '博士',
+              label: '博士',
+            },
+            {value: '硕士',
+              label: '硕士',
+            },
+            {value: '学士',
+              label: '学士',
+          },{
               value: '大专',
               label: '大专',
-            }
+            }, {
+              value: '高中',
+              label: '高中',}
+            , {
+            value: '其他',
+            label: '其他',}
           ],
 
 
@@ -273,27 +283,27 @@ import area from '../../../assets/js/area.js'
           // console.log(file);
           //创建临时的路径来展示图片
           var windowURL = window.URL || window.webkitURL;
-           var src=windowURL.createObjectURL(file);
+          this.src1 = windowURL.createObjectURL(file);
           //重新写一个表单上传的方法
-          this.infoForm.frontUrl = src;
+          this.infoForm.frontUrl = this.src1;
           // return false;
         },
         beforeuploadBack(file) {
           // console.log(file);
           //创建临时的路径来展示图片
           var windowURL = window.URL || window.webkitURL;
-          this.src=windowURL.createObjectURL(file);
+          this.src2 = windowURL.createObjectURL(file);
           //重新写一个表单上传的方法
-          this.infoForm.backUrl = this.src;
+          this.infoForm.backUrl = this.src2;
           // return false;
         },
         beforeuploadHead(file) {
           // console.log(file);
           //创建临时的路径来展示图片
           var windowURL = window.URL || window.webkitURL;
-          this.src=windowURL.createObjectURL(file);
+          this.src3 = windowURL.createObjectURL(file);
           //重新写一个表单上传的方法
-          this.infoForm.headUrl = this.src;
+          this.infoForm.headUrl = this.src3;
           // return false;
         },
         //覆盖默认的上传行为
@@ -325,8 +335,11 @@ import area from '../../../assets/js/area.js'
                   headshot:that.infoForm.headUrl,
                   user_id: 1},
                 id_address: that.infoForm.id_address,
+                id_address_detail: that.infoForm.id_address_detail,
                 postal_address: that.infoForm.mail_address,
+                postal_address_detail: that.infoForm.mail_address_detail,
                 contact_address: that.infoForm.contact_address,
+                contact_address_detail: that.infoForm.contact_address_detail,
               };
 
 

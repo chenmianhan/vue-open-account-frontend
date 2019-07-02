@@ -14,12 +14,20 @@
         placement="bottom"
         v-model="visible">
         <div style="text-align:center; width: 300px">
-          <el-form ref="form" :model="addForm" label-width="100px" size="mini">
-            <el-form-item label="营业网点名称">
+          <el-form ref="addForm" :model="addForm" :rules="rules" label-width="100px" size="mini">
+            <el-form-item label="营业网点名称" prop="store">
               <el-input v-model="addForm.store"></el-input>
             </el-form-item>
-            <el-form-item label="所属机构">
-              <el-input v-model="addForm.institute"></el-input>
+            <el-form-item label="网点地址" prop="address">
+            <el-cascader
+              :options="address"
+              props.checkStrictly
+              v-model="addForm.address"
+              props.expandTrigger="hover">
+            </el-cascader>
+            </el-form-item>
+            <el-form-item label="联系电话" prop="phone">
+              <el-input v-model="addForm.phone"></el-input>
             </el-form-item>
             <el-button size="mini" type="text" @click="visible = false">取消</el-button>
             <el-button type="primary" size="mini" @click="visible = false; submitAddForm('addForm')">保存</el-button>
@@ -35,11 +43,15 @@
         style="width: 100%">
         <el-table-column
           prop="store"
-          label="营业网点名称">
+          label="网点名称">
         </el-table-column>
         <el-table-column
           prop="inst"
           label="所属机构">
+        </el-table-column>
+        <el-table-column
+          prop="store"
+          label="网点地址">
         </el-table-column>
         <el-table-column
           prop="user_number"
@@ -56,9 +68,27 @@
   </div>
 </template>
 <script>
+  import area from '../../assets/js/area.js'
+
     export default {
       data(){
+        let checkPhone = (rule, value, callback) => {
+          if (!value) {
+            return callback(new Error('电话号码不能为空'));
+          } else {
+            const reg = /^(0[0-9]{2,3}\-)?([2-9][0-9]{6,7})+(\-[0-9]{1,4})?$|(^(13[0-9]|15[0|3|6|7|8|9]|18[8|9])\d{8}$)/;
+            // console.log(reg.test(value));
+            if (reg.test(value)) {
+              callback();
+            } else {
+              return callback(new Error('请输入正确的电话号码'));
+            }
+          }
+        };
+
         return{
+          address: areajson,
+
           visible: false,
           institute: [],
           ins_ops: [{
@@ -71,7 +101,8 @@
 
           addForm:{
             store:'',
-            institute:'',
+            address:'',
+            phone:'',
           },
 
           instData:[{
@@ -80,26 +111,40 @@
             user_number:'123',
           }],
 
+          rules: {
+            store: [
+              { required: true, message: '请输入网点名称', trigger: 'blur' }
+            ],
+            address: [
+              { required: true, trigger: 'blur'}
+            ],
+            phone: [
+              { required: true, message: '请输入电话号码', trigger: 'blur' },
+              { validator: checkPhone, trigger: 'blur' }
+            ],
+          },
+
         }
       },
       methods:{
+        handleChange(file, fileList) {
+          // console.log(file, fileList);
+        },
+
         submitAddForm(formName) {
+          this.addForm.address.splice(2,1);
           var that = this;
-          // console.log(this.infoForm);
-          // debugger;
           this.$refs[formName].validate((valid) => {
-            // console.log(valid);
             if (valid) {
               const postData = {
                 store: that.addForm.store,
-                institute: that.addForm.institute,
+                address: that.addForm.address,
+                phone: that.addForm.phone,
               };
 
               // var that = this;
               console.log(postData);
-              this.$axios.post('/api/addStore', this.$Qs.stringify(postData), {
-                headers: {'content-type': 'application/x-www-form-urlencoded'},
-              })
+              this.$axios.post('/api/superadmin/addStore', postData)
                 .then(function (response) {
                   console.log(response);
                   that.$msgbox({
@@ -132,7 +177,7 @@
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            this.$axios.post('/api/superadmin/deleteInstitute', deleteStore)//post也可以改成get，但需要对应服务端的请求方法
+            this.$axios.post('/api/superadmin/deleteStore', deleteStore)//post也可以改成get，但需要对应服务端的请求方法
               .then(function (response) {
                 console.log(response);
               })

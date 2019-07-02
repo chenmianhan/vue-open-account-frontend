@@ -161,11 +161,11 @@ export default {
             this.checked.grade = false;
             this.checked.image = false;
 
-            const postData = {
-                reviewerId: this.reviewerId
-            }
+            // const postData = {
+            //     reviewerId: this.reviewerId
+            // }
             var that = this;
-            this.$axios.post('/api/api/reviewUser/getUserInfo', this.$Qs.stringify(postData)
+            this.$axios.post('/api/api/reviewUser/getUserInfo'
             ).then(function(response){
                 console.log(response.data);
                 that.userInfo = response.data.userInfo;
@@ -244,19 +244,6 @@ export default {
                 type: 'warning'
             }).then(() => {
                 this.postResult();//提交结果
-                // console.log('提交状态:' + this.isPost);//控制台查看提交状态
-                // if(this.isPost){
-                //     this.$message({
-                //         type: 'success',
-                //         message: '确认提交！'
-                //     });
-                //     this.isPost = false;
-                //     this.getFullInfo();//继续获取下一个待审核用户的信息
-                // }
-                // else{
-                //     this.$message.error('提交失败！');
-                //     this.isPost = false;
-                // }
             }).catch(() => {
                 this.$message({
                     type: 'info',

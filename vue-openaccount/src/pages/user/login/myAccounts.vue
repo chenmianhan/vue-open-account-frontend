@@ -535,11 +535,6 @@ export default {
     line-height: 12px;
   }
 
-  /* .button {
-    padding: 0;
-    float: right;
-  } */
-
   .image {
     width: 100%;
     display: block;

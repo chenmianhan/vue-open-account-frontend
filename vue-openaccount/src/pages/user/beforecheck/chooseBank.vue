@@ -49,7 +49,7 @@
         let checkAccount = (rule, value, callback) => {
           if (value === '') {
             callback(new Error('请再次输入账号'));
-          } else if (value !== this.ruleForm.pass) {
+          } else if (value !== this.bankForm.bank_account) {
             callback(new Error('两次输入账号不一致'));
           } else {
             callback();
@@ -67,9 +67,9 @@
           },
 
           rules: {
-            // check_account: [
-            //   { validator: checkAccount, trigger: 'blur' }
-            // ]
+             check_account: [
+               { validator: checkAccount, trigger: 'blur' }
+             ]
           }
 
         }
@@ -81,25 +81,23 @@
           this.$refs[formName].validate((valid) => {
             if (valid) {
               const postData = {
-                user_bank: that.bankForm.user_bank,
-                bank_account: that.bankForm.bank_account,
-                bank_password: that.bankForm.bank_password,
+                user_id:1,
+                deposit_bank: that.bankForm.user_bank,
+                deposit_account: that.bankForm.bank_account,
+                deposit_password: that.bankForm.bank_password,
               };
-              // this.$axios.post('/api/chooseBank',this.$Qs.stringify(postData), {
-              //   headers: { 'content-type': 'application/x-www-form-urlencoded' },
-              // })
-              //   .then(function (response) {
-              //     // if(response.data.)
-              //     console.log(response);
-              //     that.$router.push('/user/loading');
-              //   })
-              //   .catch(function (error) {
-              //     that.$msgbox({
-              //       title: '连接失败',
-              //       type: 'error'
-              //     });
-              //   });
-              that.$router.push('/user/loading');
+               this.$axios.put('/api/updateDeposit',postData)
+                 .then(
+                   res=>{
+                     console.log('res=>',res);
+                     that.$router.push({path: '/user/loading'});
+                   })
+                 .catch(function (error) {
+                   that.$msgbox({
+                     title: '连接失败',
+                     type: 'error'
+                   });
+                 });
             } else {
               console.log('error submit!!');
               return false;

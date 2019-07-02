@@ -20,7 +20,7 @@
 
     <img src="../../../assets/image/wait.gif" class="image">
     <h1>您的资料待审核......</h1>
-    <h3>如有问题，请联系客服：400-5764-5687</h3>
+    <h3>如有问题，请联系客服：{{contactNum}}</h3>
 </div>
 </template>
 
@@ -28,8 +28,29 @@
 export default {
     data(){
         return{
-
+            contactNum: 'xxx-xxxx-xxxx'
         }
+    },
+    
+    methods: {
+        getContactNum(){
+            var that = this;
+            this.$axios.get('/api/contactNum'
+            ).then(function(response){
+                that.contactNum = response.data.contactNum;
+            }).catch(function(error){
+                console.log(error);
+                that.$msgbox({
+                    type: 'error',
+                    title: '连接失败',
+                    message: '与后台服务器通讯失败！'
+                })
+            })
+        }
+    },
+
+    mounted(){
+        this.getContactNum();
     }
 }
 </script>

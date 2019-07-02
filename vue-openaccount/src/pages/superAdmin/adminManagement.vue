@@ -23,32 +23,10 @@
             </el-form-item>
 
             <el-form-item label="权限" prop="authority">
-              <el-select v-model="institute" placeholder="请选择">
-                <el-option
-                  v-for="item in ins_ops"
-                  :key="item.institute"
-                  :label="item.label"
-                  :value="item.institute">
-                </el-option>
-              </el-select>
-              <!--选择地点-->
-              <el-cascader v-show="institute=='sh'"
-                           :options="shNet"
-                           :props="props"
+              <el-cascader :options="Net"
                            checkStrictly
-                           v-model="addForm.shPoint"
-                           class="wd400"
-                           collapse-tags
-                           clearable></el-cascader>
-
-              <el-cascader v-show="institute=='sz'"
-                           :options="szNet"
-                           :props="props"
-                           checkStrictly
-                           v-model="addForm.szPoint"
-                           class="wd400"
-                           collapse-tags
-                           clearable>
+                           v-model="addForm.store"
+                           class="wd400">
               </el-cascader>
             </el-form-item>
 
@@ -117,50 +95,10 @@
                 </el-form-item>
 
                 <el-form-item label="权限" prop="authority">
-                 <!-- <el-tabs v-model="modifyForm.inst" @tab-click="handleClick">
-                    <el-tab-pane label="上海" name="first">
-                      <el-checkbox-group v-model="modifyForm.str">
-                        <el-checkbox label="营业网点1"></el-checkbox>
-                        <el-checkbox label="营业网点2"></el-checkbox>
-                        <el-checkbox label="营业网点3"></el-checkbox>
-                        <el-checkbox label="营业网点4"></el-checkbox>
-                      </el-checkbox-group>
-                    </el-tab-pane>
-                    <el-tab-pane label="深圳" name="second">
-                      <el-checkbox-group v-model="modifyForm.str">
-                        <el-checkbox label="营业网点1"></el-checkbox>
-                        <el-checkbox label="营业网点2"></el-checkbox>
-                        <el-checkbox label="营业网点3"></el-checkbox>
-                      </el-checkbox-group>
-                    </el-tab-pane>
-                  </el-tabs>-->
-                  <!--选择机构-->
-                  <el-select v-model="institute" placeholder="请选择">
-                    <el-option
-                      v-for="item in ins_ops"
-                      :key="item.institute"
-                      :label="item.label"
-                      :value="item.institute">
-                    </el-option>
-                  </el-select>
-                 <!--选择地点-->
-                  <el-cascader v-show="institute=='sh'"
-                               :options="shNet"
-                               :props="props"
+                  <el-cascader :options="Net"
                                checkStrictly
-                               v-model="modifyForm.shPoint"
-                               class="wd400"
-                               collapse-tags
-                               clearable></el-cascader>
-
-                  <el-cascader v-show="institute=='sz'"
-                               :options="szNet"
-                               :props="props"
-                               checkStrictly
-                               v-model="modifyForm.szPoint"
-                               class="wd400"
-                               collapse-tags
-                               clearable>
+                               v-model="modifyForm.store"
+                               class="wd400">
                   </el-cascader>
                 </el-form-item>
 
@@ -205,6 +143,8 @@
           shNet: [],//后端传来的所有营业网点列表
           szNet: [],
 
+          Net:[], //后端传来的所有营业网点列表
+
           tableData:[{
             admin_id:'1',
             name:'whatever',
@@ -215,16 +155,14 @@
             name:'',
             account:'',
             password:'',
-            shPoint:[],
-            szPoint:[],
+            store:'',
           },
 
           addForm:{
             name:'',
             account:'',
             password:'',
-            shPoint:[],
-            szPoint:[],
+            store:'',
           },
         }
       },
@@ -241,8 +179,6 @@
                 name: that.addForm.name,
                 account: that.addForm.account,
                 password: that.addForm.password,
-                inst: that.addForm.inst,
-                str: that.addForm.str,
               };
 
               // var that = this;
@@ -285,8 +221,6 @@
                 name: that.modifyForm.name,
                 account: that.modifyForm.account,
                 password: that.modifyForm.password,
-                inst: that.modifyForm.inst,
-                str: that.modifyForm.str,
               };
 
               // var that = this;
@@ -405,6 +339,5 @@
   }
   .wd400{
     width: 100%;
-    padding: 10px;
   }
 </style>
