@@ -1,8 +1,8 @@
 <template>
 <div>
-  <h1>你所负责的营业网点：  {{store}}</h1>
+  <h1 style="float: left">你所负责的营业网点：  {{store}}</h1>
     <div class="search-bar">
-      <!--<div class="block">
+      <div class="block">
       <span class="demonstration">所属机构</span>
       <el-select v-model="institute" placeholder="请选择">
           <el-option
@@ -35,7 +35,7 @@
       <div class="block">
         <el-input v-model="targetReviewer" placeholder="审核员姓名"></el-input>
       </div>
-      <el-button icon="el-icon-search" circle></el-button>-->
+      <el-button icon="el-icon-search" circle></el-button>
 
       <el-popover
         placement="bottom"
@@ -56,7 +56,7 @@
             <el-button type="primary" size="mini" @click="onSubmit">保存</el-button>
           </el-form>
         </div>
-        <el-button slot="reference" type="primary" size="small" style="margin-left: 50px">添加</el-button>
+        <el-button slot="reference" type="primary" size="small" style="float: right; margin-right: 20px">添加</el-button>
       </el-popover>
   </div>
     <div class="results">
@@ -72,7 +72,7 @@
 
           <template slot-scope="props">
             <el-date-picker
-              v-model="dateValue"
+              v-model="tableData.dateValue"
               type="daterange"
               align="right"
               unlink-panels
@@ -86,11 +86,11 @@
               :picker-options="pickerOptions">
             </el-date-picker>
             <el-tooltip class="item" effect="dark" content="所选日期范围最大为一周" placement="right">
-              <el-button @click='getReviewerInfo' icon='el-icon-search' type='primary' round>查询</el-button>
+              <el-button @click='getReviewerInfo(props.row)' icon='el-icon-search' type='primary' round>查询</el-button>
             </el-tooltip>
 
-            <el-form label-position="left" inline class="demo-table-expand">
-              <el-form-item>
+            <el-form label-position="left" class="demo-table-expand">
+              <el-form-item style="padding-top: 10px">
                 <span style='color: #99a9bf;'>已审核通过：</span>
                 <span>{{ props.row.reviewedNum }}</span>
               </el-form-item>
@@ -114,6 +114,7 @@
       </el-table-column>
       <el-table-column
         prop="name"
+        width="150px"
         label="审核员名称">
       </el-table-column>
       <el-table-column
@@ -126,7 +127,7 @@
       </el-table-column>
       <el-table-column
         label="操作"
-        width="100">
+        >
         <template slot-scope="scope">
 
           <el-popover
@@ -146,7 +147,7 @@
 
 
                 <el-button size="mini" type="text" @click="visible2 = false">取消</el-button>
-                <el-button type="primary" size="mini" @click="visible2 = false; onSubmit">保存</el-button>
+                <el-button type="primary" size="mini" @click="visible2 = false; submitAddForm('modifyForm',scope.row)">保存</el-button>
               </el-form>
             </div>
             <el-button slot="reference" size="mini">修改</el-button>
@@ -169,6 +170,7 @@
           visible2: false,
           loading: false,
 
+          store:'',
 
           pickerOptions: {//日期选择器的快捷选项
             shortcuts: [{
@@ -297,7 +299,7 @@
           console.log('submit!');
         },
 
-        submitModifyForm(formName) {
+        submitModifyForm(formName, row) {
           var that = this;
           // console.log(this.infoForm);
           // debugger;
@@ -309,7 +311,7 @@
                 account: that.modifyForm.account,
                 password: that.modifyForm.password,
                 str: that.modifyForm.str,
-                auditor_id: 1
+                auditor_id: row.reviewer_id,
               };
 
               // var that = this;
@@ -383,11 +385,12 @@
           console.log(tab, event);
         },
 
-        getReviewerInfo(){//获取该审核员统计数据
+        getReviewerInfo(row){//获取该审核员统计数据
+          console.log();
           if(this.tableData.dateValue != ''){
             var that = this;
             const postData = {
-              reviewer_id:this.tableData.reviewer_id,
+              reviewer_id:row.reviewer_id,
               start: this.tableData.dateValue[0],
               end: this.tableData.dateValue[1]
             };
@@ -414,6 +417,31 @@
               this.getReviewerInfo();
             }
           }
+        },
+
+        handleDelete(index, row) {
+          console.log(index, row);
+          let postData = {
+            reviewer_id : row.reviewer_id,
+          };
+          this.$confirm("确认删除该审核员吗？", "提示", {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.$axios.post('/api/superadmin/deleteReviewer', postData)//post也可以改成get，但需要对应服务端的请求方法
+              .then(function (response) {
+                console.log(response);
+              })
+              .catch(function (error) {
+                alert(error);
+              });
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消'
+            });
+          });
         },
 
         getSHList(){
@@ -469,13 +497,23 @@
 
 <style>
   .search-bar{
-    float:left;
+    float: left;
+    width: 100%;
   }
   .block{
     display: inline-block;
     padding: 10px;
   }
   .wd400{
+    width: 100%;
+  }
+  .demo-table-expand {
+    font-size: 0;
+    width: 100%;
+  }
+  .demo-table-expand .el-form-item {
+    margin-right: 0;
+    margin-bottom: 0;
     width: 100%;
   }
 </style>

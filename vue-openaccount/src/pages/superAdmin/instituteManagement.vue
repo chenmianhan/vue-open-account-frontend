@@ -175,13 +175,16 @@
 
         handleDelete(index, row) {
           console.log(index, row);
-          var deleteStore = row.store;
+          console.log(row.store);
+          let postData = {
+            store:  row.store,
+          };
           this.$confirm("确认删除该网点吗？", "提示", {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            this.$axios.post('/api/superadmin/deleteStore', deleteStore)//post也可以改成get，但需要对应服务端的请求方法
+            this.$axios.post('/api/superadmin/deleteStore', postData)//post也可以改成get，但需要对应服务端的请求方法
               .then(function (response) {
                 console.log(response);
               })
