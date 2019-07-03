@@ -154,8 +154,6 @@
 
           dateValue:'', //查询日期条件
 
-          targetUser:'',//搜索的目标用户名称
-
           modifyForm:{ //修改表单
             name:'',
             idNum:'',
