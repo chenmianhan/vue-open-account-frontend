@@ -43,7 +43,7 @@
 
     <div class="results">
       <el-table
-        :data="instData"
+        :data="currentData"
         style="width: 100%">
         <el-table-column
           prop="name"
@@ -69,6 +69,18 @@
         </el-table-column>
       </el-table>
     </div>
+    <!-- 分页器 -->
+    <div>
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="currentPage"
+        :page-sizes="[8, 20, 30, 40]"
+        :page-size="pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total='length'>
+      </el-pagination>
+    </div>
   </div>
 </template>
 <script>
@@ -93,6 +105,10 @@
         return{
           address: areajson,
           visible: false,
+          currentPage: 1,
+          pageSize: 8,
+          length: 0,
+          currentData: [],
 
           store:'',
 
@@ -126,6 +142,17 @@
         }
       },
       methods:{
+        handleSizeChange(val){
+          this.pageSize = val;
+          this.loadAllStore();
+        },
+        handleCurrentChange(val){{
+          this.currentPage = val;
+          this.currentData = [];
+          for(var i = (this.currentPage - 1) * this.pageSize; i < this.currentPage * this.pageSize; i++){
+            this.currentData.push(this.instData[i]);
+          }
+        }},
         handleChange(file, fileList) {
           // console.log(file, fileList);
         },
@@ -264,6 +291,11 @@
           this.$axios.get('/api/superadmin/getAllStore')
             .then(function(response){
             that.instData = response.data;
+            that.length = that.instData.length;
+            that.currentData = [];
+            for(var i = 0; i < that.pageSize; i++){
+              that.currentData.push(that.instData[i]);
+            }
           }).catch(function(error){
             console.log(error);
             that.$msgbox({

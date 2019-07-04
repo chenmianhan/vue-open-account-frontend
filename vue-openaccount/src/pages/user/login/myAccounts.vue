@@ -368,14 +368,20 @@ export default {
             this.withdrawVisible = true;
         },
         handleDelete(index){
+            console.log(index);
             var that = this;
             this.$confirm('此操作将永久删除此账号，是否继续？', "警告", {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                this.$axios.post('', index).then(function(response){
-                    that.secondaryAccount.splice(index,1);
+                console.log(index);
+                const postData = {
+                    id: parseInt(index)
+                }
+                this.$axios.post('/api/account/deleteFundAccount', postData).then(function(response){
+                    // that.secondaryAccount.splice(index,1);
+                    that.getData();
                     that.$message({
                         type:'success',
                         message: '删除成功！'
