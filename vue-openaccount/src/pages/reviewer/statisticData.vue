@@ -28,9 +28,10 @@
                             :default-time="['00:00:00', '23:59:59']"
                             :picker-options="pickerOptions">
                         </el-date-picker>
-                        <!-- <el-tooltip class="item" effect="dark" content="所选日期范围最大为一周" placement="right">
-                            <el-button @click='getTableData' icon='el-icon-search' type='primary' round>查询</el-button>
-                        </el-tooltip> -->
+                        <el-tooltip v-show="way=='date'"
+                        class="item" effect="dark" content="所选日期范围最大为一周" placement="right">
+                            <el-button @click='queryTable' icon='el-icon-search' type='primary' circle></el-button>
+                        </el-tooltip>
                     </div>
                     <!-- 按用户姓名查询 -->
                     <div class="block" v-show="way == 'name'">
@@ -41,12 +42,12 @@
                             @select="handleSelect"
                         ></el-autocomplete>
                     </div>
-                    <el-button @click="queryTable" icon="el-icon-search" circle></el-button>
+                    <el-button v-show="way=='name'" @click="queryTable" icon="el-icon-search" type="primary" circle></el-button>
                 </div>
             </div>
         </el-row>
         <!-- 页头 -->
-        <el-row style="float:center;" v-show="way=='date'">
+        <el-row v-show="way=='date'">
             <div class='show-item'>
                 <el-row :gutter="12">
                     <el-col :span="4">
@@ -86,6 +87,7 @@
             <el-table 
             v-loading='loading' 
             :data="tableData" 
+            @filter-change="handleFilterChange"
             stripe
             ref="filterTable"
             :default-sort = "{prop: 'accTime', order: 'descending'}" 
@@ -147,11 +149,10 @@
                 </el-table-column>
                 <el-table-column
                     prop="reviewStatu"
+                    column-key="reviewStatu"
                     label="审核状态"
                     width="100"
-                    :filters="[{ text: '通过', value: '通过' }, { text: '未通过', value: '未通过' }
-                    , { text: '待审核', value: '待审核' }]"
-                    :filter-method="filterTag"
+                    :filters="[{ text: '通过', value: '通过' }, { text: '未通过', value: '未通过' }]"
                     filter-placement="bottom-end">
                     <template slot-scope="scope">
                         <el-tag
@@ -161,6 +162,18 @@
                 </el-table-column>
             </el-table>
         </div>
+            <div class="page-block">
+                <el-pagination
+                :hide-on-single-page="true"
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page="currentPage"
+                :page-sizes="[8, 16, 24]"
+                :page-size="pageSize"
+                layout="total, sizes, prev, pager, next, jumper"
+                :total="totalNum">
+                </el-pagination>
+            </div>
     </div>
 </template>
 
@@ -168,6 +181,11 @@
 export default {
     data: function(){
         return {
+            totalNum: 1,
+            currentPage: 1,
+            pageSize: 8,
+            filterCode: 0,
+
             toReviewNum: 0,
             reviewedNum: 0,
             notPassNum: 0,
@@ -203,6 +221,30 @@ export default {
                 bankCardNum: '48372614784591975',
                 accTime:'2000-01-01 00:00:00',
                 reviewStatu:'通过'
+            },{//表格用户对象列表
+                userName:'王五',
+                idCardNum:'510504199901010311',
+                idValDate:'yyyy-mm-dd 至 yyyy-mm-dd',
+                idInstitute: 'xx市xx区派出所',
+                userJob: '医生',
+                education: '大学',
+                email: 'xxx@123.com',
+                bankName: '工商银行',
+                bankCardNum: '48372614784591975',
+                accTime:'2000-01-01 00:00:00',
+                reviewStatu:'未通过'
+            },{//表格用户对象列表
+                userName:'李四',
+                idCardNum:'510504199901010311',
+                idValDate:'yyyy-mm-dd 至 yyyy-mm-dd',
+                idInstitute: 'xx市xx区派出所',
+                userJob: '医生',
+                education: '大学',
+                email: 'xxx@123.com',
+                bankName: '工商银行',
+                bankCardNum: '48372614784591975',
+                accTime:'2000-01-01 00:00:00',
+                reviewStatu:'通过'
             }],
              pickerOptions: {//日期选择器的快捷选项
                 shortcuts: [{
@@ -221,8 +263,18 @@ export default {
     },
 
     methods: {
-        filterTag(value, row) {//过滤标签
-            return row.reviewStatu === value;
+        handleFilterChange(filters){
+            console.log(this.filterValues);
+            if (filters.reviewStatu.length == 2){
+                this.filterCode = 0;
+            }else{
+                if (filters.reviewStatu[0] == '通过'){
+                    this.filterCode = 1;
+                }else{
+                    this.filterCode = 2;
+                }
+            }
+            this.queryTable();
         },
 
         filterTagColor(statu){ //标签颜色
@@ -230,8 +282,6 @@ export default {
                 return 'success';
             }else if (statu === '未通过'){
                 return 'danger';
-            }else if (statu === '待审核'){
-                return 'info';
             }else{
                 return 'primary';
             }
@@ -272,9 +322,10 @@ export default {
 
         queryTable(){
             if(this.way=='date'){
-              this.queryDate();
+                this.getReviewerInfo();//更新审核员审核人数数据
+                this.queryDate();
             }else if (this.way=='name'){
-              this.queryName();
+                this.queryName();
             }
         },
 
@@ -283,7 +334,10 @@ export default {
                 console.log(this.dateValue);
                 const postData = {
                     start: this.dateValue[0],
-                    end: this.dateValue[1]
+                    end: this.dateValue[1],
+                    pageNum: this.currentPage,
+                    size: this.pageSize,
+                    status: this.filterCode
                 }
                 var that = this;
                 console.log(this.$Qs.stringify(postData));
@@ -292,10 +346,7 @@ export default {
                 this.$axios.post('/api/reviewer/getUserByDate', this.$Qs.stringify(postData)
                 ).then(function(response){
                     console.log(response.data);
-                    that.tableData = response.data;
-                    that.toReviewNum = response.data.toReviewNum;
-                    that.reviewedNum = response.data.reviewedNum;
-                    that.notPassNum = response.data.notPassNum;
+                    that.tableData = response.data.tableData;
                     that.loading = false;
                 }).catch(function(error){
                     console.log(error);
@@ -317,7 +368,9 @@ export default {
            if (this.state != ''){
               console.log(this.state);
               const postData = {
-                  username: this.state
+                username: this.state,
+                pageNum: this.currentPage,
+                size: this.pageSize,
               };
               var that = this;
               console.log(this.$Qs.stringify(postData));
@@ -448,6 +501,18 @@ export default {
             }else{
                 return true;
             }
+        },
+
+        handleSizeChange(val) {
+            console.log(`每页 ${val} 条`);
+            this.pageSize = val;
+            console.log(this.pageSize);
+        },
+
+        handleCurrentChange(val) {
+            console.log(`当前页: ${val}`);
+            this.currentPage = val;
+            console.log(this.currentPage);
         }
     },
 
@@ -471,6 +536,7 @@ export default {
     .search-bar{
         /*position: relative;*/
         float:left;
+        margin-left: 45px
     }
     
     .block{
@@ -497,7 +563,7 @@ export default {
     
     .show-item {
         text-align: left;
-        float: center;
+        margin-left: 50px;
     }
 
     .show-data-item {
@@ -512,5 +578,9 @@ export default {
         font-weight: bold;
         font-size: 50px;
         text-align: left;
+    }
+
+    .page-block {
+        margin-top: 40px;
     }
 </style>
