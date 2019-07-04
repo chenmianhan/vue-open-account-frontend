@@ -2,13 +2,16 @@
   <div>
     <div class="search-bar">
       <div class="block">
-        <span class="demonstration">所属机构</span>
-        <el-cascader
-          v-model="institute"
-          :options="ins_ops"
-          @change="handleChange"></el-cascader>
+        <!--<el-input v-model="input" placeholder="营业网点名称" ></el-input>-->
+        <el-autocomplete
+          v-model="store"
+          :fetch-suggestions="querySearchAsync"
+          placeholder="营业网点名称"
+          @select="handleSelect"
+          class="wd400"
+        ></el-autocomplete>
       </div>
-      <el-button icon="el-icon-search" circle></el-button>
+      <el-button icon="el-icon-search" @click="queryStore" circle></el-button>
 
       <el-popover
         placement="bottom"
@@ -23,11 +26,10 @@
               :options="address"
               props.checkStrictly
               v-model="addForm.address"
+              style="width: 100%"
               props.expandTrigger="hover">
             </el-cascader>
-            </el-form-item>
-            <el-form-item label="联系电话" prop="phone">
-              <el-input v-model="addForm.phone"></el-input>
+              <el-input v-model="addForm.address_detail" style="padding-top: 10px; width: 100%" placeholder="详细地址"></el-input>
             </el-form-item>
             <el-button size="mini" type="text" @click="visible = false">取消</el-button>
             <el-button type="primary" size="mini" @click="visible = false; submitAddForm('addForm')">保存</el-button>
@@ -54,7 +56,7 @@
           label="城市">
         </el-table-column>
         <el-table-column
-          prop="store"
+          prop="address"
           label="网点地址">
         </el-table-column>
         <el-table-column
@@ -76,7 +78,7 @@
 
     export default {
       data(){
-        let checkPhone = (rule, value, callback) => {
+        /*let checkPhone = (rule, value, callback) => {
           if (!value) {
             return callback(new Error('电话号码不能为空'));
           } else {
@@ -88,30 +90,25 @@
               return callback(new Error('请输入正确的电话号码'));
             }
           }
-        };
+        };*/
 
         return{
           address: areajson,
-
           visible: false,
-          institute: [],
-          ins_ops: [{
-            institute: '上海',
-            label: '上海',
-          },{
-            institute: '深圳',
-            label: '深圳',
-          } ],
+
+          store:'',
 
           addForm:{
             store:'',
             address:'',
-            phone:'',
+            address_detail:'',
           },
 
           instData:[{
             store:'营业网点1',
-            inst:'上海',
+            province:'广东',
+            city:'广州',
+            address_detail:'',
             user_number:'123',
           }],
 
@@ -121,10 +118,6 @@
             ],
             address: [
               { required: true, trigger: 'blur'}
-            ],
-            phone: [
-              { required: true, message: '请输入电话号码', trigger: 'blur' },
-              { validator: checkPhone, trigger: 'blur' }
             ],
           },
 
@@ -143,9 +136,8 @@
               const postData = {
                 store: that.addForm.store,
                 address: that.addForm.address,
-                phone: that.addForm.phone,
+                address_detail: that.addForm.address_detail,
               };
-
               // var that = this;
               console.log(postData);
               this.$axios.post('/api/superadmin/addStore', postData)
@@ -174,6 +166,7 @@
         },
 
         handleDelete(index, row) {
+          var that = this;
           console.log(index, row);
           console.log(row.store);
           let postData = {
@@ -187,6 +180,7 @@
             this.$axios.post('/api/superadmin/deleteStore', postData)//post也可以改成get，但需要对应服务端的请求方法
               .then(function (response) {
                 console.log(response);
+                that.loadAllStore();
               })
               .catch(function (error) {
                 alert(error);
@@ -198,10 +192,91 @@
             });
           });
         },
+
+        queryStore(){
+          if (this.store != ''){
+            console.log(this.store);
+            const postData = {
+              store: this.store
+            };
+            var that = this;
+            this.$axios.post('/api/superadmin/getStore', postData)
+              .then(function(response){
+              that.instData = response.data;
+            }).catch(function(error){
+              console.log(error);
+              that.$msgbox({
+                type: 'error',
+                title: '连接失败',
+                message: '获取网点信息失败！'
+              })
+            })
+          }else{
+            this.$msgbox({
+              type: 'info',
+              title: '信息不完全',
+              message: '请输入你想要搜索的网点名称！'
+            })
+          }
+        },
+
+        querySearchAsync(queryString, cb) {
+          var store = this.store;
+          var results = queryString ? store.filter(this.createStateFilter(queryString)) : store;
+
+          clearTimeout(this.timeout);
+          this.timeout = setTimeout(() => {
+            cb(results);
+          }, 3000 * Math.random());
+        },
+
+        createStateFilter(queryString) {
+          return (state) => {
+            return (state.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+          };
+        },
+
+        handleSelect(item) {
+          console.log(item);
+          var that = this;
+          const postData = {
+            store: item.store,
+          };
+          this.$axios.get('/api/superadmin/getStoreInfo', postData)
+            .then(function(response){
+            that.instData = response.data;
+          }).catch(function(error){
+            console.log(error);
+            that.$msgbox({
+              type: 'error',
+              title:'连接失败',
+              message: '获取用户信息失败！'
+            })
+          })
+        },
+
+        loadAllStore(){
+          var that = this;
+          this.$axios.get('/api/superadmin/getAllStore')
+            .then(function(response){
+            this.instData = response.data;
+          }).catch(function(error){
+            console.log(error);
+            that.$msgbox({
+              type: 'error',
+              title: '连接失败',
+              message: '获取网点信息失败！'
+            })
+          })
+        },
+      },
+
+      mounted(){
+        this.loadAllStore();
       }
     }
 </script>
-<style>
+<style scoped>
   .search-bar{
     /*position: relative;*/
     float:left;
@@ -209,5 +284,8 @@
   .block{
     display: inline-block;
     padding: 10px;
+  }
+  .wd400{
+    width: 100%;
   }
 </style>
