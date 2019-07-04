@@ -1,43 +1,25 @@
 <template>
   <div>
     <div class="search-bar">
-      <div class="block">
-      <span class="demonstration">选择网点</span>
-        <el-select v-model="institute" placeholder="所属机构">
-          <el-option
-            v-for="item in ins_ops"
-            :key="item.institute"
-            :label="item.label"
-            :value="item.institute">
-          </el-option>
-        </el-select>
-      </div>
-      <div class="block">
-     <!-- <span class="demonstration">所属营业网点</span>-->
-        <el-cascader v-show="institute=='sh'"
-                     placeholder="所属营业网点"
-                     :options="shNet"
-                     checkStrictly
-                     v-model="shPoint"
-                     props.expandTrigger="hover"
-                     :show-all-levels='false'
-                     class="wd400">
-        </el-cascader>
-        <el-cascader v-show="institute=='sz'"
-                     placeholder="所属营业网点"
-                     :options="szNet"
-                     checkStrictly
-                     v-model="szPoint"
-                     props.expandTrigger="hover"
-                     :show-all-levels='false'
-                     class="wd400">
-        </el-cascader>
-      </div>
-      <div class="block">
-      <el-input v-model="input" placeholder="用户姓名"></el-input>
-      </div>
-      <!--<el-button type="primary" icon="el-icon-search">搜索</el-button>-->
-      <el-button icon="el-icon-search" circle></el-button>
+      <el-form :inline="true" :model="searchForm" size="medium" style="margin-top:20px;">
+        <el-form-item label="选择网点">
+          <el-cascader
+            placeholder="所属营业网点"
+            :options="shNet"
+            checkStrictly
+            v-model="shPoint"
+            props.expandTrigger="hover"
+            :show-all-levels='false'
+            class="wd400">
+          </el-cascader>
+        </el-form-item>
+        <el-form-item label="输入用户姓名">
+          <el-input v-model="input" placeholder="用户姓名"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button icon="el-icon-search" circle type="primary"></el-button>
+        </el-form-item>
+      </el-form>
     </div>
     <div class="results">
       <el-table
@@ -157,6 +139,7 @@
         };
 
         return {
+          searchForm: {},
           address: areajson,
           visible : false,
           /*props: { multiple: true },*/
@@ -350,16 +333,16 @@
 
 
 <style scoped>
-  .search-bar{
-    /*position: relative;*/
-    float:left;
-  }
-  .block{
-    display: inline-block;
-    padding: 10px;
-  }
+.search-bar{
+  padding:10px;
+  border-bottom:1px #DCDFE6 solid;
+  background-color:#F2F6FC;
+  height:80px;
+  width:90%;
+  margin:0 auto;
+}
   .results{
-    /*position: relative;*/
+    margin-top:40px;
   }
   .wd400{
     width: 100%;
