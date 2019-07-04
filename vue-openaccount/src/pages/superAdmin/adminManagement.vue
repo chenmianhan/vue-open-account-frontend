@@ -122,8 +122,8 @@
         label="密码">
       </el-table-column>
       <el-table-column
-        prop="authority"
-        label="权限">
+        prop="store"
+        label="负责网点">
       </el-table-column>
       <el-table-column
         label="操作"
@@ -145,7 +145,7 @@
                   <el-input v-model="modifyForm.password"></el-input>
                 </el-form-item>
 
-                <el-form-item label="权限" prop="authority">
+                <el-form-item label="权限" prop="store">
                   <el-cascader :options="Net"
                                checkStrictly
                                v-model="modifyForm.store"
@@ -201,7 +201,7 @@
             name:'whatever',
             account:'',
             password:'',
-            authority:'',
+            store:'',
           }],
 
           modifyForm:{
@@ -393,7 +393,7 @@
               admin_name: this.admin_name
             };
             var that = this;
-            this.$axios.post('/api/admin/getUserByName', postData)
+            this.$axios.post('/api/admin/getAdminByName', postData)
             .then(function(response){
               that.tableData = response.data;
             }).catch(function(error){
