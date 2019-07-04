@@ -2,14 +2,14 @@
   <div>
     <div class="search-bar">
       <div class="block">
-        <!--<el-input v-model="input" placeholder="营业网点名称" ></el-input>-->
-        <el-autocomplete
+        <el-input v-model="store" placeholder="营业网点名称" class="wd400"></el-input>
+        <!--<el-autocomplete
           v-model="store"
           :fetch-suggestions="querySearchAsync"
           placeholder="营业网点名称"
           @select="handleSelect"
           class="wd400"
-        ></el-autocomplete>
+        ></el-autocomplete>-->
       </div>
       <el-button icon="el-icon-search" @click="queryStore" circle></el-button>
 
@@ -31,6 +31,9 @@
             </el-cascader>
               <el-input v-model="addForm.address_detail" style="padding-top: 10px; width: 100%" placeholder="详细地址"></el-input>
             </el-form-item>
+            <el-form-item label="网点电话" prop="contact_phone">
+              <el-input v-model="addForm.contact_phone"></el-input>
+            </el-form-item>
             <el-button size="mini" type="text" @click="visible = false">取消</el-button>
             <el-button type="primary" size="mini" @click="visible = false; submitAddForm('addForm')">保存</el-button>
           </el-form>
@@ -44,7 +47,7 @@
         :data="instData"
         style="width: 100%">
         <el-table-column
-          prop="store"
+          prop="name"
           label="网点名称">
         </el-table-column>
         <el-table-column
@@ -54,10 +57,6 @@
         <el-table-column
           prop="city"
           label="城市">
-        </el-table-column>
-        <el-table-column
-          prop="address"
-          label="网点地址">
         </el-table-column>
         <el-table-column
           prop="user_number"
@@ -78,7 +77,7 @@
 
     export default {
       data(){
-        /*let checkPhone = (rule, value, callback) => {
+        let checkPhone = (rule, value, callback) => {
           if (!value) {
             return callback(new Error('电话号码不能为空'));
           } else {
@@ -90,7 +89,7 @@
               return callback(new Error('请输入正确的电话号码'));
             }
           }
-        };*/
+        };
 
         return{
           address: areajson,
@@ -105,10 +104,10 @@
           },
 
           instData:[{
-            store:'营业网点1',
+            name:'营业网点1',
             province:'广东',
             city:'广州',
-            address_detail:'',
+            contact_phone:'',
             user_number:'123',
           }],
 
@@ -118,6 +117,10 @@
             ],
             address: [
               { required: true, trigger: 'blur'}
+            ],
+            contact_phone: [
+              { required: true, message: '请输入电话号码', trigger: 'blur' },
+              { validator: checkPhone, trigger: 'blur' }
             ],
           },
 
@@ -136,7 +139,7 @@
               const postData = {
                 store: that.addForm.store,
                 address: that.addForm.address,
-                address_detail: that.addForm.address_detail,
+                phone: that.addForm. contact_phone,
               };
               // var that = this;
               console.log(postData);
@@ -200,9 +203,11 @@
               store: this.store
             };
             var that = this;
+            console.log(postData);
             this.$axios.post('/api/superadmin/getStore', postData)
               .then(function(response){
-              that.instData = response.data;
+                let result = response.data;
+                that.instData = [result];
             }).catch(function(error){
               console.log(error);
               that.$msgbox({
@@ -242,7 +247,7 @@
           const postData = {
             store: item.store,
           };
-          this.$axios.get('/api/superadmin/getStoreInfo', postData)
+          this.$axios.get('/api/superadmin/getStore', postData)
             .then(function(response){
             that.instData = response.data;
           }).catch(function(error){
@@ -259,7 +264,7 @@
           var that = this;
           this.$axios.get('/api/superadmin/getAllStore')
             .then(function(response){
-            this.instData = response.data;
+            that.instData = response.data;
           }).catch(function(error){
             console.log(error);
             that.$msgbox({
