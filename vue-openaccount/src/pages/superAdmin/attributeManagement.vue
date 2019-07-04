@@ -112,14 +112,14 @@
 
         SubmitNum(){
           let postData = {
-            max_reviewer:  this.num,
+            max_num:  this.num,
           };
           this.$confirm("确认修改吗？", "提示", {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            this.$axios.post('/api/superadmin/changeMinScore', postData)//post也可以改成get，但需要对应服务端的请求方法
+            this.$axios.post('/api/superadmin/changeMaxNum', postData)//post也可以改成get，但需要对应服务端的请求方法
               .then(function (response) {
                 this.$message({
                   type: 'info',
