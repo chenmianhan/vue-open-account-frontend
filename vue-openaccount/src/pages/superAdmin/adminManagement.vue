@@ -358,7 +358,7 @@
   border-bottom:1px #DCDFE6 solid;
   background-color:#F2F6FC;
   height:80px;
-  width:100%;
+  width:90%;
   margin:0 auto;
 }
   .block{
