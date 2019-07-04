@@ -46,13 +46,13 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="js" value="149" />
-          <entry key="vue" value="6454" />
+          <entry key="vue" value="6463" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="JavaScript" value="149" />
-          <entry key="Vue.js" value="6454" />
+          <entry key="Vue.js" value="6463" />
         </counts>
       </usages-collector>
     </session>
@@ -74,11 +74,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/vue-openaccount/src/pages/superAdmin/attributeManagement.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="319">
-              <caret line="121" column="60" selection-start-line="121" selection-start-column="46" selection-end-line="121" selection-end-column="60" />
+            <state relative-caret-position="396">
+              <caret line="131" column="26" lean-forward="true" selection-start-line="131" selection-start-column="26" selection-end-line="131" selection-end-column="26" />
               <folding>
                 <element signature="n#style#0;n#el-button#0;n#el-collapse-item#0;n#el-collapse#0;n#div#0;n#template#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#div#0;n#el-collapse-item#1;n#el-collapse#0;n#div#0;n#template#0;n#!!top" expanded="true" />
@@ -108,14 +108,18 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/vue-openaccount/src/pages/superAdmin/instituteManagement.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="396">
-              <caret line="213" column="39" lean-forward="true" selection-start-line="213" selection-start-column="39" selection-end-line="213" selection-end-column="39" />
+            <state relative-caret-position="242">
+              <caret line="281" column="28" lean-forward="true" selection-start-line="281" selection-start-column="28" selection-end-line="281" selection-end-column="28" />
               <folding>
-                <element signature="n#style#0;n#el-cascader#0;n#el-form-item#1;n#el-form#0;n#div#0;n#el-popover#0;n#div#0;n#div#0;n#template#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#el-button#0;n#el-popover#0;n#div#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#el-form#0;n#div#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#el-popover#0;n#el-form-item#2;n#el-form#0;n#div#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#el-cascader#0;n#el-form-item#1;n#el-form#0;n#div#0;n#el-popover#0;n#el-form-item#2;n#el-form#0;n#div#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#el-table#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#el-button#0;n#template#0;n#el-table-column#4;n#el-table#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#2;n#div#0;n#template#0;n#!!top" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -152,9 +156,9 @@
         <option value="$PROJECT_DIR$/vue-openaccount/src/pages/user/beforecheck/inputInfo.vue" />
         <option value="$PROJECT_DIR$/vue-openaccount/src/pages/superAdmin/userManagement.vue" />
         <option value="$PROJECT_DIR$/vue-openaccount/src/pages/admin/userManagement.vue" />
-        <option value="$PROJECT_DIR$/vue-openaccount/src/pages/superAdmin/instituteManagement.vue" />
         <option value="$PROJECT_DIR$/vue-openaccount/src/pages/superAdmin/adminManagement.vue" />
         <option value="$PROJECT_DIR$/vue-openaccount/src/pages/superAdmin/attributeManagement.vue" />
+        <option value="$PROJECT_DIR$/vue-openaccount/src/pages/superAdmin/instituteManagement.vue" />
       </list>
     </option>
   </component>
@@ -348,12 +352,12 @@
       <workItem from="1562029168478" duration="8073000" />
       <workItem from="1562050284299" duration="2191000" />
       <workItem from="1562207581591" duration="4495000" />
-      <workItem from="1562220206156" duration="5272000" />
+      <workItem from="1562220206156" duration="5535000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="92062000" />
+    <option name="totallyTimeSpent" value="92325000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="878" extended-state="6" />
@@ -607,21 +611,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/vue-openaccount/src/pages/superAdmin/instituteManagement.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="396">
-          <caret line="213" column="39" lean-forward="true" selection-start-line="213" selection-start-column="39" selection-end-line="213" selection-end-column="39" />
-          <folding>
-            <element signature="n#style#0;n#el-cascader#0;n#el-form-item#1;n#el-form#0;n#div#0;n#el-popover#0;n#div#0;n#div#0;n#template#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#el-button#0;n#el-popover#0;n#div#0;n#div#0;n#template#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/vue-openaccount/src/pages/superAdmin/attributeManagement.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="319">
-          <caret line="121" column="60" selection-start-line="121" selection-start-column="46" selection-end-line="121" selection-end-column="60" />
+        <state relative-caret-position="396">
+          <caret line="131" column="26" lean-forward="true" selection-start-line="131" selection-start-column="26" selection-end-line="131" selection-end-column="26" />
           <folding>
             <element signature="n#style#0;n#el-button#0;n#el-collapse-item#0;n#el-collapse#0;n#div#0;n#template#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#0;n#el-collapse-item#1;n#el-collapse#0;n#div#0;n#template#0;n#!!top" expanded="true" />
@@ -629,6 +622,21 @@
             <element signature="n#style#0;n#el-button#0;n#el-collapse-item#1;n#el-collapse#0;n#div#0;n#template#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#0;n#el-collapse-item#2;n#el-collapse#0;n#div#0;n#template#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#el-button#0;n#el-collapse-item#2;n#el-collapse#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vue-openaccount/src/pages/superAdmin/instituteManagement.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="242">
+          <caret line="281" column="28" lean-forward="true" selection-start-line="281" selection-start-column="28" selection-end-line="281" selection-end-column="28" />
+          <folding>
+            <element signature="n#style#0;n#el-form#0;n#div#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#el-popover#0;n#el-form-item#2;n#el-form#0;n#div#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#el-cascader#0;n#el-form-item#1;n#el-form#0;n#div#0;n#el-popover#0;n#el-form-item#2;n#el-form#0;n#div#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#el-table#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#el-button#0;n#template#0;n#el-table-column#4;n#el-table#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#2;n#div#0;n#template#0;n#!!top" expanded="true" />
           </folding>
         </state>
       </provider>
