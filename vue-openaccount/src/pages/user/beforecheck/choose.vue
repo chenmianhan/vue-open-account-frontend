@@ -40,13 +40,10 @@
                 :show-all-levels='false'
                 class="wd400">
                 </el-cascader>
-                <span>{{point}}</span>
+                <!-- <span>{{point}}</!-->
             </div>
         </el-col>
         </el-row>
-        <!-- <el-col :span="9">
-            <img class="img-style" src="../../../assets/image/hint1.jpg">
-        </el-col> -->
         <el-row style="height:50px;">
             <el-button icon="el-icon-caret-left" round @click="$router.push({path:'/login/evaluation'})">上一步</el-button>
             <el-button type="primary" round @click="handleSubmit">下一步<i class="el-icon-caret-right icon"></i></el-button>
@@ -97,44 +94,11 @@ export default {
                 });
             });
         },
-        // getSHList(){
-        //     var that = this;
-        //     this.$axios.get('/api/security/get_securityall').then(function(response){
-        //         that.shNet = [];
-        //         that.shNet = response.data;
-        //         for(var i = 0; i < that.shNet.length; i++){
-        //             for(var j = 0; j < that.shNet[i].children.length; j++){
-        //                 for(var t = 0; t < that.shNet[i].children[j].children.length; t++){
-        //                     if(that.shNet[i].children[j].children[t].type != '0'){
-        //                         that.shNet[i].children[j].children.splice(t,1);
-        //                         t--;
-        //                     }
-        //                 }
-        //             }
-        //         }
-        //     });
-        // },
-        // getSZList(){
-        //     var that = this;
-        //     this.$axios.get('/api/security/get_securityall').then(function(response){
-        //         that.szNet = [];
-        //         that.szNet = response.data;
-        //         for(var i = 0; i < that.szNet.length; i++){
-        //             for(var j = 0; j < that.szNet[i].children.length; j++){
-        //                 for(var t = 0; t < that.szNet[i].children[j].children.length; t++){
-        //                     if(that.szNet[i].children[j].children[t].type != '1'){
-        //                         that.szNet[i].children[j].children.splice(t,1);
-        //                         t--;
-        //                     }
-        //                 }
-        //             }
-        //         }
-        //     });
-        // }
         getList(){
             var that = this;
             this.$axios.get('/api/security/get_securityall').then(function(response){
                 console.log(response);
+                that.shNet = response.data;
             });
         }
     },
