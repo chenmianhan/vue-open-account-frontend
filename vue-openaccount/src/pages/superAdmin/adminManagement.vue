@@ -14,13 +14,14 @@
         </el-select>
 
         <el-form-item v-show="way == 'store'">
-          <el-autocomplete
+          <!--<el-autocomplete
             v-model="store"
             :fetch-suggestions="querySearchAsync"
             placeholder="输入营业网点名称"
             @select="handleSelect"
             class="wd400"
-          ></el-autocomplete>
+          ></el-autocomplete>-->
+          <el-input v-model="store" placeholder="营业网点名称" class="wd400"></el-input>
         </el-form-item>
 
         <el-form-item v-show="way == 'name'">
@@ -428,21 +429,6 @@
           })
         },
 
-        querySearchAsync(queryString, cb) {
-          var admin_name = this.admin_name;
-          var results = queryString ? admin_name.filter(this.createStateFilter(queryString)) : admin_name;
-
-          clearTimeout(this.timeout);
-          this.timeout = setTimeout(() => {
-            cb(results);
-          }, 3000 * Math.random());
-        },
-
-        createStateFilter(queryString) {
-          return (state) => {
-            return (state.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
-          };
-        },
 
       },
 
