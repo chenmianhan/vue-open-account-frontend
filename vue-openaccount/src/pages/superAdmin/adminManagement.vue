@@ -2,6 +2,58 @@
 
   <div>
     <div class="search-bar">
+      <el-form :inline="true"  size="medium" style="margin-top:20px;">
+        <el-form-item label="选择网点">
+          <el-cascader
+            placeholder="所属营业网点"
+            :options="shNet"
+            checkStrictly
+            v-model="shPoint"
+            props.expandTrigger="hover"
+            :show-all-levels='false'
+            class="wd400">
+          </el-cascader>
+        </el-form-item>
+        <el-form-item label="输入管理员姓名">
+          <el-input v-model="input" placeholder="管理员姓名"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button icon="el-icon-search" circle type="primary"></el-button>
+        </el-form-item>
+        <el-form-item>
+          <el-popover
+            placement="bottom"
+            v-model="visible1">
+            <div style="text-align:center; width: 300px">
+              <el-form ref="addForm" :model="addForm" :rules="rules" label-width="100px" size="mini">
+                <el-form-item label="管理员名称">
+                  <el-input v-model="addForm.name"></el-input>
+                </el-form-item>
+                <el-form-item label="账号">
+                  <el-input v-model="addForm.account"></el-input>
+                </el-form-item>
+                <el-form-item label="密码">
+                  <el-input v-model="addForm.password"></el-input>
+                </el-form-item>
+                <el-form-item label="权限" prop="authority">
+                  <el-cascader :options="Net"
+                    checkStrictly
+                    v-model="addForm.store"
+                    class="wd400">
+                  </el-cascader>
+                </el-form-item>
+                <el-button size="mini" type="text" @click="visible1 = false">取消</el-button>
+                <el-button type="primary" size="mini" @click="visible1 = false; submitAddForm('addForm')">保存</el-button>
+              </el-form>
+            </div>
+            <el-button slot="reference" type="success" size="small" >添加</el-button>
+          </el-popover>
+        </el-form-item>
+      </el-form>
+    </div>
+
+
+    <!-- <div class="search-bar">
       <div class="block">
         <el-input v-model="input" placeholder="管理员名称"></el-input>
       </div>
@@ -36,7 +88,7 @@
         </div>
         <el-button slot="reference" type="primary" size="small" style="margin-left: 700px">添加</el-button>
       </el-popover>
-    </div>
+    </div> -->
 
   <div class="results">
     <el-table
@@ -117,6 +169,7 @@
     export default {
       data(){
         return{
+          shNet: [],
           input:'',
           visible1: false,
           visible2: false,
@@ -289,10 +342,14 @@
     }
 </script>
 <style>
-  .search-bar{
-    /*position: relative;*/
-    float:left;
-  }
+.search-bar{
+  padding:10px;
+  border-bottom:1px #DCDFE6 solid;
+  background-color:#F2F6FC;
+  height:80px;
+  width:100%;
+  margin:0 auto;
+}
   .block{
     display: inline-block;
     padding: 10px;
@@ -300,4 +357,8 @@
   .wd400{
     width: 100%;
   }
+    .results{
+    margin-top:40px;
+  }
+
 </style>
