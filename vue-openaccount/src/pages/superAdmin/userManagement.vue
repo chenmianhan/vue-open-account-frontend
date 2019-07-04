@@ -5,9 +5,9 @@
         <el-form-item label="选择网点">
           <el-cascader
             placeholder="所属营业网点"
-            :options="shNet"
+            :options="Net"
             checkStrictly
-            v-model="shPoint"
+            v-model="point"
             props.expandTrigger="hover"
             :show-all-levels='false'
             class="wd400">
@@ -17,7 +17,7 @@
           <el-input v-model="input" placeholder="用户姓名"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button icon="el-icon-search" circle type="primary"></el-button>
+          <el-button icon="el-icon-search" circle type="primary" @click="handleSearch"></el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -144,30 +144,10 @@
           visible : false,
           /*props: { multiple: true },*/
 
-          institute: '',
-          ins_ops: [{//机构显示列表
-            institute: 'sh',
-            label: '上海',
-          },{
-            institute: 'sz',
-            label: '深圳',
-          } ],
-          shNet: [],//后端传来的所有营业网点列表
-          szNet: [],
-
           Net:[],
 
-          stores: [],
-          str_ops:[{
-            stores:'wangdian1',
-            label:'营业网点1'
-          },{
-            stores:'wangdian2',
-            label:'营业网点2'
-          }],
-
           input:'',
-
+          point: '',
           modifyForm:{
             name:'',
             idNum:'',
@@ -198,10 +178,6 @@
         };
       },
       methods: {
-        handleChange(value) {
-          console.log(value);
-        },
-
         handleDelete(index, row) {
           console.log(index, row);
           let deleteId = row.user_id;
@@ -214,7 +190,7 @@
               this.$axios.post('/api/deleteUsers', {user_id: deleteId})//post也可以改成get，但需要对应服务端的请求方法
                 .then(function (response) {
                   console.log(response);
-                  that.querytable();
+                  that.handleSearch();
                 })
                 .catch(function (error) {
                   alert(error);
@@ -251,7 +227,7 @@
                     title: '修改成功',
                     type: 'succeed'
                   });
-                  that.querytable();
+                  that.handleSearch();
                 })
                 .catch(function (error) {
                   that.$msgbox({
@@ -282,50 +258,49 @@
             });
         },
 
-        getSHList(){
+        getList(){
           var that = this;
           this.$axios.get('/api/security/get_securityall').then(function(response){
-            that.shNet = [];
-            that.shNet = response.data;
-            for(var i = 0; i < that.shNet.length; i++){
-              for(var j = 0; j < that.shNet[i].children.length; j++){
-                for(var t = 0; t < that.shNet[i].children[j].children.length; t++){
-                  if(that.shNet[i].children[j].children[t].type != '0'){
-                    that.shNet[i].children[j].children.splice(t,1);
-                    t--;
-                  }
-                }
-              }
-            }
+            that.Net = response.data;
           });
-          console.log('get sh list');
+          console.log('get list');
         },
 
-        getSZList(){
+        // getSZList(){
+        //   var that = this;
+        //   this.$axios.get('/api/security/get_securityall').then(function(response){
+        //     that.szNet = [];
+        //     that.szNet = response.data;
+        //     for(var i = 0; i < that.szNet.length; i++){
+        //       for(var j = 0; j < that.szNet[i].children.length; j++){
+        //         for(var t = 0; t < that.szNet[i].children[j].children.length; t++){
+        //           if(that.szNet[i].children[j].children[t].type != '1'){
+        //             that.szNet[i].children[j].children.splice(t,1);
+        //             t--;
+        //           }
+        //         }
+        //       }
+        //     }
+        //   });
+        //   console.log('get sz list');
+        // },
+        handleSearch(){
           var that = this;
-          this.$axios.get('/api/security/get_securityall').then(function(response){
-            that.szNet = [];
-            that.szNet = response.data;
-            for(var i = 0; i < that.szNet.length; i++){
-              for(var j = 0; j < that.szNet[i].children.length; j++){
-                for(var t = 0; t < that.szNet[i].children[j].children.length; t++){
-                  if(that.szNet[i].children[j].children[t].type != '1'){
-                    that.szNet[i].children[j].children.splice(t,1);
-                    t--;
-                  }
-                }
-              }
-            }
-          });
-          console.log('get sz list');
-        },
+          var postData = {
+            point: this.point,
+            name: this.input,
+          }
+          this.$axios.post('',postData).then(function(response){
+            that.userData = response.data;
+          })
+        }
 
       },
 
       mounted(){
         console.log('start to get net list');
-        this.getSHList();
-        this.getSZList();
+        this.getList();
+        // this.getSZList();
       }
     }
 </script>
