@@ -24,8 +24,13 @@
                 <div class="login-btn">
                     <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
                 </div>
-                <el-button type="text" class="login-tips">忘记密码？</el-button>
-                <el-button type="text" class="login-tips" @click="$router.push({path: '/user/home'})">点击这里看审核通过界面</el-button>
+                <el-button type="text" class="login-tips" @click="forget">忘记密码？</el-button>
+                <!-- <el-button type="text" class="login-tips" @click="$router.push({path: '/user/home'})">点击这里看审核通过界面</!--> 
+            </el-form>
+        </div>
+        <div>
+            <el-form>
+
             </el-form>
         </div>
     </div>
@@ -101,6 +106,24 @@
             }
         },
         methods: {
+            forget(){
+                this.$prompt('请输入邮箱', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
+                inputErrorMessage: '邮箱格式不正确'
+                }).then(({ value }) => {
+                this.$message({
+                    type: 'success',
+                    message: '已发送验证码至你的邮箱: ' + value
+                });
+                }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '取消输入'
+                });       
+                });
+            },
             //表单验证，主要验证输入格式是否正确；验证正确后向后端传输数据
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
