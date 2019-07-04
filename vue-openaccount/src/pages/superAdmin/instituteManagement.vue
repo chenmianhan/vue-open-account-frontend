@@ -1,8 +1,51 @@
 <template>
-  <div>
+  <div v-loading='loading' element-loading-text="拼命加载中"
+    element-loading-spinner="el-icon-loading"
+    element-loading-background="rgba(0, 0, 0, 0.8)">
     <div class="search-bar">
-      <div class="block">
+      <el-form :inline="true" :model="searchForm" size="medium" style="margin-top:20px;">
+        <el-form-item label="查找营业网点">
         <el-input v-model="store" placeholder="营业网点名称" class="wd400"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button icon="el-icon-search" @click="queryStore" circle type="primary"></el-button>
+        </el-form-item>
+        <el-form-item>
+      <el-popover
+        placement="bottom"
+        v-model="visible">
+        <div style="text-align:center; width: 300px">
+          <el-form ref="addForm" :model="addForm" :rules="rules" label-width="100px" size="mini">
+            <el-form-item label="营业网点名称" prop="store">
+              <el-input v-model="addForm.store"></el-input>
+            </el-form-item>
+            <el-form-item label="网点地址" prop="address">
+            <el-cascader
+              :options="address"
+              props.checkStrictly
+              v-model="addForm.address"
+              style="width: 100%"
+              props.expandTrigger="hover">
+            </el-cascader>
+            </el-form-item>
+            <el-form-item label="网点电话" prop="contact_phone">
+              <el-input v-model="addForm.contact_phone"></el-input>
+            </el-form-item>
+            <el-button size="mini" type="text" @click="visible = false">取消</el-button>
+            <el-button type="primary" size="mini" @click="visible = false; submitAddForm('addForm')">保存</el-button>
+          </el-form>
+        </div>
+        <el-button slot="reference" type="primary" size="small">添加</el-button>
+      </el-popover>
+        </el-form-item>
+      </el-form>
+    </div>
+
+
+
+    <!-- <div class="search-bar">
+      <div class="block">
+        <el-input v-model="store" placeholder="营业网点名称" class="wd400"></el-input> -->
         <!--<el-autocomplete
           v-model="store"
           :fetch-suggestions="querySearchAsync"
@@ -10,7 +53,7 @@
           @select="handleSelect"
           class="wd400"
         ></el-autocomplete>-->
-      </div>
+      <!-- </div>
       <el-button icon="el-icon-search" @click="queryStore" circle></el-button>
 
       <el-popover
@@ -39,7 +82,7 @@
         </div>
         <el-button slot="reference" type="primary" size="small" style="margin-left: 700px">添加</el-button>
       </el-popover>
-    </div>
+    </div> -->
 
     <div class="results">
       <el-table
@@ -70,7 +113,7 @@
       </el-table>
     </div>
     <!-- 分页器 -->
-    <div>
+    <div style="margin: 30px;">
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
@@ -103,6 +146,7 @@
         };
 
         return{
+          loading: true,
           address: areajson,
           visible: false,
           currentPage: 1,
@@ -290,6 +334,7 @@
           var that = this;
           this.$axios.get('/api/superadmin/getAllStore')
             .then(function(response){
+              that.loading = false;
             that.instData = response.data;
             that.length = that.instData.length;
             that.currentData = [];
@@ -313,9 +358,16 @@
     }
 </script>
 <style scoped>
-  .search-bar{
-    /*position: relative;*/
-    float:left;
+.search-bar{
+  padding:10px;
+  border-bottom:1px #DCDFE6 solid;
+  background-color:#F2F6FC;
+  height:80px;
+  width:90%;
+  margin:0 auto;
+}
+  .results{
+    margin-top:40px;
   }
   .block{
     display: inline-block;
