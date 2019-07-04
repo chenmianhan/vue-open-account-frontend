@@ -438,7 +438,7 @@
       }
     }
 </script>
-<style>
+<style scoped>
 .search-bar{
   padding:10px;
   border-bottom:1px #DCDFE6 solid;
