@@ -2,6 +2,68 @@
 
   <div>
     <div class="search-bar">
+      <el-form :inline="true"  size="medium" style="margin-top:20px;">
+
+        <el-select v-model="way" placeholder="请选择">
+          <el-option
+            v-for="item in wayOptions"
+            :key="item.way"
+            :label="item.label"
+            :value="item.way">
+          </el-option>
+        </el-select>
+
+        <el-form-item v-show="way == 'store'">
+          <!--<el-autocomplete
+            v-model="store"
+            :fetch-suggestions="querySearchAsync"
+            placeholder="输入营业网点名称"
+            @select="handleSelect"
+            class="wd400"
+          ></el-autocomplete>-->
+          <el-input v-model="store" placeholder="营业网点名称" class="wd400"></el-input>
+        </el-form-item>
+
+        <el-form-item v-show="way == 'name'">
+          <el-input v-model="admin_name" placeholder="输入管理员姓名"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button icon="el-icon-search" @click="queryAdmin" circle type="primary"></el-button>
+        </el-form-item>
+        <el-form-item>
+          <el-popover
+            placement="bottom"
+            v-model="visible1">
+            <div style="text-align:center; width: 300px">
+              <el-form ref="addForm" :model="addForm" :rules="rules" label-width="100px" size="mini">
+                <el-form-item label="管理员名称">
+                  <el-input v-model="addForm.name"></el-input>
+                </el-form-item>
+                <el-form-item label="账号">
+                  <el-input v-model="addForm.account"></el-input>
+                </el-form-item>
+                <el-form-item label="密码">
+                  <el-input v-model="addForm.password"></el-input>
+                </el-form-item>
+                <el-form-item label="权限" prop="authority">
+                  <el-cascader :options="Net"
+                    checkStrictly
+                    v-model="addForm.store"
+                    class="wd400">
+                  </el-cascader>
+                </el-form-item>
+                <el-button size="mini" type="text" @click="visible1 = false">取消</el-button>
+                <el-button type="primary" size="mini" @click="visible1 = false; submitAddForm('addForm')">保存</el-button>
+              </el-form>
+            </div>
+            <el-button slot="reference" type="success" size="small" >添加</el-button>
+          </el-popover>
+        </el-form-item>
+      </el-form>
+    </div>
+
+
+    <!-- <div class="search-bar">
       <div class="block">
         <el-input v-model="input" placeholder="管理员名称"></el-input>
       </div>
@@ -36,7 +98,7 @@
         </div>
         <el-button slot="reference" type="primary" size="small" style="margin-left: 700px">添加</el-button>
       </el-popover>
-    </div>
+    </div> -->
 
   <div class="results">
     <el-table
@@ -61,8 +123,8 @@
         label="密码">
       </el-table-column>
       <el-table-column
-        prop="authority"
-        label="权限">
+        prop="store"
+        label="负责网点">
       </el-table-column>
       <el-table-column
         label="操作"
@@ -84,7 +146,7 @@
                   <el-input v-model="modifyForm.password"></el-input>
                 </el-form-item>
 
-                <el-form-item label="权限" prop="authority">
+                <el-form-item label="权限" prop="store">
                   <el-cascader :options="Net"
                                checkStrictly
                                v-model="modifyForm.store"
@@ -117,18 +179,30 @@
     export default {
       data(){
         return{
-          input:'',
+          way: 'store',
+          store:'',
+          admin_name:'',
+
           visible1: false,
           visible2: false,
           props: { multiple: true },
 
+          wayOptions:[{
+            way: 'store',
+            label:'按营业网点查询',
+          },{
+            way:'name',
+            label:'按管理员姓名查询',
+          }],
 
           Net:[], //后端传来的所有营业网点列表
 
           tableData:[{
             admin_id:'1',
             name:'whatever',
-            authority:'',
+            account:'',
+            password:'',
+            store:'',
           }],
 
           modifyForm:{
@@ -264,21 +338,97 @@
 
         getNetList(){
           var that = this;
-          this.$axios.get('/api/superadmin/get_securityUnderAdmin')
+          this.$axios.get('/api/security/get_securityall')
             .then(function(response){
-            console.log(response.data)
-            that.Net = [];
+            /*console.log(response.data)*/
             that.Net = response.data;
           });
           console.log('get net list');
-          console.log(that.Net[0]);
         },
 
         handleCheckedSHChange(value) {
           let checkedCount = value.length;
           this.checkAll = checkedCount === this.shNet.length;
           this.isIndeterminate = checkedCount > 0 && checkedCount < this.shNet.length;
-        }
+        },
+
+        queryAdmin(){
+          if(this.way=='store'){
+            this.queryStore();
+          }else if (this.way=='name'){
+            this.queryName();
+          }
+        },
+
+        queryStore(){
+          if (this.store != ''){
+            console.log(this.store);
+            const postData = {
+              store: this.store
+            };
+            var that = this;
+            this.$axios.post('/api/superadmin/getAdminByStore', postData)
+              .then(function(response){
+                that.tableData = response.data;
+              }).catch(function(error){
+              console.log(error);
+              that.$msgbox({
+                type: 'error',
+                title: '连接失败',
+                message: '获取管理员信息失败！'
+              })
+            })
+          }else{
+            this.$msgbox({
+              type: 'info',
+              title: '信息不完全',
+              message: '请输入你想要搜索的网点名称！'
+            })
+          }
+        },
+
+        queryName(){
+          if (this.admin_name != ''){
+            console.log(this.admin_name);
+            const postData = {
+              admin_name: this.admin_name
+            };
+            var that = this;
+            this.$axios.post('/api/admin/getAdminByName', postData)
+            .then(function(response){
+              that.tableData = response.data;
+            }).catch(function(error){
+              console.log(error);
+              that.$msgbox({
+                type: 'error',
+                title: '连接失败',
+                message: '获取用户信息失败！'
+              })
+            })
+          }else{
+            this.$msgbox({
+              type: 'info',
+              title: '信息不完全',
+              message: '请输入你想要搜索的管理员姓名！'
+            })
+          }
+        },
+
+        loadAllAdmin(){
+          var that = this;
+          this.$axios.get('/api/superadmin/getAllAdmin')
+            .then(function(response){
+              this.tableData = response.data;
+            }).catch(function(error){
+              console.log(error);
+              that.$msgbox({
+                type: 'error',
+                title: '连接失败',
+                message: '获取网点信息失败！'
+              })
+          })
+        },
+
 
       },
 
@@ -289,10 +439,14 @@
     }
 </script>
 <style>
-  .search-bar{
-    /*position: relative;*/
-    float:left;
-  }
+.search-bar{
+  padding:10px;
+  border-bottom:1px #DCDFE6 solid;
+  background-color:#F2F6FC;
+  height:80px;
+  width:100%;
+  margin:0 auto;
+}
   .block{
     display: inline-block;
     padding: 10px;
@@ -300,4 +454,8 @@
   .wd400{
     width: 100%;
   }
+    .results{
+    margin-top:40px;
+  }
+
 </style>

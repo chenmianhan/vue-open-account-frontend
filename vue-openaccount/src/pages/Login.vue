@@ -1,7 +1,7 @@
 <template>
     <div class="login-wrap">
         <div class="ms-login">
-            <div class="ms-title">在线开户平台</div>
+            <div class="ms-title">金证在线开户平台</div>
             <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="0px" class="ms-content">
                 <el-form-item prop="username">
                     <el-input v-model="ruleForm.username" placeholder="username">
@@ -103,10 +103,10 @@
         methods: {
             //表单验证，主要验证输入格式是否正确；验证正确后向后端传输数据
             submitForm(formName) {
-                var that = this;
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         //前->后端传输
+                        var that = this;
                         const postData = {//打包传输数据，类型均为string
                             account: that.ruleForm.username,
                             password: that.ruleForm.password,
@@ -115,10 +115,8 @@
                         console.log(postData);
                         console.log(this.$Qs.stringify(postData));
                         //在这里给后台传输数据-
-                        this.$axios.post('/api/login',this.$Qs.stringify(postData), {
-                            headers: {'Content-Type':'application/x-www-form-urlencoded'}}
-                        ).then(function(response){
-                            console.log(response);
+                        this.$axios.post('/api/login',that.$Qs.stringify(postData)).then(function(response){
+                            console.log('response', response);
                             //成功登录后根据不同的身份标签跳转页面
                             if (response.data.code == '100' || response.data.code == '102'){
                                 sessionStorage.setItem('Flag', 'isLogin');//存储登录状态
@@ -157,15 +155,19 @@
                                 //console.log('error');
                             }
                         }).catch(function(error){
-                            console.log(error);
+                            that.$msgbox({
+                                message: error.message,
+                                type: 'error'
+                            });
+                            console.log('error', error);
                         })
                         //将用户名缓存
                         sessionStorage.setItem('ms_username',this.ruleForm.account);
                         //this.$router.push('/login/warning');//暂时直接跳转风险提示界面
-                        //console.log('submit!');
+                        // console.log('submit!');
                     } else {
-                        console.log('error submit!!');
-                        return false;
+                        // console.log('error submit!!');
+                        // return false;
                     }
                 });
             },
@@ -208,7 +210,7 @@
         },
         //登录即注册提示
         mounted: function(){
-            console.log(sessionStorage);
+            // console.log(sessionStorage);
             if(this.notifyInstance) {
                 this.notifyInstance.close();
             }
