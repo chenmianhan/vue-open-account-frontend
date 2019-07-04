@@ -44,7 +44,8 @@
                   {{reviewerName}} <i class="el-icon-caret-bottom"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item command="loginout">退出登录</el-dropdown-item>
+                  <el-dropdown-item disabled="true">{{netName}}</el-dropdown-item>
+                  <el-dropdown-item command="loginout" icon="el-icon-switch-button" divided="true">退出登录</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
           </el-col>
@@ -112,8 +113,9 @@ export default {
     
     getReviewerInfo(){
         var that = this;
-        this.$axios.get('/api/reviewer'
+        this.$axios.post('/api/reviewer'
         ).then(function(response){
+            console.log(response.data);
             that.netName = response.data.netName;
             that.reviewerName = response.data.reviewerName;
         }).catch(function(error){
@@ -127,7 +129,7 @@ export default {
     },
   },
   mounted() {//获取页头信息：网点名称/审核员名称
-      //this.getReviewerInfo();
+      this.getReviewerInfo();
   },
 
   computed: {
