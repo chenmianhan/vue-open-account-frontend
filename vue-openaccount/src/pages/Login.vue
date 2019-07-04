@@ -51,7 +51,7 @@
             var validatePhone = (rule, value, callback) => {
                 //验证手机号格式是否正确
                 const reg = /^1[3|4|5|7|8][0-9]\d{8}$/;
-                // console.log(reg.test(value));
+                console.log(reg.test(value));
                 if (reg.test(value)) {//格式正确
                     callback();
                 } else {//格式错误
@@ -61,7 +61,7 @@
             var validateAdminId = (rule, value, callback) => {
                 //验证非用户账号格式是否正确
                 const reg = /^[A-Za-z0-9]{1,12}$/;
-                // console.log(reg.test(value));
+                console.log(reg.test(value));
                 if (reg.test(value)){
                     callback();
                 }else{
@@ -103,28 +103,26 @@
         methods: {
             //表单验证，主要验证输入格式是否正确；验证正确后向后端传输数据
             submitForm(formName) {
-                var that = this;
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         //前->后端传输
+                        var that = this;
                         const postData = {//打包传输数据，类型均为string
                             account: that.ruleForm.username,
                             password: that.ruleForm.password,
                             role: String(that.ruleForm.role)
                         }
-                        // console.log(postData);
-                        // console.log(this.$Qs.stringify(postData));
+                        console.log(postData);
+                        console.log(this.$Qs.stringify(postData));
                         //在这里给后台传输数据-
-                        this.$axios.post('/api/login',postData, {
-                            headers: {'Content-Type':'application/x-www-form-urlencoded'}}
-                        ).then(function(response){
+                        this.$axios.post('/api/login',that.$Qs.stringify(postData)).then(function(response){
                             console.log('response', response);
                             //成功登录后根据不同的身份标签跳转页面
                             if (response.data.code == '100' || response.data.code == '102'){
                                 sessionStorage.setItem('Flag', 'isLogin');//存储登录状态
                                 sessionStorage.setItem('Role', postData.role); //存储身份标识
-                                // console.log(sessionStorage.getItem('Flag'));
-                                // console.log(sessionStorage.getItem('Role'));
+                                console.log(sessionStorage.getItem('Flag'));
+                                console.log(sessionStorage.getItem('Role'));
 
                                 switch(postData.role){
                                     case '0'://用户成功登录
@@ -166,7 +164,7 @@
                         //将用户名缓存
                         sessionStorage.setItem('ms_username',this.ruleForm.account);
                         //this.$router.push('/login/warning');//暂时直接跳转风险提示界面
-                        //console.log('submit!');
+                        // console.log('submit!');
                     } else {
                         // console.log('error submit!!');
                         // return false;
@@ -176,7 +174,7 @@
             goPage(){
                 var that = this;
                 this.$axios.post('/api/getReviewResult').then(function(response){
-                    // console.log(response.data);
+                    console.log(response.data);
                     switch(response.data.status){
                         case '0':
                             sessionStorage.setItem('status', 0)

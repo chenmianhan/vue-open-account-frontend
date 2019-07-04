@@ -29,7 +29,6 @@
               style="width: 100%"
               props.expandTrigger="hover">
             </el-cascader>
-              <el-input v-model="addForm.address_detail" style="padding-top: 10px; width: 100%" placeholder="详细地址"></el-input>
             </el-form-item>
             <el-form-item label="网点电话" prop="contact_phone">
               <el-input v-model="addForm.contact_phone"></el-input>
