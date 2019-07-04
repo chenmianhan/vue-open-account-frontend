@@ -6,9 +6,9 @@
         <el-form-item label="选择网点">
           <el-cascader
             placeholder="所属营业网点"
-            :options="shNet"
+            :options="Net"
             checkStrictly
-            v-model="shPoint"
+            v-model="point"
             props.expandTrigger="hover"
             :show-all-levels='false'
             class="wd400">
@@ -18,7 +18,7 @@
           <el-input v-model="input" placeholder="管理员姓名"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button icon="el-icon-search" circle type="primary"></el-button>
+          <el-button icon="el-icon-search" circle type="primary" @click="handleSearch()"></el-button>
         </el-form-item>
         <el-form-item>
           <el-popover
@@ -177,12 +177,14 @@
 
 
           Net:[], //后端传来的所有营业网点列表
+          point: '',
 
           tableData:[{
             admin_id:'1',
             name:'whatever',
             authority:'',
           }],
+          userData:[],
 
           modifyForm:{
             name:'',
@@ -213,7 +215,16 @@
         }
       },
       methods: {
-
+        handleSearch(){
+          var that = this;
+          const postData = {
+            point: this.point,
+            name: this.input
+          }
+          this.$axios.post(''.postData).then(function(response){
+            that.userData = response.data;
+          })
+        },
         submitAddForm(formName) {
           var that = this;
           this.$refs[formName].validate((valid) => {
