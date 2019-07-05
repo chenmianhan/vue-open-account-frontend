@@ -4,7 +4,8 @@
             <div class='search-bar'>
             <!-- 查询方式选择 -->
                 <div class='block' style="margin-bottom: 35px; text-align: left;">
-                    <el-select v-model="way" placeholder="请选择">
+                    <el-select @change="handleSelectChange"
+                    v-model="way" placeholder="请选择">
                         <el-option
                             v-for="item in wayOptions"
                             :key="item.way"
@@ -254,11 +255,18 @@ export default {
                     }
                 }]
              },
-             loading: false
+             loading: true
           }
     },
 
     methods: {
+        handleSelectChange(){
+            this.tableData = [];
+            this.totalNum = 0;
+
+            this.queryTable();
+        },
+
         handleFilterChange(filters){
             console.log(this.filters);
             if (filters.reviewStatus.length == 2){
@@ -384,6 +392,7 @@ export default {
               ).then(function(response){
                   that.tableData = response.data;
                   that.totalNum = that.tableData.length;
+                  that.loading = false;
               }).catch(function(error){
                   console.log(error);
                   that.$msgbox({
@@ -392,13 +401,13 @@ export default {
                     message: '获取用户信息失败！'
                   })
               })
-           }else{
-             this.$msgbox({
-                type: 'info',
-                title: '信息不完全',
-                message: '请输入你想要搜索的用户姓名！'
-             })
            }
+        //    else{
+        //      this.$msgbox({
+        //         type: 'info',
+        //         message: '请输入你想要搜索的用户姓名！'
+        //      })
+        //    }
         },
 
         loadAll(){
