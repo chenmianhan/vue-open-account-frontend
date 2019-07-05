@@ -182,7 +182,7 @@ export default {
             var validatePhone = (rule, value, callback) => {
                 //验证手机号格式是否正确
                 const reg = /^1[3|4|5|7|8][0-9]\d{8}$/;
-                console.log(reg.test(value));
+                // console.log(reg.test(value));
                 if (reg.test(value)) {//格式正确
                     callback();
                 } else {//格式错误
@@ -242,9 +242,9 @@ export default {
     methods: {
         getData(){
             var that = this;
-            const postData = {
-                user_id: 17
-            }
+            // const postData = {
+            //     user_id: 17
+            // }
             this.$axios.get('/api/account/accountDisplay').then(function(response){
                 console.log('response', response.data);
                 that.primaryAccount = response.data.primaryAccount;
@@ -266,7 +266,7 @@ export default {
                 that.loading = false;
                 // that.netPoint = response.data.netPoint;
             }).catch((error) => {
-                console.log(error);
+                // console.log(error);
                 that.$msgbox({
                     type: 'error',
                     title: '连接失败',
@@ -280,7 +280,7 @@ export default {
                 user_id: 17
             };
             this.$axios.post('/api/timeline/get_timeline', postData).then(function(response){
-                console.log(response.data);
+                // console.log(response.data);
                 if(response.data.length >= 5){
                     that.bill = response.data.slice(0, 5);
                 }else{
@@ -320,7 +320,7 @@ export default {
             });
         },
         handleClick(tab, event) {
-            console.log(tab, event);
+            // console.log(tab, event);
         },
         handleRecharge(item){
             this.rechargeForm.cardID = item.cardID;
@@ -383,14 +383,14 @@ export default {
             this.withdrawVisible = true;
         },
         handleDelete(index){
-            console.log(index);
+            // console.log(index);
             var that = this;
             this.$confirm('此操作将永久删除此账号，是否继续？', "警告", {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                console.log(index);
+                // console.log(index);
                 const postData = {
                     id: parseInt(index)
                 }
