@@ -102,7 +102,7 @@
 
   <div class="results">
     <el-table
-      :data="tableData"
+      :data="currentData"
       style="width: 100%">
       <el-table-column
         prop="admin_id"
@@ -183,6 +183,7 @@
   </div>
 </template>
 <script>
+import area from '../../assets/js/area';
     export default {
       data(){
         return{
@@ -251,12 +252,12 @@
       methods: {
         handleSizeChange(val){
           this.pageSize = val;
-          this.loadAllAdmin();
+          this.handleCurrentChange(1);
         },
         handleCurrentChange(val){{
           this.currentPage = val;
           this.currentData = [];
-          for(var i = (this.currentPage - 1) * this.pageSize; i < this.currentPage * this.pageSize; i++){
+          for(var i = (this.currentPage - 1) * this.pageSize; (i < this.currentPage * this.pageSize) && (i < this.length); i++){
             this.currentData.push(this.tableData[i]);
           }
         }},
@@ -399,6 +400,8 @@
             this.$axios.post('/api/superadmin/getAdminByStore', postData)
               .then(function(response){
                 that.tableData = response.data;
+                that.length = that.tableData.length;
+                that.handleCurrentChange(1);
               }).catch(function(error){
               console.log(error);
               that.$msgbox({
@@ -426,6 +429,8 @@
             this.$axios.post('/api/admin/getAdminByName', postData)
             .then(function(response){
               that.tableData = response.data;
+              that.length = that.tableData.length;
+              that.handleCurrentChange(1);
             }).catch(function(error){
               console.log(error);
               that.$msgbox({
@@ -450,10 +455,11 @@
               that.loading = false;
               that.tableData = response.data;
               that.length = that.tableData.length;
-              that.currentData = [];
-              for(var i = 0; i < that.pageSize; i++){
-                that.currentData.push(that.tableData[i]);
-              }
+              // that.currentData = [];
+              // for(var i = 0; i < that.pageSize; i++){
+              //   that.currentData.push(that.tableData[i]);
+              // }
+              that.handleCurrentChange(1);
             }).catch(function(error){
               console.log(error);
               that.$msgbox({
