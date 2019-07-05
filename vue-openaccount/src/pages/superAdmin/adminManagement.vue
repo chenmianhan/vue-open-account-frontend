@@ -275,6 +275,7 @@ import area from '../../assets/js/area';
                 name: that.addForm.name,
                 account: that.addForm.account,
                 password: that.addForm.password,
+                store: that.addForm.store,
               };
 
               // var that = this;

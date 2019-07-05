@@ -157,6 +157,8 @@
 
           store:'',
 
+          vals:[],
+
           addForm:{
             store:'',
             address:'',
@@ -202,11 +204,27 @@
           // console.log(file, fileList);
         },
 
+        getCascaderObj(val,opt) {
+          return val.map(function (value, index, array) {
+            for (var itm of opt) {
+              if (itm.value == value) { opt = itm.children; return itm; }
+            }
+            return null;
+          });
+        },
+
         submitAddForm(formName) {
           this.addForm.address.splice(2,1);
+          this.vals = this.getCascaderObj(this.addForm.address, this.address);
+          var temp = [];
+          for (var i = 0; i < this.vals.length; i++){
+            temp[i] = this.vals[i].label;
+          };
+          this.addForm.address = temp;
           var that = this;
           this.$refs[formName].validate((valid) => {
             if (valid) {
+
               const postData = {
                 store: that.addForm.store,
                 address: that.addForm.address,
@@ -251,10 +269,10 @@
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            this.$axios.post('/api/superadmin/deleteStore', postData)//post也可以改成get，但需要对应服务端的请求方法
+            this.$axios.post('/api/deleteStore', postData)//post也可以改成get，但需要对应服务端的请求方法
               .then(function (response) {
                 console.log(response);
-                that.loadAllStore();
+                //that.loadAllStore();
               })
               .catch(function (error) {
                 alert(error);
@@ -362,6 +380,7 @@
             })
           })
         },
+
       },
 
       mounted(){
