@@ -276,8 +276,7 @@
             console.log(postData);
             this.$axios.post('/api/superadmin/getStore', postData)
               .then(function(response){
-                let result = response.data;
-                that.instData = [result];
+                that.instData = response.data;
             }).catch(function(error){
               console.log(error);
               that.$msgbox({

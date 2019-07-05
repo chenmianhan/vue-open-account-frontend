@@ -238,10 +238,8 @@ export default {
             // const postData = {
             //     user_id: 17
             // }
-            this.$axios.get('/api/account/accountDisplay', {
-                params: {user_id: 17}
-            }).then(function(response){
-                console.log(response.data);
+            this.$axios.get('/api/account/accountDisplay').then(function(response){
+                console.log('response', response.data);
                 that.primaryAccount = response.data.primaryAccount;
                 that.primaryAccount.balance.balance = that.changeTwoDecimal_f(that.primaryAccount.balance.balance)
                 that.secondaryAccount = response.data.secondaryAccount;
@@ -288,22 +286,25 @@ export default {
                     if(this.addForm.password == '111111'){
                         var that = this;
                         const postData = {
-                            cardID: this.addForm.cardID,
+                            bank_account: this.addForm.cardID,
                             bank: this.addForm.bank
                         }
-                        this.$axios.post('', postData).then(function(response){
-                                that.$message.success({
-                                    message: '添加账户成功'
+                        this.$axios.post('/api/account/addFundAccount', postData).then(function(response){
+                                that.$message({
+                                    message: '添加账户成功',
+                                    type: 'success'
                                 });
                                 that.getData();
                         }).catch(() => {
-                            that.$message.error({
-                                message: '连接失败'
+                            that.$message({
+                                message: '连接失败',
+                                type: 'error'
                             });
                         });
                     }else{
-                        that.$message.error({
-                            message: '密码错误'
+                        that.$message({
+                            message: '密码错误',
+                            type:'error'
                         });
                     } 
                 }
@@ -324,14 +325,16 @@ export default {
                         account.balance.balance = parseFloat(account.balance.balance) + parseFloat(this.rechargeForm.value);
                         // console.log(parseFloat(this.rechargeForm.value));
                         account.balance.balance = this.changeTwoDecimal_f(account.balance.balance);
-                        this.$message.success({
-                            message: '充值成功'
+                        this.$message({
+                            message: '充值成功',
+                            type:'success'
                         });
                         this.rechargeForm.password = '';
                         this.rechargeVisible = false;
                     } else {
-                        this.$message.error({
-                            message: '密码错误'
+                        this.$message({
+                            message: '密码错误',
+                            type:'error'
                         });
                     }
                 }
@@ -342,21 +345,24 @@ export default {
                 if(valid){
                     if(this.withdrawForm.password == '111111'){
                         if(account.balance.balance < parseFloat(this.withdrawForm.value)){
-                            this.$message.error({
-                                message: '余额不足'
+                            this.$message({
+                                message: '余额不足',
+                                type:'error'
                             });
                         } else{
                             account.balance.balance = parseFloat(account.balance.balance) - parseFloat(this.withdrawForm.value);
                             account.balance.balance = this.changeTwoDecimal_f(account.balance.balance);
-                            this.$message.success({
-                                message: '提现成功，将在24小时内到账'
+                            this.$message({
+                                message: '提现成功，将在24小时内到账',
+                                type: 'success'
                             });
                             this.withdrawForm.password = '';
                             this.withdrawVisible = false;
                         }
                     }else{
-                        this.$message.error({
-                            message: '密码错误'
+                        this.$message({
+                            message: '密码错误',
+                            type: 'error'
                         });
                     }
                 }
@@ -387,8 +393,9 @@ export default {
                         message: '删除成功！'
                     });
                 }).catch(() => {
-                    that.$message.error({
-                        message: '连接失败'
+                    that.$message({
+                        message: '连接失败',
+                        type:'error'
                     });
                 });
             }).catch(() => {
