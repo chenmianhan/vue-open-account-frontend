@@ -314,6 +314,7 @@ import area from '../../assets/js/area';
                 name: that.modifyForm.name,
                 account: that.modifyForm.account,
                 password: that.modifyForm.password,
+                store: that.modifyForm.store,
               };
 
               // var that = this;
