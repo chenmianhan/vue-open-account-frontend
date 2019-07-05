@@ -37,7 +37,7 @@
       <!--页眉-->
       <el-header class="header">
         <el-row>
-          <el-col :span="18" class="header-title">
+          <el-col :span="20" class="header-title">
             <span v-if="collapsed" class="system-name">{{systemName}}</span>
             <span v-else class="menu-button" @click.prevent="collapsed=!collapsed">
               <i class="el-icon-s-fold"></i>
@@ -52,7 +52,7 @@
                   {{adminName}} <i class="el-icon-caret-bottom"></i>
                 </span>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item command="loginout">退出登录</el-dropdown-item>
+                <el-dropdown-item command="loginout" icon="el-icon-switch-button">退出登录</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
           </el-col>
@@ -113,10 +113,26 @@ export default {
                 })
             })
         }
-    }
+    },
+
+    getSuperadminInfo(){
+        var that = this;
+        this.$axios.post('/api/superadmin'
+        ).then(function(response){
+            console.log(response.data);
+            that.superadminName = response.data.superadminName;
+        }).catch(function(error){
+            console.log(error);
+            that.$msgbox({
+              type:'error',
+              title: '连接失败',
+              message:'获取超级管理员信息失败'
+            })
+        })
+    },
   },
   mounted: function() {
-
+    this.getSuperadminInfo();
   },
   computed: {
     onRoutes(){
