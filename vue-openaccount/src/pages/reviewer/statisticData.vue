@@ -176,7 +176,7 @@
 
 <script>
 export default {
-    data: function(){
+    data(){
         return {
             totalNum: 1,
             currentPage: 1,
