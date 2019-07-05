@@ -100,8 +100,8 @@
                     <el-input v-model="modifyForm.contact_address_detail" class="wd400" style="padding-top: 10px" placeholder="详细地址"></el-input>
                   </el-form-item>
 
-                  <el-button size="mini" type="text" @click="visible = false">取消</el-button>
-                  <el-button type="primary" size="mini" @click="visible = false; submitModifyForm('modifyForm',scope.row)">保存</el-button>
+                  <el-button size="mini" type="text" @click="scope.row.visible = false">取消</el-button>
+                  <el-button type="primary" size="mini" @click="scope.row.visible = false; submitModifyForm('modifyForm',scope.row)">保存</el-button>
                 </el-form>
               </div>
               <el-button slot="reference" size="mini">修改</el-button>
@@ -136,7 +136,6 @@
 
         return {
           address: areajson,
-          visible : false,
 
           way: 'date',
 
@@ -176,7 +175,16 @@
             id_num:'510504199901010000',
             contact:'13300000101',
             address:'广东省广州市大学城',
-            date:'2019-01-01 00:00:00'
+            date:'2019-01-01 00:00:00',
+            visible : false,
+          },{
+            user_id:'2',
+            name:'张三',
+            id_num:'510504199901010000',
+            contact:'13300000101',
+            address:'广东省广州市大学城',
+            date:'2019-01-01 00:00:00',
+            visible : false,
           }],
 
           pickerOptions: {//日期选择器的快捷选项
