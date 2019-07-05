@@ -146,6 +146,7 @@
         };
 
         return{
+          searchForm:{},
           loading: true,
           address: areajson,
           visible: false,
@@ -276,7 +277,17 @@
             console.log(postData);
             this.$axios.post('/api/superadmin/getStore', postData)
               .then(function(response){
+                console.log(response.data);
                 that.instData = response.data;
+                that.length = that.instData.length;
+                if(that.length < that.pageSize){
+                  that.currentData = that.instData;
+                }else{
+                  that.currentData = [];
+                  for(var i = 0; i < that.pageSize; i++){
+                    that.currentData.push(that.instData[i]);
+                  }
+                }
             }).catch(function(error){
               console.log(error);
               that.$msgbox({
