@@ -427,7 +427,7 @@ import area from '../../assets/js/area';
               admin_name: this.admin_name
             };
             var that = this;
-            this.$axios.post('/api/admin/getAdminByName', postData)
+            this.$axios.post('/api/superadmin/getAdminByName', postData)
             .then(function(response){
               that.tableData = response.data;
               that.length = that.tableData.length;
