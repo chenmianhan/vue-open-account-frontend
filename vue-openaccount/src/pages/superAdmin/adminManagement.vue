@@ -167,18 +167,33 @@
       </el-table-column>
     </el-table>
   </div>
+  <!-- 分页器 -->
+    <div style="margin: 30px;">
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="currentPage"
+        :page-sizes="[8, 20, 30, 40]"
+        :page-size="pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total='length'>
+      </el-pagination>
+    </div>
 
   </div>
-
-
-
-
-
 </template>
 <script>
     export default {
       data(){
         return{
+          loading: true,
+          address: areajson,
+          visible: false,
+          currentPage: 1,
+          pageSize: 8,
+          length: 0,
+          currentData: [],
+
           way: 'store',
           store:'',
           admin_name:'',
@@ -234,6 +249,20 @@
         }
       },
       methods: {
+        handleSizeChange(val){
+          this.pageSize = val;
+          this.loadAllAdmin();
+        },
+        handleCurrentChange(val){{
+          this.currentPage = val;
+          this.currentData = [];
+          for(var i = (this.currentPage - 1) * this.pageSize; i < this.currentPage * this.pageSize; i++){
+            this.currentData.push(this.tableData[i]);
+          }
+        }},
+        handleChange(file, fileList) {
+          // console.log(file, fileList);
+        },
 
         submitAddForm(formName) {
           var that = this;
@@ -418,13 +447,19 @@
           var that = this;
           this.$axios.get('/api/superadmin/getAllAdmin')
             .then(function(response){
-              this.tableData = response.data;
+              that.loading = false;
+              that.tableData = response.data;
+              that.length = that.tableData.length;
+              that.currentData = [];
+              for(var i = 0; i < that.pageSize; i++){
+                that.currentData.push(that.tableData[i]);
+              }
             }).catch(function(error){
               console.log(error);
               that.$msgbox({
                 type: 'error',
                 title: '连接失败',
-                message: '获取网点信息失败！'
+                message: '获取管理员信息失败！'
               })
           })
         },
@@ -435,10 +470,11 @@
       mounted(){
         console.log('start to get net list');
         this.getNetList();
+        this.loadAllAdmin();
       }
     }
 </script>
-<style>
+<style scoped>
 .search-bar{
   padding:10px;
   border-bottom:1px #DCDFE6 solid;
