@@ -44,8 +44,8 @@
                   {{reviewerName}} <i class="el-icon-caret-bottom"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item disabled=true>{{netName}}</el-dropdown-item>
-                  <el-dropdown-item command="loginout" icon="el-icon-switch-button" divided=true>退出登录</el-dropdown-item>
+                  <el-dropdown-item :disabled="true">{{netName}}</el-dropdown-item>
+                  <el-dropdown-item command="loginout" icon="el-icon-switch-button" :divided="true">退出登录</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
           </el-col>
@@ -144,7 +144,7 @@ export default {
   lang="scss">
 $width: 100%;
 $height: 100%;
-$background-color: #2b6aab;
+$background-color: #215181;
 $header-color: #fff;
 $header-height: 60px;
 

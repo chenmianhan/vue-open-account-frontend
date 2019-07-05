@@ -45,8 +45,8 @@
                   {{userName}} <i class="el-icon-caret-bottom"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item disabled=true>{{netName}}</el-dropdown-item>
-                  <el-dropdown-item command="loginout" icon="el-icon-switch-button" divided=true>退出登录</el-dropdown-item>
+                  <el-dropdown-item :disabled='true'>{{netName}}</el-dropdown-item>
+                  <el-dropdown-item command="loginout" icon="el-icon-switch-button" :divided='true'>退出登录</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
           </el-col>
@@ -115,9 +115,9 @@ export default {
         var that = this;
         this.$axios.post('/api/user'
         ).then(function(response){
-            console.log(response.data);
+            console.log(response);
             that.netName = response.data.netName;
-            that.username = response.data.username;
+            that.userName = response.data.username;
         }).catch(function(error){
             console.log(error);
             that.$msgbox({
@@ -134,6 +134,7 @@ export default {
         || sessionStorage.getItem('status') != '7'){
             this.$router.push({path: '/403'});
         }
+        this.getUserInfo();
   },
   computed: {
     onRoutes(){
