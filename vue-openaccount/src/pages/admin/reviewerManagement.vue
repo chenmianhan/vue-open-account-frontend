@@ -10,32 +10,35 @@
               @select="handleSelect"
             ></el-autocomplete>
           <el-button icon="el-icon-search" @click="queryName" type="info" circle></el-button>
-          <el-button slot="reference" type="primary" size="small" @click="submitAddForm">添加</el-button>
+
+
+            <el-popover
+              placement="bottom"
+              v-model="visible1"
+              style="padding-left: 20px">
+              <div style="text-align:center; width: 300px">
+                <el-form ref="form" :model="addForm" label-width="100px" size="mini">
+                  <el-form-item label="审核员名称">
+                    <el-input v-model="addForm.name"></el-input>
+                  </el-form-item>
+                  <el-form-item label="账号">
+                    <el-input v-model="addForm.account"></el-input>
+                  </el-form-item>
+                  <el-form-item label="密码">
+                    <el-input v-model="addForm.password"></el-input>
+                  </el-form-item>
+                  <el-button size="mini" type="text" @click="visible1 = false">取消</el-button>
+                  <el-button type="primary" size="mini" @click="visible1 = false; SubmitAddForm">保存</el-button>
+                </el-form>
+              </div>
+              <el-button slot="reference" type="success" size="small" >添加</el-button>
+            </el-popover>
+
         </div>
       </el-row>
-    </div>
-    <div class="add-button">
-      <el-popover
-        placement="bottom"
-        v-model="visible1">
-        <div style="text-align:center; width: 300px">
-          <el-form ref="form" :model="addForm" label-width="100px" size="mini">
-            <el-form-item label="审核员名称">
-              <el-input v-model="addForm.name"></el-input>
-            </el-form-item>
-            <el-form-item label="账号">
-              <el-input v-model="addForm.account"></el-input>
-            </el-form-item>
-            <el-form-item label="密码">
-              <el-input v-model="addForm.password"></el-input>
-            </el-form-item>
 
-            <el-button size="mini" type="text" @click="visible1 = false">取消</el-button>
-            <el-button type="primary" size="mini" @click="visible1 = false; SubmitAddForm">保存</el-button>
-          </el-form>
-        </div>
-      </el-popover>
     </div>
+
     <div class="results">
       <el-table
         v-loading='loading'
@@ -480,7 +483,7 @@
     padding: 10px;
   }
   .add-button{
-    float:right;
+    /*float:right;*/
   }
   .wd400{
     width: 100%;
