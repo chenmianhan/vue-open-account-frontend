@@ -100,8 +100,8 @@
                     <el-input v-model="modifyForm.contact_address_detail" class="wd400" style="padding-top: 10px" placeholder="详细地址"></el-input>
                   </el-form-item>
 
-                  <el-button size="mini" type="text" @click="visible = false">取消</el-button>
-                  <el-button type="primary" size="mini" @click="visible = false; submitModifyForm('modifyForm',scope.row)">保存</el-button>
+                  <el-button size="mini" type="text" @click="scope.row.visible = false">取消</el-button>
+                  <el-button type="primary" size="mini" @click="scope.row.visible = false; submitModifyForm('modifyForm',scope.row)">保存</el-button>
                 </el-form>
               </div>
               <el-button slot="reference" size="mini">修改</el-button>
@@ -136,7 +136,6 @@
 
         return {
           address: areajson,
-          visible : false,
 
           way: 'date',
 
@@ -176,7 +175,16 @@
             id_num:'510504199901010000',
             contact:'13300000101',
             address:'广东省广州市大学城',
-            date:'2019-01-01 00:00:00'
+            date:'2019-01-01 00:00:00',
+            visible : false,
+          },{
+            user_id:'2',
+            name:'张三',
+            id_num:'510504199901010000',
+            contact:'13300000101',
+            address:'广东省广州市大学城',
+            date:'2019-01-01 00:00:00',
+            visible : false,
           }],
 
           pickerOptions: {//日期选择器的快捷选项
@@ -267,10 +275,10 @@
                     end: this.dateValue[1]
                 }
                 var that = this;
-                console.log(this.$Qs.stringify(postData));
+                //console.log(this.$Qs.stringify(postData));
                 //向后端传输日期范围，后端返回该范围中所有审核通过用户信息对象列表
                 //一个对象元素对应一个用户信息
-                this.$axios.post('/api/admin/getUserByDate', this.$Qs.stringify(postData)
+                this.$axios.get('/api/admin/getUserByDate', postData
                 ).then(function(response){
                     console.log(response.data);
                     that.tableData = response.data;
@@ -298,10 +306,13 @@
                   username: this.state
               };
               var that = this;
-              console.log(this.$Qs.stringify(postData));
-              this.$axios.post('/api/admin/getUserByName', this.$Qs.stringify(postData)
+              //console.log(this.$Qs.stringify(postData));
+              this.$axios.get('/api/admin/getUserByName', postData
               ).then(function(response){
                   that.tableData = response.data;
+                  for(var i = 0; i < that.tableData.length; i++){
+                   that.tableData[i].visible = false;
+                 }
               }).catch(function(error){
                   console.log(error);
                   that.$msgbox({

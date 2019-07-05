@@ -133,7 +133,7 @@
 
           <el-popover
             placement="bottom"
-            v-model="visible2">
+            v-model="scope.row.visible2">
             <div style="text-align:center; width: 300px">
               <el-form ref="modifyForm" :model="modifyForm" :rules="rules" label-width="100px" size="mini">
                 <el-form-item label="管理员名称">
@@ -258,6 +258,7 @@ import area from '../../assets/js/area';
           this.currentPage = val;
           this.currentData = [];
           for(var i = (this.currentPage - 1) * this.pageSize; (i < this.currentPage * this.pageSize) && (i < this.length); i++){
+            this.tableData[i].visible2 = false;
             this.currentData.push(this.tableData[i]);
           }
         }},
