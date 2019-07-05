@@ -310,6 +310,9 @@
               this.$axios.post('/api/admin/getUserByName', this.$Qs.stringify(postData)
               ).then(function(response){
                   that.tableData = response.data;
+                  for(var i = 0; i < that.tableData.length; i++){
+                   that.tableData[i].visible = false;
+                 }
               }).catch(function(error){
                   console.log(error);
                   that.$msgbox({
