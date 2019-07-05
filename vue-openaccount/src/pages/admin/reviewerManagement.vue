@@ -1,15 +1,18 @@
 <template>
 <div>
     <div class="search-bar">
-      <div class="block">
-        <el-autocomplete
-            v-model="state"
-            :fetch-suggestions="querySearchAsync"
-            placeholder="请输入审核员姓名"
-            @select="handleSelect"
-          ></el-autocomplete>
-      </div>
-      <el-button icon="el-icon-search" @click="queryName" circle></el-button>
+      <el-row>
+        <div class="block">
+          <el-autocomplete
+              v-model="state"
+              :fetch-suggestions="querySearchAsync"
+              placeholder="请输入审核员姓名"
+              @select="handleSelect"
+            ></el-autocomplete>
+          <el-button icon="el-icon-search" @click="queryName" type="info" circle></el-button>
+          <el-button slot="reference" type="primary" size="small" @click="submitAddForm">添加</el-button>
+        </div>
+      </el-row>
     </div>
     <div class="add-button">
       <el-popover
@@ -31,7 +34,6 @@
             <el-button type="primary" size="mini" @click="visible1 = false; SubmitAddForm">保存</el-button>
           </el-form>
         </div>
-        <el-button slot="reference" type="primary" size="small" style="float: right; margin-right: 20px">添加</el-button>
       </el-popover>
     </div>
     <div class="results">
