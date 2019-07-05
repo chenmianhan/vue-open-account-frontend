@@ -85,9 +85,7 @@ export default {
     },
     mounted(){
         var that = this;
-        this.$axios.get('/api/getAccountInfo', {
-            params:{user_id: 17}
-        }).then(function(response){
+        this.$axios.get('/api/getAccountInfo').then(function(response){
             console.log(response.data);
             that.accountInfo = response.data.account_info;
             that.contactAddress = response.data.contact_address;

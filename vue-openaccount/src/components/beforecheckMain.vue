@@ -71,9 +71,9 @@ export default {
     }
   },
   mounted: function() {
-	if(sessionStorage.getItem('Flag') != 'isLogin'){
-		this.$router.push({path: '/403'});
-	}
+	// if(sessionStorage.getItem('Flag') != 'isLogin'){
+	// 	this.$router.push({path: '/403'});
+	// }
 
   },
   computed: {

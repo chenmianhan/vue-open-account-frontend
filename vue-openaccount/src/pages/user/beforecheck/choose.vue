@@ -17,7 +17,7 @@
     </el-steps>  
   </div>
     <el-divider><i class="el-icon-star-off"></i><i class="el-icon-star-off"></i><i class="el-icon-star-off"></i></el-divider>
-        <el-row>
+        <el-row style="width: 80%; margin: 0 auto;">
         <el-col :span="12">
         <div class="title">开通账户类型</div>
         <div class="check">
@@ -67,6 +67,21 @@ export default {
     },
     methods: {
         handleSubmit(){
+            console.log(this.accountType)
+            console.log(this.point)
+            if(this.accountType.length == 0){
+                this.$msgbox({
+                    message: "请选择账户类型",
+                    type:'error'
+                });
+                return;
+            }else if(this.point.length == 0){
+                this.$msgbox({
+                    message: '请选择网点',
+                    type: 'error'
+                });
+                return;
+            }
             this.$confirm("提交至审核员后不可修改，确认提交吗？", "提示", {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
@@ -104,11 +119,11 @@ export default {
     },
     mounted(){
         console.log(sessionStorage)
-        if(sessionStorage.getItem('Flag') != 'isLogin' 
-        || (sessionStorage.getItem('status') != '2' 
-        && sessionStorage.getItem('status') != '3')){
-            this.$router.push({path: '/403'});
-        }
+        // if(sessionStorage.getItem('Flag') != 'isLogin' 
+        // || (sessionStorage.getItem('status') != '2' 
+        // && sessionStorage.getItem('status') != '3')){
+        //     this.$router.push({path: '/403'});
+        // }
         this.getList();
     }
 }
