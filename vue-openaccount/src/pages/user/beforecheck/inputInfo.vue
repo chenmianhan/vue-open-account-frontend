@@ -326,7 +326,8 @@ import area from '../../../assets/js/area.js'
                   id_picture:that.infoForm.frontUrl,
                   id_card_inverse_side:that.infoForm.backUrl,
                   headshot:that.infoForm.headUrl,
-                  user_id: 1},
+                  // user_id: 1
+                  },
                 id_address: that.infoForm.id_address,
                 id_address_detail: that.infoForm.id_address_detail,
                 postal_address: that.infoForm.mail_address,

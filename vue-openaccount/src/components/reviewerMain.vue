@@ -44,8 +44,13 @@
                   {{reviewerName}} <i class="el-icon-caret-bottom"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
+<<<<<<< HEAD
                   <el-dropdown-item :disabled="true">{{netName}}</el-dropdown-item>
                   <el-dropdown-item command="loginout" icon="el-icon-switch-button" :divided="true">退出登录</el-dropdown-item>
+=======
+                  <el-dropdown-item :disabled='true'>{{netName}}</el-dropdown-item>
+                  <el-dropdown-item command="loginout" icon="el-icon-switch-button" :divided='true'>退出登录</el-dropdown-item>
+>>>>>>> b4f173cebb61ba6b29008e8e49ff1119025a1e1d
                 </el-dropdown-menu>
               </el-dropdown>
           </el-col>

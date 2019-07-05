@@ -11,7 +11,7 @@
           <span v-else class="system-name">{{systemName}}</span>
         </el-header>
         <el-main>
-          <el-menu :collapse="collapsed" background-color="#EBEEF5" router :default-active='onRoutes'>
+          <el-menu :collapse="collapsed" background-color="#F2F6FC" router :default-active='onRoutes'>
             <el-menu-item index="/superadmin/home">
               <i class="el-icon-notebook-1"></i>
               <span slot="title">用户管理</span>
@@ -146,7 +146,7 @@ export default {
   lang="scss">
 $width: 100%;
 $height: 100%;
-$background-color: #2b6aab;
+$background-color: #323740;
 $header-color: #fff;
 $header-height: 60px;
 

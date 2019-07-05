@@ -80,7 +80,7 @@
           <template slot-scope="scope">
             <el-popover
               placement="bottom"
-              v-model="visible">
+              v-model="scope.row.visible">
               <div style="text-align:center; width: 300px">
                 <el-form ref="modifyForm" :model="modifyForm" :rules="rules" label-width="100px" size="mini">
                   <el-form-item label="姓名" prop="name">

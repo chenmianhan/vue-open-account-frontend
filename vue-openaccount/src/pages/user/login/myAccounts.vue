@@ -242,9 +242,6 @@ export default {
     methods: {
         getData(){
             var that = this;
-            // const postData = {
-            //     user_id: 17
-            // }
             this.$axios.get('/api/account/accountDisplay').then(function(response){
                 console.log('response', response.data);
                 that.primaryAccount = response.data.primaryAccount;
@@ -277,7 +274,7 @@ export default {
         getTimeLine(){
             var that = this;
             const postData = {
-                user_id: 17
+                // user_id: 17
             };
             this.$axios.post('/api/timeline/get_timeline', postData).then(function(response){
                 // console.log(response.data);

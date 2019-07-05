@@ -92,7 +92,7 @@
           this.$refs[formName].validate((valid) => {
             if (valid) {
               const postData = {
-                user_id:1,
+                // user_id:1,
                 deposit_bank: that.bankForm.user_bank,
                 deposit_account: that.bankForm.bank_account,
                 deposit_password: that.bankForm.bank_password,
