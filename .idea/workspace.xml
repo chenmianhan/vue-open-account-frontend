@@ -46,13 +46,13 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="js" value="162" />
-          <entry key="vue" value="7420" />
+          <entry key="vue" value="7491" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="JavaScript" value="162" />
-          <entry key="Vue.js" value="7420" />
+          <entry key="Vue.js" value="7491" />
         </counts>
       </usages-collector>
     </session>
@@ -62,8 +62,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/vue-openaccount/src/pages/superAdmin/adminManagement.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="429">
-              <caret line="320" column="36" lean-forward="true" selection-start-line="320" selection-start-column="36" selection-end-line="320" selection-end-column="36" />
+            <state relative-caret-position="33">
+              <caret line="308" column="26" selection-start-line="308" selection-start-column="26" selection-end-line="308" selection-end-column="26" />
               <folding>
                 <element signature="n#style#0;n#el-form#0;n#div#0;n#div#0;n#template#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#div#0;n#el-popover#0;n#el-form-item#3;n#el-form#0;n#div#0;n#div#0;n#template#0;n#!!top" expanded="true" />
@@ -80,8 +80,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/vue-openaccount/src/pages/superAdmin/instituteManagement.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="668">
-              <caret line="386" column="16" lean-forward="true" selection-start-line="386" selection-start-column="16" selection-end-line="386" selection-end-column="16" />
+            <state relative-caret-position="488">
+              <caret line="221" column="12" selection-start-line="221" selection-start-column="12" selection-end-line="221" selection-end-column="12" />
               <folding>
                 <element signature="n#style#0;n#el-form#0;n#div#0;n#div#0;n#template#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#div#0;n#el-popover#0;n#el-form-item#2;n#el-form#0;n#div#0;n#div#0;n#template#0;n#!!top" expanded="true" />
@@ -92,6 +92,8 @@
                 <element signature="n#style#0;n#el-table#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#el-button#0;n#template#0;n#el-table-column#4;n#el-table#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#div#2;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="e#6802#7947#0" />
+                <element signature="e#7983#8796#0" />
                 <element signature="e#8819#10084#0" />
                 <element signature="e#10129#10415#0" />
                 <element signature="e#10457#10600#0" />
@@ -332,15 +334,15 @@
       <workItem from="1562207581591" duration="4495000" />
       <workItem from="1562220206156" duration="6547000" />
       <workItem from="1562288760250" duration="9601000" />
-      <workItem from="1562307098998" duration="5017000" />
+      <workItem from="1562307098998" duration="6552000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="107955000" />
+    <option name="totallyTimeSpent" value="109490000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1550" height="878" extended-state="6" />
+    <frame x="-7" y="-7" width="1550" height="878" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.20937912" />
@@ -604,8 +606,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/vue-openaccount/src/pages/superAdmin/instituteManagement.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="668">
-          <caret line="386" column="16" lean-forward="true" selection-start-line="386" selection-start-column="16" selection-end-line="386" selection-end-column="16" />
+        <state relative-caret-position="488">
+          <caret line="221" column="12" selection-start-line="221" selection-start-column="12" selection-end-line="221" selection-end-column="12" />
           <folding>
             <element signature="n#style#0;n#el-form#0;n#div#0;n#div#0;n#template#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#0;n#el-popover#0;n#el-form-item#2;n#el-form#0;n#div#0;n#div#0;n#template#0;n#!!top" expanded="true" />
@@ -616,6 +618,8 @@
             <element signature="n#style#0;n#el-table#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#el-button#0;n#template#0;n#el-table-column#4;n#el-table#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#2;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="e#6802#7947#0" />
+            <element signature="e#7983#8796#0" />
             <element signature="e#8819#10084#0" />
             <element signature="e#10129#10415#0" />
             <element signature="e#10457#10600#0" />
@@ -627,8 +631,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/vue-openaccount/src/pages/superAdmin/adminManagement.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="429">
-          <caret line="320" column="36" lean-forward="true" selection-start-line="320" selection-start-column="36" selection-end-line="320" selection-end-column="36" />
+        <state relative-caret-position="33">
+          <caret line="308" column="26" selection-start-line="308" selection-start-column="26" selection-end-line="308" selection-end-column="26" />
           <folding>
             <element signature="n#style#0;n#el-form#0;n#div#0;n#div#0;n#template#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#0;n#el-popover#0;n#el-form-item#3;n#el-form#0;n#div#0;n#div#0;n#template#0;n#!!top" expanded="true" />

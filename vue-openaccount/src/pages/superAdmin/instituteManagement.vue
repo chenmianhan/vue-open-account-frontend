@@ -89,6 +89,11 @@
         :data="currentData"
         style="width: 100%">
         <el-table-column
+          prop="security_id"
+          width="100px"
+          label="网点id">
+        </el-table-column>
+        <el-table-column
           prop="name"
           label="网点名称">
         </el-table-column>
@@ -166,6 +171,7 @@
           },
 
           instData:[{
+            security_id: '',
             name:'营业网点1',
             province:'广东',
             city:'广州',
@@ -262,7 +268,7 @@
           console.log(index, row);
           console.log(row.store);
           let postData = {
-            store:  row.store,
+            store:  row.security_id,
           };
           this.$confirm("确认删除该网点吗？", "提示", {
             confirmButtonText: '确定',
@@ -272,7 +278,7 @@
             this.$axios.post('/api/deleteStore', postData)//post也可以改成get，但需要对应服务端的请求方法
               .then(function (response) {
                 console.log(response);
-                //that.loadAllStore();
+                that.loadAllStore();
               })
               .catch(function (error) {
                 alert(error);
