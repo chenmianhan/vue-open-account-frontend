@@ -123,8 +123,8 @@
                 </el-form-item>
 
 
-                <el-button size="mini" type="text" @click="visible2 = false">取消</el-button>
-                <el-button type="primary" size="mini" @click="visible2 = false; submitModifyForm('modifyForm',scope.row)">保存</el-button>
+                <el-button size="mini" type="text" @click="scope.row.visible2 = false">取消</el-button>
+                <el-button type="primary" size="mini" @click="scope.row.visible2 = false; submitModifyForm('modifyForm',scope.row)">保存</el-button>
               </el-form>
             </div>
             <el-button slot="reference" size="mini">修改</el-button>
@@ -144,7 +144,6 @@
       data() {
         return {
           visible1: false,
-          visible2: false,
           loading: false,
 
           pickerOptions: {//日期选择器的快捷选项
@@ -173,6 +172,7 @@
             toReviewNum: '',
             reviewedNum: '',
             notPassNum: '',
+            visible2: false,
           }],
 
           modifyForm:{
@@ -263,6 +263,9 @@
           this.$axios.get('/api/admin/getReviewerInfo', params={reviewerId: item.address}
           ).then(function(response){
               that.tableData = response.data;
+              for(var i = 0; i < that.tableData.length; i++){
+                that.tableData[i].visible2 = false;
+              }
           }).catch(function(error){
               console.log(error);
               that.$msgbox({
