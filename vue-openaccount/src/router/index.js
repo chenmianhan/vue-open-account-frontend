@@ -72,6 +72,10 @@ export default new Router({
           //isLogin: true//需要登录
         },
         name: '选择银行'
+      },{
+        path: '/login/reviewInfo',
+        component: resolve => require(['../pages/user/beforecheck/reviewInfo.vue'], resolve),
+        name: '待审核资料'
       }]
     }, {
       path: '/user/home',
