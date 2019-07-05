@@ -189,12 +189,12 @@
       methods:{
         handleSizeChange(val){
           this.pageSize = val;
-          this.loadAllStore();
+          this.handleCurrentChange(1);
         },
         handleCurrentChange(val){{
           this.currentPage = val;
           this.currentData = [];
-          for(var i = (this.currentPage - 1) * this.pageSize; i < this.currentPage * this.pageSize; i++){
+          for(var i = (this.currentPage - 1) * this.pageSize; (i < this.currentPage * this.pageSize) && (i < this.length); i++){
             this.currentData.push(this.instData[i]);
           }
         }},
@@ -280,14 +280,15 @@
                 console.log(response.data);
                 that.instData = response.data;
                 that.length = that.instData.length;
-                if(that.length < that.pageSize){
-                  that.currentData = that.instData;
-                }else{
-                  that.currentData = [];
-                  for(var i = 0; i < that.pageSize; i++){
-                    that.currentData.push(that.instData[i]);
-                  }
-                }
+                // if(that.length < that.pageSize){
+                //   that.currentData = that.instData;
+                // }else{
+                //   that.currentData = [];
+                //   for(var i = 0; i < that.pageSize; i++){
+                //     that.currentData.push(that.instData[i]);
+                //   }
+                // }
+                that.handleCurrentChange(1);
             }).catch(function(error){
               console.log(error);
               that.$msgbox({
@@ -347,10 +348,11 @@
               that.loading = false;
             that.instData = response.data;
             that.length = that.instData.length;
-            that.currentData = [];
-            for(var i = 0; i < that.pageSize; i++){
-              that.currentData.push(that.instData[i]);
-            }
+            // that.currentData = [];
+            // for(var i = 0; i < that.pageSize; i++){
+            //   that.currentData.push(that.instData[i]);
+            // }
+            that.handleCurrentChange(1);
           }).catch(function(error){
             console.log(error);
             that.$msgbox({
