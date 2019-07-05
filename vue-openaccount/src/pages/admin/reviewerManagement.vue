@@ -9,7 +9,7 @@
             @select="handleSelect"
           ></el-autocomplete>
       </div>
-      <el-button icon="el-icon-search" circle></el-button>
+      <el-button icon="el-icon-search" @click="queryName" circle></el-button>
     </div>
     <div class="add-button">
       <el-popover
@@ -28,7 +28,7 @@
             </el-form-item>
 
             <el-button size="mini" type="text" @click="visible1 = false">取消</el-button>
-            <el-button type="primary" size="mini" @click="onSubmit">保存</el-button>
+            <el-button type="primary" size="mini" @click="visible1 = false; SubmitAddForm">保存</el-button>
           </el-form>
         </div>
         <el-button slot="reference" type="primary" size="small" style="float: right; margin-right: 20px">添加</el-button>
@@ -39,6 +39,8 @@
         v-loading='loading'
         :data="tableData"
         stripe
+        :row-key="getRowKeys"
+        :expand-row-keys="expands"
         ref="filterTable"
         :default-sort = "{prop: 'accTime', order: 'descending'}"
         style="width: 100%">
@@ -122,7 +124,7 @@
 
 
                 <el-button size="mini" type="text" @click="visible2 = false">取消</el-button>
-                <el-button type="primary" size="mini" @click="visible2 = false; submitAddForm('modifyForm',scope.row)">保存</el-button>
+                <el-button type="primary" size="mini" @click="visible2 = false; submitModifyForm('modifyForm',scope.row)">保存</el-button>
               </el-form>
             </div>
             <el-button slot="reference" size="mini">修改</el-button>
@@ -168,9 +170,9 @@
             account:'abc',
             password:'123456',
             dateValue:'',
-            toReviewNum: 0,
-            reviewedNum: 0,
-            notPassNum: 0,
+            toReviewNum: '',
+            reviewedNum: '',
+            notPassNum: '',
           }],
 
           modifyForm:{
@@ -185,6 +187,13 @@
             password:'',
           },
 
+          // 获取row的key值
+          getRowKeys(row) {
+            return row.reviewer_id;
+          },
+          // 要展开的行，数值的元素是row的key值
+          expands: [],
+
         };
       },
       methods: {
@@ -196,8 +205,8 @@
               };
               var that = this;
               console.log(this.$Qs.stringify(postData));
-              this.$axios.post('/api/admin/getReviewerByName', this.$Qs.stringify(postData)
-              ).then(function(response){
+              this.$axios.post('/api/admin/getReviewerByName',postData)
+              .then(function(response){
                   that.tableData = response.data;
               }).catch(function(error){
                   console.log(error);
@@ -251,7 +260,6 @@
         handleSelect(item) {
           console.log(item);
           var that = this;
-
           this.$axios.get('/api/admin/getReviewerInfo', params={reviewerId: item.address}
           ).then(function(response){
               that.tableData = response.data;
@@ -263,15 +271,6 @@
                   message: '获取审核员信息失败！'
               })
           })
-        },
-
-        onSubmit() {
-          this.visible1 = false; 
-          var that = this;
-          this.$axios.post('', that.addForm).then(function(response){
-            
-          })
-          console.log('submit!');
         },
 
         submitModifyForm(formName, row) {
@@ -356,28 +355,29 @@
             }
           });
         },
+
         handleClick(tab, event) {
           console.log(tab, event);
         },
 
         getReviewerInfo(row){//获取该审核员统计数据
-          console.log();
           if(this.tableData.dateValue != ''){
             var that = this;
             const postData = {
-              reviewer_id:row.reviewer_id,
+              reviewerId:row.reviewer_id,
               start: this.tableData.dateValue[0],
               end: this.tableData.dateValue[1]
             };
+            //console.log(row.toReviewNum);
             console.log(this.$Qs.stringify(postData));
-
             //向后端传输审核员的ID，后端返回审核员信息
-            this.$axios.post('/api/api/statisticData/getReviewerInfo', this.$Qs.stringify(postData)
+            this.$axios.post('/api/reviewer/getReviewerInfo', this.$Qs.stringify(postData)
             ).then(function(response) {
               console.log(response.data);
-              that.tableData.toReviewNum = response.data.toReviewNum;
-              that.tableData.reviewedNum = response.data.reviewedNum;
-              that.tableData.notPassNum = response.data.notPassNum;
+              row.toReviewNum = response.data.toReviewNum;
+              row.reviewedNum = response.data.reviewedNum;
+              row.notPassNum = response.data.notPassNum;
+              //that.tableData.notPassNum = response.data.notPassNum;
             }).catch(function(error){
               console.log(error);
               that.$msgbox({
@@ -386,11 +386,6 @@
                 message:'获取审核员信息和统计数据失败！'
               });
             });
-          }
-          else{
-            if(this.setDefaultDate()){
-              this.getReviewerInfo();
-            }
           }
         },
 
@@ -418,10 +413,52 @@
             });
           });
         },
+
+        checkRange(){//检查选择的日期范围
+
+          var end = new Date(this.tableData.dateValue[1]);
+          var start = new Date(this.tableData.dateValue[0]);
+          var now = new Date();
+
+          now.setTime(now.getTime());
+          var reg = new RegExp( '/' , "g" );
+          now = now.toLocaleDateString().replace(reg, '-');
+          var hintDate = now;
+          now += ' 23:59:59';
+          now = new Date(now);
+
+          var dateRange = end.getTime() - start.getTime();
+          var isBeyond = now.getTime() - end.getTime();
+          console.log(dateRange);
+          console.log(isBeyond);
+
+          if(isBeyond < 0){
+            this.$msgbox({
+              type:'error',
+              title: '超出范围',
+              message: '结束日期不能超过今天（' + hintDate + '），请重新选择！'
+            });
+            this.dateValue = '';
+            return false;
+          }else if (dateRange >= 3600 * 1000 * 24 * 7){
+            this.$msgbox({
+              type:'error',
+              title: '超出范围',
+              message: '所选日期范围不能超过一周，请重新选择！'
+            });
+            this.dateValue = '';
+            return false;
+          }else{
+            return true;
+          }
+        },
+
       },
 
       mounted(){
-
+        //console.log(this.expands);
+        //console.log(this.tableData[this.expands].reviewer_id);
+        //this.expands.push(this.tableData[this.expands].id);
         }
     }
 </script>

@@ -1,4 +1,10 @@
 <template>
+<!-- <div
+    v-loading='loading' 
+    element-loading-text="拼命加载中"
+    element-loading-spinner="el-icon-loading"
+    element-loading-background="rgba(0, 0, 0, 0.8)"
+> -->
 <div>
     <div class="account-box">
         <el-tabs v-model="accountName" @tab-click='handleClick'>
@@ -184,6 +190,7 @@ export default {
                 }
             };
         return {
+            loading: true,
             accountName: 'first',
             primaryAccount: data.primaryAccount,
             secondaryAccount: data.secondaryAccount,
@@ -235,9 +242,9 @@ export default {
     methods: {
         getData(){
             var that = this;
-            // const postData = {
-            //     user_id: 17
-            // }
+            const postData = {
+                user_id: 17
+            }
             this.$axios.get('/api/account/accountDisplay').then(function(response){
                 console.log('response', response.data);
                 that.primaryAccount = response.data.primaryAccount;
@@ -256,6 +263,7 @@ export default {
                 } else{
                     that.netPoint.s_netpoint = null;
                 }
+                that.loading = false;
                 // that.netPoint = response.data.netPoint;
             }).catch((error) => {
                 console.log(error);
@@ -294,6 +302,7 @@ export default {
                                     message: '添加账户成功',
                                     type: 'success'
                                 });
+                                that.addVisible = false;
                                 that.getData();
                         }).catch(() => {
                             that.$message({
@@ -302,7 +311,7 @@ export default {
                             });
                         });
                     }else{
-                        that.$message({
+                        this.$message({
                             message: '密码错误',
                             type:'error'
                         });
