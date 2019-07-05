@@ -49,7 +49,7 @@
           <el-col :span="3">
             <el-dropdown @command="handleCommand">
                 <span class="el-dropdown-link">
-                  {{adminName}} <i class="el-icon-caret-bottom"></i>
+                  {{superadminName}} <i class="el-icon-caret-bottom"></i>
                 </span>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item command="loginout" icon="el-icon-switch-button">退出登录</el-dropdown-item>
@@ -74,7 +74,7 @@ let data = () => {
   return {
     collapsed: false,
     systemName: '金证开户平台',
-    adminName: 'xx管理员'
+    superadminName: 'xx管理员'
   }
 }
 
@@ -117,7 +117,7 @@ export default {
 
     getSuperadminInfo(){
         var that = this;
-        this.$axios.post('/api/superadmin'
+        this.$axios.get('/api/superadmin'
         ).then(function(response){
             console.log(response.data);
             that.superadminName = response.data.superadminName;

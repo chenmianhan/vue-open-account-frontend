@@ -178,7 +178,7 @@
 export default {
     data(){
         return {
-            totalNum: 1,
+            totalNum: 0,
             currentPage: 1,
             pageSize: 8,
             filterCode: 0,
@@ -206,51 +206,27 @@ export default {
             targetUser:'',//搜索的目标用户名称
 
 
-            tableData: [{//表格用户对象列表
-                userName:'张三',
-                idCardNum:'510504199901010311',
-                idValDate:'yyyy-mm-dd 至 yyyy-mm-dd',
-                idInstitute: 'xx市xx区派出所',
-                userJob: '医生',
-                education: '大学',
-                email: 'xxx@123.com',
-                bankName: '工商银行',
-                bankCardNum: '48372614784591975',
-                accTime:'2000-01-01 00:00:00',
-                reviewStatus:'通过'
-            },{//表格用户对象列表
-                userName:'王五',
-                idCardNum:'510504199901010311',
-                idValDate:'yyyy-mm-dd 至 yyyy-mm-dd',
-                idInstitute: 'xx市xx区派出所',
-                userJob: '医生',
-                education: '大学',
-                email: 'xxx@123.com',
-                bankName: '工商银行',
-                bankCardNum: '48372614784591975',
-                accTime:'2000-01-01 00:00:00',
-                reviewStatus:'未通过'
-            },{//表格用户对象列表
-                userName:'李四',
-                idCardNum:'510504199901010311',
-                idValDate:'yyyy-mm-dd 至 yyyy-mm-dd',
-                idInstitute: 'xx市xx区派出所',
-                userJob: '医生',
-                education: '大学',
-                email: 'xxx@123.com',
-                bankName: '工商银行',
-                bankCardNum: '48372614784591975',
-                accTime:'2000-01-01 00:00:00',
-                reviewStatus:'通过'
-            }],
+            tableData: [],
              pickerOptions: {//日期选择器的快捷选项
                 shortcuts: [{
                         text: '最近一周',
                         onClick(picker) {
-                        const end = new Date();
-                        const start = new Date();
+                        var end = new Date();
+                        var start = new Date();
                         start.setTime(start.getTime() - 3600 * 1000 * 24 * 6);
                         end.setTime(end.getTime());
+
+                        var dateRange = new Array(start, end);
+                        var reg = new RegExp( '/' , "g" );
+                        dateRange[0] = dateRange[0].toLocaleDateString().replace(reg,'-');
+                        dateRange[1] = dateRange[1].toLocaleDateString().replace(reg,'-');
+                        dateRange[0] += ' 00:00:00';
+                        dateRange[1] += ' 23:59:59';
+
+                        this.dateValue = dateRange;
+                        start = this.dateValue[0];
+                        end = this.dateValue[1];
+
                         picker.$emit('pick', [start, end]);
                     }
                 }]
@@ -310,7 +286,7 @@ export default {
                     that.toReviewNum = response.data.toReviewNum;
                     that.reviewedNum = response.data.reviewedNum;
                     that.notPassNum = response.data.notPassNum;
-                    that.totalNum = that.reviewedNum + that.notPassNum;
+                    // that.totalNum = that.reviewedNum + that.notPassNum;
                 }).catch(function(error){
                     console.log(error);
                     that.$msgbox({
@@ -328,6 +304,8 @@ export default {
         },
 
         queryTable(){
+            this.tableData = [];
+            this.totalNum = 0;
             if(this.way=='date'){
                 this.getReviewerInfo();//更新审核员审核人数数据
                 this.queryDate();
@@ -338,6 +316,8 @@ export default {
 
         queryDate(){
             if(this.dateValue != ''){
+                this.tableData = [];
+                this.totalNum = 0;
                 console.log(this.dateValue);
                 const postData = {
                     start: this.dateValue[0],
@@ -352,6 +332,7 @@ export default {
                 //一个对象元素对应一个用户信息
                 this.$axios.post('/api/reviewer/getUserByDate', this.$Qs.stringify(postData)
                 ).then(function(response){
+                    console.log("queryDate");
                     console.log(response.data);
                     that.tableData = response.data;
                     if (that.filterCode == 0){
@@ -380,27 +361,29 @@ export default {
 
         queryName(){
            if (this.state != ''){
-              console.log(this.state);
-              const postData = {
-                username: this.state,
-                pageNum: this.currentPage,
-                size: this.pageSize,
-              };
-              var that = this;
-              console.log(this.$Qs.stringify(postData));
-              this.$axios.post('/api/reviewer/getUserByName', this.$Qs.stringify(postData)
-              ).then(function(response){
-                  that.tableData = response.data;
-                  that.totalNum = that.tableData.length;
-                  that.loading = false;
-              }).catch(function(error){
-                  console.log(error);
-                  that.$msgbox({
-                    type: 'error',
-                    title: '连接失败',
-                    message: '获取用户信息失败！'
-                  })
-              })
+                this.tableData = [];
+                this.totalNum = 0;
+                console.log(this.state);
+                const postData = {
+                    username: this.state,
+                    pageNum: this.currentPage,
+                    size: this.pageSize,
+                };
+                var that = this;
+                console.log(this.$Qs.stringify(postData));
+                this.$axios.post('/api/reviewer/getUserByName', this.$Qs.stringify(postData)
+                ).then(function(response){
+                    that.tableData = response.data;
+                    that.totalNum = that.tableData.length;
+                    that.loading = false;
+                }).catch(function(error){
+                    console.log(error);
+                    that.$msgbox({
+                        type: 'error',
+                        title: '连接失败',
+                        message: '获取用户信息失败！'
+                    })
+                })
            }
         //    else{
         //      this.$msgbox({
@@ -444,22 +427,24 @@ export default {
         },
 
         handleSelect(item) {
-          console.log(item.value);
-          console.log(item.address);
-          var that = this;
+            this.tableData = [];
+            this.totalNum == 0;
+            console.log(item.value);
+            console.log(item.address);
+            var that = this;
 
-          this.$axios.get('/api/reviewer/getUserInfoById', {params:{userId: item.address}}
-          ).then(function(response){
-              that.tableData = response.data;
-              that.totalNum = that.tableData.length;
-          }).catch(function(error){
-              console.log(error);
-              that.$msgbox({
-                  type: 'error',
-                  title:'连接失败',
-                  message: '获取用户信息失败！'
-              })
-          })
+            this.$axios.get('/api/reviewer/getUserInfoById', {params:{userId: item.address}}
+            ).then(function(response){
+                that.tableData = response.data;
+                that.totalNum = that.tableData.length;
+            }).catch(function(error){
+                console.log(error);
+                that.$msgbox({
+                    type: 'error',
+                    title:'连接失败',
+                    message: '获取用户信息失败！'
+                })
+            })
         },
 
         setDefaultDate(){//默认显示最近一周已审核用户信息
@@ -500,7 +485,7 @@ export default {
             var isBeyond = now.getTime() - end.getTime();
             console.log(dateRange);
             console.log(isBeyond);
-            
+
             if(isBeyond < 0){
                 this.$msgbox({
                     type:'error',
