@@ -12,7 +12,7 @@
                             :value="item.way">
                         </el-option>
                     </el-select>
-                <!-- 日期查询 -->
+                    <!-- 日期查询 -->
                     <div class='block' v-show="way == 'date'">
                         <el-date-picker
                             v-model="dateValue"
@@ -58,9 +58,6 @@
                                 <span>审核通过</span>
                             </div>
                     </el-col>
-                    <!-- <el-col :span='1'>
-                        <el-divider direction='vertical'></el-divider>
-                    </el-col> -->
                     <el-col :span="4">
                             <div class='show-text-item' style="color:maroon;">
                                 <el-row>{{ notPassNum }}</el-row>
@@ -148,23 +145,22 @@
                 <el-table-column prop="accTime" sortable label="开户时间">
                 </el-table-column>
                 <el-table-column
-                    prop="reviewStatu"
-                    column-key="reviewStatu"
+                    prop="reviewStatus"
+                    column-key="reviewStatus"
                     label="审核状态"
                     width="100"
                     :filters="[{ text: '通过', value: '通过' }, { text: '未通过', value: '未通过' }]"
                     filter-placement="bottom-end">
                     <template slot-scope="scope">
                         <el-tag
-                        :type="filterTagColor(scope.row.reviewStatu)"
-                        disable-transitions>{{scope.row.reviewStatu}}</el-tag>
+                        :type="filterTagColor(scope.row.reviewStatus)"
+                        disable-transitions>{{scope.row.reviewStatus}}</el-tag>
                     </template>
                 </el-table-column>
             </el-table>
         </div>
             <div class="page-block">
                 <el-pagination
-                :hide-on-single-page="true"
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
                 :current-page="currentPage"
@@ -220,7 +216,7 @@ export default {
                 bankName: '工商银行',
                 bankCardNum: '48372614784591975',
                 accTime:'2000-01-01 00:00:00',
-                reviewStatu:'通过'
+                reviewStatus:'通过'
             },{//表格用户对象列表
                 userName:'王五',
                 idCardNum:'510504199901010311',
@@ -232,7 +228,7 @@ export default {
                 bankName: '工商银行',
                 bankCardNum: '48372614784591975',
                 accTime:'2000-01-01 00:00:00',
-                reviewStatu:'未通过'
+                reviewStatus:'未通过'
             },{//表格用户对象列表
                 userName:'李四',
                 idCardNum:'510504199901010311',
@@ -244,7 +240,7 @@ export default {
                 bankName: '工商银行',
                 bankCardNum: '48372614784591975',
                 accTime:'2000-01-01 00:00:00',
-                reviewStatu:'通过'
+                reviewStatus:'通过'
             }],
              pickerOptions: {//日期选择器的快捷选项
                 shortcuts: [{
@@ -264,14 +260,16 @@ export default {
 
     methods: {
         handleFilterChange(filters){
-            console.log(this.filterValues);
-            if (filters.reviewStatu.length == 2){
+            console.log(this.filters);
+            if (filters.reviewStatus.length == 2){
                 this.filterCode = 0;
             }else{
-                if (filters.reviewStatu[0] == '通过'){
+                if (filters.reviewStatus[0] == '通过'){
                     this.filterCode = 1;
-                }else{
+                }else if (filters.reviewStatus[0] == '未通过'){
                     this.filterCode = 2;
+                }else{
+                    this.filterCode = 0;
                 }
             }
             this.queryTable();
@@ -304,6 +302,7 @@ export default {
                     that.toReviewNum = response.data.toReviewNum;
                     that.reviewedNum = response.data.reviewedNum;
                     that.notPassNum = response.data.notPassNum;
+                    that.totalNum = that.reviewedNum + that.notPassNum;
                 }).catch(function(error){
                     console.log(error);
                     that.$msgbox({
@@ -346,7 +345,14 @@ export default {
                 this.$axios.post('/api/reviewer/getUserByDate', this.$Qs.stringify(postData)
                 ).then(function(response){
                     console.log(response.data);
-                    that.tableData = response.data.tableData;
+                    that.tableData = response.data;
+                    if (that.filterCode == 0){
+                        that.totalNum = that.reviewedNum + that.notPassNum;
+                    }else if (that.filterCode == 1){
+                        that.totalNum = that.reviewedNum;
+                    }else if (that.filterCode == 2){
+                        that.totalNum = that.notPassNum;
+                    }
                     that.loading = false;
                 }).catch(function(error){
                     console.log(error);
@@ -377,6 +383,7 @@ export default {
               this.$axios.post('/api/reviewer/getUserByName', this.$Qs.stringify(postData)
               ).then(function(response){
                   that.tableData = response.data;
+                  that.totalNum = that.tableData.length;
               }).catch(function(error){
                   console.log(error);
                   that.$msgbox({
@@ -397,9 +404,10 @@ export default {
         loadAll(){
           var that = this;
           //后端传回用户姓名和ID对应的列表
-          this.$axios.get('/api/reviewer/getUserId'
+          this.$axios.post('/api/reviewer/getUserId'
           ).then(function(response){
-              this.username = response.data;
+              console.log(response);
+              that.username = response.data;
           }).catch(function(error){
               console.log(error);
               that.$msgbox({
@@ -427,10 +435,11 @@ export default {
         },
 
         handleSelect(item) {
-          console.log(item);
+          console.log(item.value);
+          console.log(item.address);
           var that = this;
 
-          this.$axios.get('/api/reviewer/getUserInfo', params={userId: item.address}
+          this.$axios.get('/api/reviewer/getUserInfoById', {params:{userId: item.address}}
           ).then(function(response){
               that.tableData = response.data;
           }).catch(function(error){
@@ -507,19 +516,22 @@ export default {
             console.log(`每页 ${val} 条`);
             this.pageSize = val;
             console.log(this.pageSize);
+            this.queryTable();
         },
 
         handleCurrentChange(val) {
             console.log(`当前页: ${val}`);
             this.currentPage = val;
             console.log(this.currentPage);
+            this.queryTable();
         }
     },
 
     mounted(){
         this.setDefaultDate();
         this.getReviewerInfo();
-        this.queryTable(); 
+        this.queryTable();
+        this.username = this.loadAll(); 
     }
 }
 </script>
@@ -582,5 +594,6 @@ export default {
 
     .page-block {
         margin-top: 40px;
+        margin-bottom: 40px;
     }
 </style>
