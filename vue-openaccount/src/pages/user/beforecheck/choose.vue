@@ -17,7 +17,7 @@
     </el-steps>  
   </div>
     <el-divider><i class="el-icon-star-off"></i><i class="el-icon-star-off"></i><i class="el-icon-star-off"></i></el-divider>
-        <el-row>
+        <el-row style="width: 80%; margin: 0 auto;">
         <el-col :span="12">
         <div class="title">开通账户类型</div>
         <div class="check">
