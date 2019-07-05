@@ -40,7 +40,7 @@
             @select="handleSelect"
           ></el-autocomplete>
         </div>
-        <el-button @click="queryTable" icon="el-icon-search" circle></el-button>
+        <el-button @click="queryTable" icon="el-icon-search" type="info" circle></el-button>
         </div>
       </div>
       <div class="results">
