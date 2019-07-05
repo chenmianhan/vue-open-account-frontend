@@ -35,7 +35,7 @@
                                 </el-card>
                             </el-col>
                             <el-col :span='6'>
-                                <el-button size="small" type="danger" round style="margin: 50px 0;" @click="handleDelete(item.id)">删 除</el-button>
+                                <el-button size="small" type="danger" round style="margin: 50px 0;" @click="handleDelete(item)">删 除</el-button>
                             </el-col>
                         </el-row>
                     </div>
@@ -135,14 +135,15 @@
             <el-input size="small" :disabled="true" v-model="withdrawForm.cardID" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item label="提现金额" :label-width="formLabelWidth" prop="value">
-            <el-input size="small" v-model="withdrawForm.value" autocomplete="off"></el-input>
+            <el-input size="small" v-model="withdrawForm.value" autocomplete="off">
+            <el-button slot="append" @click="allWithdraw(withdrawForm.account)">全部提现</el-button></el-input>
             </el-form-item>
             <el-form-item label="账户密码" :label-width="formLabelWidth" prop="password">
             <el-input size="small" type="password" v-model="withdrawForm.password" autocomplete="off"></el-input>
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-            <el-button @click="withdrawVisible = false" size="small" >取 消</el-button>
+            <el-button @click="withdrawVisible = false;  withdrawForm.value = ''" size="small" >取 消</el-button>
             <el-button type="primary" @click="withdrawOK(withdrawForm.account)" size="small">确 定</el-button>
         </div>
         </el-dialog>
@@ -201,12 +202,12 @@ export default {
             visible: false,
             withdrawForm: {
                 cardID: '',
-                value: 0,
+                value: '',
                 password: ''
             },
             rechargeForm: {
                 cardID: '',
-                value: 0,
+                value: '',
                 password: ''
             },
             addForm: {
@@ -240,6 +241,9 @@ export default {
         }
     },
     methods: {
+        allWithdraw(item){
+            this.withdrawForm.value = item.balance.balance;
+        },
         getData(){
             var that = this;
             this.$axios.get('/api/account/accountDisplay').then(function(response){
@@ -379,19 +383,28 @@ export default {
             this.withdrawForm.account = account;
             this.withdrawVisible = true;
         },
-        handleDelete(index){
+        handleDelete(item){
             // console.log(index);
             var that = this;
+            if(item.balance.balance > 0){
+                this.$confirm('您的账户还有余额，请全部提现！', "警告", {
+                    confirmButtonText: '去提现',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.handleWithdraw(item);
+                })
+                return;
+            }
             this.$confirm('此操作将永久删除此账号，是否继续？', "警告", {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
                 // console.log(index);
-                const postData = {
-                    id: parseInt(index)
-                }
-                this.$axios.post('/api/account/deleteFundAccount', postData).then(function(response){
+                this.$axios.get('/api/account/deleteFundAccount', {
+                    params: {id: item.id}
+                }).then(function(response){
                     // that.secondaryAccount.splice(index,1);
                     that.getData();
                     that.$message({
