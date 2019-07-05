@@ -45,7 +45,8 @@
                   {{userName}} <i class="el-icon-caret-bottom"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item command="loginout">退出登录</el-dropdown-item>
+                  <el-dropdown-item disabled: true>{{netName}}</el-dropdown-item>
+                  <el-dropdown-item command="loginout" icon="el-icon-switch-button" divided:true>退出登录</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
           </el-col>
@@ -67,7 +68,8 @@ let data = () => {
   return {
     collapsed: false,
     systemName: '金证开户平台',
-    userName: 'xx用户'
+    userName: 'xx用户',
+    netName: 'xx营业网点'
   }
 }
 
@@ -107,7 +109,24 @@ export default {
                 })
             })
         }
-    }
+    },
+
+    getUserInfo(){
+        var that = this;
+        this.$axios.post('/api/user'
+        ).then(function(response){
+            console.log(response.data);
+            that.netName = response.data.netName;
+            that.username = response.data.username;
+        }).catch(function(error){
+            console.log(error);
+            that.$msgbox({
+              type:'error',
+              title: '连接失败',
+              message:'获取用户信息失败'
+            })
+        })
+    },
   },
   mounted: function() {
         console.log(sessionStorage);
