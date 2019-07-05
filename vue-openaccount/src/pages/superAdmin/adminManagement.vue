@@ -275,6 +275,7 @@ import area from '../../assets/js/area';
                 name: that.addForm.name,
                 account: that.addForm.account,
                 password: that.addForm.password,
+                store: that.addForm.store[2],
               };
 
               // var that = this;
@@ -306,20 +307,17 @@ import area from '../../assets/js/area';
 
         submitModifyForm(formName) {
           var that = this;
-          this.$refs[formName].validate((valid) => {
-            // console.log(valid);
-            if (valid) {
               const postData = {
                 name: that.modifyForm.name,
                 account: that.modifyForm.account,
                 password: that.modifyForm.password,
+                store: that.modifyForm.store[2],
               };
-
-              // var that = this;
               console.log(postData);
               this.$axios.post('/api/superadmin/modifyAdmin', postData)
                 .then(function (response) {
                   console.log(response);
+                  that.loadAllAdmin();
                   that.$msgbox({
                     title: '修改成功',
                     type: 'succeed'
@@ -331,15 +329,7 @@ import area from '../../assets/js/area';
                     type: 'error'
                   });
                 });
-            } else {
-              this.$msgbox({
-                message: '表单格式有误',
-                type: 'error'
-              });
-              // console.log('error submit!!');
-              return false;
-            }
-          });
+
         },
 
         handleDelete(index, row) {
@@ -347,6 +337,7 @@ import area from '../../assets/js/area';
           const postData = {
             admin_id:  row.admin_id,
           };
+          var that = this;
           this.$confirm("确认删除该管理员吗？", "提示", {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
@@ -355,6 +346,7 @@ import area from '../../assets/js/area';
             this.$axios.post('/api/superadmin/deleteAdmin', postData)//post也可以改成get，但需要对应服务端的请求方法
               .then(function (response) {
                 console.log(response);
+                that.loadAllAdmin();
               })
               .catch(function (error) {
                 alert(error);
@@ -427,7 +419,7 @@ import area from '../../assets/js/area';
               admin_name: this.admin_name
             };
             var that = this;
-            this.$axios.post('/api/admin/getAdminByName', postData)
+            this.$axios.post('/api/superadmin/getAdminByName', postData)
             .then(function(response){
               that.tableData = response.data;
               that.length = that.tableData.length;

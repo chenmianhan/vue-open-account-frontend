@@ -89,6 +89,11 @@
         :data="currentData"
         style="width: 100%">
         <el-table-column
+          prop="security_id"
+          width="100px"
+          label="网点id">
+        </el-table-column>
+        <el-table-column
           prop="name"
           label="网点名称">
         </el-table-column>
@@ -157,6 +162,8 @@
 
           store:'',
 
+          vals:[],
+
           addForm:{
             store:'',
             address:'',
@@ -164,6 +171,7 @@
           },
 
           instData:[{
+            security_id: '',
             name:'营业网点1',
             province:'广东',
             city:'广州',
@@ -202,11 +210,27 @@
           // console.log(file, fileList);
         },
 
+        getCascaderObj(val,opt) {
+          return val.map(function (value, index, array) {
+            for (var itm of opt) {
+              if (itm.value == value) { opt = itm.children; return itm; }
+            }
+            return null;
+          });
+        },
+
         submitAddForm(formName) {
           this.addForm.address.splice(2,1);
+          this.vals = this.getCascaderObj(this.addForm.address, this.address);
+          var temp = [];
+          for (var i = 0; i < this.vals.length; i++){
+            temp[i] = this.vals[i].label;
+          };
+          this.addForm.address = temp;
           var that = this;
           this.$refs[formName].validate((valid) => {
             if (valid) {
+
               const postData = {
                 store: that.addForm.store,
                 address: that.addForm.address,
@@ -244,14 +268,14 @@
           console.log(index, row);
           console.log(row.store);
           let postData = {
-            store:  row.store,
+            store:  row.security_id,
           };
           this.$confirm("确认删除该网点吗？", "提示", {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            this.$axios.post('/api/superadmin/deleteStore', postData)//post也可以改成get，但需要对应服务端的请求方法
+            this.$axios.post('/api/deleteStore', postData)//post也可以改成get，但需要对应服务端的请求方法
               .then(function (response) {
                 console.log(response);
                 that.loadAllStore();
@@ -362,6 +386,7 @@
             })
           })
         },
+
       },
 
       mounted(){
