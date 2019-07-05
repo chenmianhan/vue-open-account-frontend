@@ -44,8 +44,8 @@
                   {{reviewerName}} <i class="el-icon-caret-bottom"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item disabled: true>{{netName}}</el-dropdown-item>
-                  <el-dropdown-item command="loginout" icon="el-icon-switch-button" divided:true>退出登录</el-dropdown-item>
+                  <el-dropdown-item disabled=true>{{netName}}</el-dropdown-item>
+                  <el-dropdown-item command="loginout" icon="el-icon-switch-button" divided=true>退出登录</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
           </el-col>
@@ -83,9 +83,9 @@ export default {
             this.$axios.post('/api/logout'
             ).then(function(response){
                 if(response.data.code == '104'){
-                    localStorage.removeItem('ms_username');
-                    localStorage.removeItem('Flag');
-                    localStorage.removeItem('Role');
+                    sessionStorage.removeItem('ms_username');
+                    sessionStorage.removeItem('Flag');
+                    sessionStorage.removeItem('Role');
                     that.$router.push('/login');
                 }else if (response.data.code == '105'){
                     that.$msgbox({

@@ -442,6 +442,7 @@ export default {
           this.$axios.get('/api/reviewer/getUserInfoById', {params:{userId: item.address}}
           ).then(function(response){
               that.tableData = response.data;
+              that.totalNum = that.tableData.length;
           }).catch(function(error){
               console.log(error);
               that.$msgbox({
