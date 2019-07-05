@@ -29,7 +29,7 @@
       <!--页眉-->
       <el-header class="header">
         <el-row>
-          <el-col :span="18" class="header-title">
+          <el-col :span="20" class="header-title">
             <span v-if="collapsed" class="system-name">{{systemName}}</span>
             <span v-else class="menu-button" @click.prevent="collapsed=!collapsed">
               <i class="el-icon-s-fold"></i>
@@ -44,8 +44,8 @@
                   {{adminName}} <i class="el-icon-caret-bottom"></i>
                 </span>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item disabled="true">{{netName}}</el-dropdown-item>
-                <el-dropdown-item command="loginout">退出登录</el-dropdown-item>
+                <el-dropdown-item disabled: true>{{netName}}</el-dropdown-item>
+                <el-dropdown-item command="loginout" icon="el-icon-switch-button" divided:true>退出登录</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
           </el-col>
@@ -126,7 +126,7 @@ export default {
     },
   },
   mounted: function() {
-      //this.getAdminInfo();
+      this.getAdminInfo();
   },
   computed: {
     onRoutes(){
