@@ -275,10 +275,10 @@
                     end: this.dateValue[1]
                 }
                 var that = this;
-                console.log(this.$Qs.stringify(postData));
+                //console.log(this.$Qs.stringify(postData));
                 //向后端传输日期范围，后端返回该范围中所有审核通过用户信息对象列表
                 //一个对象元素对应一个用户信息
-                this.$axios.post('/api/admin/getUserByDate', this.$Qs.stringify(postData)
+                this.$axios.get('/api/admin/getUserByDate', postData
                 ).then(function(response){
                     console.log(response.data);
                     that.tableData = response.data;
@@ -306,8 +306,8 @@
                   username: this.state
               };
               var that = this;
-              console.log(this.$Qs.stringify(postData));
-              this.$axios.post('/api/admin/getUserByName', this.$Qs.stringify(postData)
+              //console.log(this.$Qs.stringify(postData));
+              this.$axios.get('/api/admin/getUserByName', postData
               ).then(function(response){
                   that.tableData = response.data;
                   for(var i = 0; i < that.tableData.length; i++){

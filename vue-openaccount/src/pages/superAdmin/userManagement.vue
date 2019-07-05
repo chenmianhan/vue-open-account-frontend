@@ -87,8 +87,8 @@
                     <el-input v-model="modifyForm.contact_address_detail" class="wd400" style="padding-top: 10px" placeholder="详细地址"></el-input>
                   </el-form-item>
 
-                  <el-button size="mini" type="text" @click="visible = false">取消</el-button>
-                  <el-button type="primary" size="mini" @click="visible = false; submitModifyForm('modifyForm',scope.row)">保存</el-button>
+                  <el-button size="mini" type="text" @click="scope.row.visible = false">取消</el-button>
+                  <el-button type="primary" size="mini" @click="scope.row.visible = false; submitModifyForm('modifyForm',scope.row)">保存</el-button>
                 </el-form>
               </div>
               <el-button slot="reference" size="mini">修改</el-button>
@@ -141,7 +141,7 @@
         return {
           searchForm: {},
           address: areajson,
-          visible : false,
+
           /*props: { multiple: true },*/
 
           Net:[],
@@ -161,6 +161,7 @@
             id_num:'123466876878987',
             contact_address:'北京市xx区',
             contact:'2435465767453',
+            visible : false,
           }],
 
           userData:[],
@@ -252,6 +253,9 @@
             .then(function (response) {
               //将返回的数据存入页面中声明的data中
               that.userData = response.data;
+              for(var i = 0; i < that.tableData.length; i++){
+                that.tableData[i].visible = false;
+              }
             })
             .catch(function (error) {
               alert(error);
