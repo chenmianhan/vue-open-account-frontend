@@ -162,7 +162,7 @@
                 <el-button type="primary" size="mini" @click="visible2 = false; submitModifyForm('modifyForm', scope.row)">保存</el-button>
               </el-form>
             </div>
-            <el-button slot="reference" size="mini">修改</el-button>
+            <el-button slot="reference" size="mini" @click="handleForm(scope.row)">修改</el-button>
           </el-popover>
 
           <el-button type="danger" size="mini" style="margin-left: 15px" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
@@ -268,6 +268,11 @@ import area from '../../assets/js/area';
         }},
         handleChange(file, fileList) {
           // console.log(file, fileList);
+        },
+
+        handleForm(row){
+          this.modifyForm.name = row.name;
+          this.modifyForm.account = row.account;
         },
 
         submitAddForm(formName) {
