@@ -81,7 +81,7 @@ export default {
 	if(sessionStorage.getItem('Flag') != 'isLogin'){
 		this.$router.push({path: '/403'});
 	}
-  this.isValid();
+  // this.isValid();
   },
   computed: {
     onRoutes(){
