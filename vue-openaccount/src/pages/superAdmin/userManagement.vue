@@ -38,8 +38,7 @@
             checkStrictly
             v-model="point"
             props.expandTrigger="hover"
-            :show-all-levels='false'
-            class="wd400">
+            :show-all-levels='false'>
           </el-cascader>
         </el-form-item>
 

@@ -170,8 +170,8 @@
 
           tableData:[{//表格审核员对象列表
             reviewer_id:'1',
-            name:'whatever',
-            account:'abc',
+            name:'小红',
+            account:'xiaohong',
             password:'123456',
             dateValue:'',
             toReviewNum: '',
