@@ -24,8 +24,8 @@
             <el-checkbox-group v-model="accountType">
                 <el-checkbox :label=0 border>沪市基金账户</el-checkbox>
                 <el-checkbox :label=1 border>深市基金账户</el-checkbox><br>
-                <el-checkbox :label=2 border>沪市A股账户</el-checkbox>
-                <el-checkbox :label=3 border>深市A股账户</el-checkbox>
+                <!-- <el-checkbox :label=2 border>沪市A股账户</el-checkbox>
+                <el-checkbox :label=3 border>深市A股账户</el-checkbox> -->
             </el-checkbox-group>
         </div>
         </el-col>
@@ -119,11 +119,11 @@ export default {
     },
     mounted(){
         console.log(sessionStorage)
-        // if(sessionStorage.getItem('Flag') != 'isLogin' 
-        // || (sessionStorage.getItem('status') != '2' 
-        // && sessionStorage.getItem('status') != '3')){
-        //     this.$router.push({path: '/403'});
-        // }
+        if(sessionStorage.getItem('Flag') != 'isLogin' 
+        || (sessionStorage.getItem('status') != '2' 
+        && sessionStorage.getItem('status') != '3')){
+            this.$router.push({path: '/403'});
+        }
         this.getList();
     }
 }

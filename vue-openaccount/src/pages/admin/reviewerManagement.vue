@@ -503,9 +503,9 @@
     display: inline-block;
     padding: 10px;
   }
-  .add-button{
+  /* .add-button{
     /*float:right;*/
-  }
+  /* }  */
   .wd400{
     width: 100%;
   }

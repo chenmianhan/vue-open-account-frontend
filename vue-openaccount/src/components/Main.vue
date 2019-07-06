@@ -127,6 +127,12 @@ export default {
             })
         })
     },
+    isValid(){
+      var that = this;
+      this.$axios.post('/api/checkInvalid').then(function(response){
+        console.log(response);
+      })
+    }
   },
   mounted: function() {
         console.log(sessionStorage);
@@ -134,6 +140,7 @@ export default {
         || sessionStorage.getItem('status') != '7'){
             this.$router.push({path: '/403'});
         }
+        this.isValid();
         this.getUserInfo();
   },
   computed: {
