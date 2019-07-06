@@ -124,9 +124,23 @@ export default {
             })
         })
     },
+    isValid(){
+      var that = this;
+      this.$axios.post('/api/checkInvalid').then(function(response){
+        if(response.data == '801'){
+          this.$message({
+            message: '登录超时，请重新登录！',
+            type: 'error'
+          });
+          this.$router.push({path: '/login'});
+        }
+      });
+    }
+
   },
   mounted: function() {
       this.getAdminInfo();
+      this.isValid();
   },
   computed: {
     onRoutes(){

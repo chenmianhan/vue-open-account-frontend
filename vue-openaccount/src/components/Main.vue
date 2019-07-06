@@ -130,9 +130,16 @@ export default {
     isValid(){
       var that = this;
       this.$axios.post('/api/checkInvalid').then(function(response){
-        console.log(response);
-      })
+        if(response.data == '801'){
+          this.$message({
+            message: '登录超时，请重新登录！',
+            type: 'error'
+          });
+          this.$router.push({path: '/login'});
+        }
+      });
     }
+
   },
   mounted: function() {
         console.log(sessionStorage);
