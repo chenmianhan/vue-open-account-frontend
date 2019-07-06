@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="search-bar">
-      <el-form :inline="true" :model="searchForm" size="medium" style="margin-top:20px;">
+      <!--<el-form :inline="true" :model="searchForm" size="medium" style="margin-top:20px;">
         <el-form-item label="选择网点">
           <el-cascader
             placeholder="所属营业网点"
@@ -18,6 +18,36 @@
         </el-form-item>
         <el-form-item>
           <el-button icon="el-icon-search" circle type="primary" @click="handleSearch"></el-button>
+        </el-form-item>
+      </el-form>-->
+      <el-form :inline="true"  size="medium" style="margin-top:20px;">
+
+        <el-select v-model="way" placeholder="请选择">
+          <el-option
+            v-for="item in wayOptions"
+            :key="item.way"
+            :label="item.label"
+            :value="item.way">
+          </el-option>
+        </el-select>
+
+        <el-form-item v-show="way == 'store'">
+          <el-cascader
+            placeholder="所属营业网点"
+            :options="Net"
+            checkStrictly
+            v-model="point"
+            props.expandTrigger="hover"
+            :show-all-levels='false'
+            class="wd400">
+          </el-cascader>
+        </el-form-item>
+
+        <el-form-item v-show="way == 'uname'">
+          <el-input v-model="user_name" placeholder="输入用户姓名"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button icon="el-icon-search" @click="queryUser" circle type="primary"></el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -43,10 +73,10 @@
           prop="contact_address"
           label="联系地址">
         </el-table-column>
-      <el-table-column
+      <!--<el-table-column
         prop="contact"
         label="联系方式">
-      </el-table-column>
+      </el-table-column>-->
       <el-table-column
         prop="apply_time"
         width="100px"
@@ -141,13 +171,28 @@
         return {
           searchForm: {},
           address: areajson,
-
           /*props: { multiple: true },*/
+          loading: true,
+          currentPage: 1,
+          pageSize: 8,
+          length: 0,
+          currentData: [],
 
           Net:[],
-
           input:'',
+
+          way: 'store',
+          wayOptions:[{
+            way: 'store',
+            label:'按营业网点查询',
+          },{
+            way:'uname',
+            label:'按用户姓名查询',
+          }],
+
           point: '',
+          user_name:'',
+
           modifyForm:{
             name:'',
             idNum:'',
@@ -164,7 +209,6 @@
             visible : false,
           }],
 
-          userData:[],
 
           rules: {
             name: [
@@ -247,20 +291,85 @@
           });
         },
 
-        querytable(){
-          var that = this;
-          this.$axios.get('/api/admin/getAllUsers')//post也可以改成get，但需要对应服务端的请求方法
-            .then(function (response) {
-              //将返回的数据存入页面中声明的data中
-              that.userData = response.data;
-              for(var i = 0; i < that.tableData.length; i++){
-                that.tableData[i].visible = false;
-              }
-            })
-            .catch(function (error) {
-              alert(error);
-            });
+        queryUser(){
+          if(this.way=='store'){
+            this.queryStore();
+          }else if (this.way=='name'){
+            this.queryName();
+          }
         },
+
+        queryStore(){
+          if (this.point != ''){
+            console.log(this.point[2]);
+            const postData = {
+              store: this.point[2],
+            };
+            var that = this;
+            this.$axios.post('/api/superadmin/getUserByStore', postData)
+              .then(function(response){
+                that.tableData = response.data;
+
+                that.length = that.tableData.length;
+                that.handleCurrentChange(1);
+              }).catch(function(error){
+              console.log(error);
+              that.$msgbox({
+                type: 'error',
+                title: '连接失败',
+                message: '获取管理员信息失败！'
+              })
+            })
+          }else{
+            this.$msgbox({
+              type: 'info',
+              title: '信息不完全',
+              message: '请输入你想要搜索的网点名称！'
+            })
+          }
+        },
+
+        queryName(){
+          if (this.user_name != ''){
+            console.log(this.user_name);
+            const postData = {
+              user_name: this.user_name
+            };
+            var that = this;
+            this.$axios.post('/api/superadmin/getUserByName', postData)
+              .then(function(response){
+                that.tableData = response.data;
+                that.length = that.tableData.length;
+                that.handleCurrentChange(1);
+              }).catch(function(error){
+              console.log(error);
+              that.$msgbox({
+                type: 'error',
+                title: '连接失败',
+                message: '获取用户信息失败！'
+              })
+            })
+          }else{
+            this.$msgbox({
+              type: 'info',
+              title: '信息不完全',
+              message: '请输入你想要搜索的管理员姓名！'
+            })
+          }
+        },
+
+        handleSizeChange(val){
+          this.pageSize = val;
+          this.handleCurrentChange(1);
+        },
+        handleCurrentChange(val){{
+          this.currentPage = val;
+          this.currentData = [];
+          for(var i = (this.currentPage - 1) * this.pageSize; (i < this.currentPage * this.pageSize) && (i < this.length); i++){
+            this.tableData[i].visible = false;
+            this.currentData.push(this.tableData[i]);
+          }
+        }},
 
         getList(){
           var that = this;
@@ -270,24 +379,6 @@
           console.log('get list');
         },
 
-        // getSZList(){
-        //   var that = this;
-        //   this.$axios.get('/api/security/get_securityall').then(function(response){
-        //     that.szNet = [];
-        //     that.szNet = response.data;
-        //     for(var i = 0; i < that.szNet.length; i++){
-        //       for(var j = 0; j < that.szNet[i].children.length; j++){
-        //         for(var t = 0; t < that.szNet[i].children[j].children.length; t++){
-        //           if(that.szNet[i].children[j].children[t].type != '1'){
-        //             that.szNet[i].children[j].children.splice(t,1);
-        //             t--;
-        //           }
-        //         }
-        //       }
-        //     }
-        //   });
-        //   console.log('get sz list');
-        // },
         handleSearch(){
           var that = this;
           var postData = {
