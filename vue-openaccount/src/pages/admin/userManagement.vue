@@ -2,7 +2,8 @@
   <div>
     <div class="search-bar">
       <div class="block">
-        <el-select v-model="way" placeholder="请选择">
+        <el-select @change="handleSelectChange"
+        v-model="way" placeholder="请选择">
           <el-option
             v-for="item in wayOptions"
             :key="item.way"
@@ -45,6 +46,7 @@
       </div>
       <div class="results">
         <el-table
+        v-loading='loading'
         :data="tableData"
         style="width: 100%">
         <el-table-column
@@ -199,6 +201,13 @@
         };
       },
       methods: {
+          handleSelectChange(){
+              this.tableData = [];
+              this.totalNum = 0;
+
+              this.queryTable();
+          },
+
           setDefaultDate(){//默认显示最近一周已审核用户信息
               const end = new Date();
               const start = new Date();
@@ -256,6 +265,8 @@
         },
 
         queryTable(){
+            this.tableData = [];
+            this.totalNum = 0;
             if(this.way=='date'){
               this.queryDate();
             }else if (this.way=='name'){
@@ -319,13 +330,14 @@
                     message: '获取用户信息失败！'
                   })
               })
-           }else{
-             this.$msgbox({
-                type: 'info',
-                title: '信息不完全',
-                message: '请输入你想要搜索的用户姓名！'
-             })
            }
+          //  else{
+          //    this.$msgbox({
+          //       type: 'info',
+          //       title: '信息不完全',
+          //       message: '请输入你想要搜索的用户姓名！'
+          //    })
+          //  }
         },
 
         loadAll(){

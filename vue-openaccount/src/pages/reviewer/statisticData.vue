@@ -334,6 +334,7 @@ export default {
                 ).then(function(response){
                     console.log("queryDate");
                     console.log(response.data);
+                    that.currentPage = postData.pageNum;
                     that.tableData = response.data;
                     if (that.filterCode == 0){
                         that.totalNum = that.reviewedNum + that.notPassNum;
@@ -374,6 +375,7 @@ export default {
                 this.$axios.post('/api/reviewer/getUserByName', this.$Qs.stringify(postData)
                 ).then(function(response){
                     that.tableData = response.data;
+                    that.currentPage = postData.pageNum;
                     that.totalNum = that.tableData.length;
                     that.loading = false;
                 }).catch(function(error){
@@ -524,7 +526,6 @@ export default {
 
     mounted(){
         this.setDefaultDate();
-        this.getReviewerInfo();
         this.queryTable();
         this.username = this.loadAll(); 
     }
