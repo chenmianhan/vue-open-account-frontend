@@ -52,7 +52,8 @@
     </div>
     <div class="results">
       <el-table
-      :data="tableData"
+      v-loading="loading"
+      :data="currentData"
       style="width: 100%">
       <el-table-column
         prop="user_id"
@@ -82,7 +83,7 @@
         label="申请时间">
       </el-table-column>
       <el-table-column
-        prop="audit_time"
+        prop="audio_time"
         label="审核时间">
       </el-table-column>
      <!-- <el-table-column
@@ -96,7 +97,7 @@
 
             <el-popover
               placement="bottom"
-              v-model="visible">
+              v-model="scope.row.visible">
               <div style="text-align:center; width: 300px">
                 <el-form ref="modifyForm" :model="modifyForm" :rules="rules" label-width="100px" size="mini">
                   <el-form-item label="姓名" prop="name">
@@ -128,6 +129,18 @@
 
         </el-table-column>
     </el-table>
+    </div>
+    <!-- 分页器 -->
+    <div style="margin: 30px;">
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="currentPage"
+        :page-sizes="[8, 20, 30, 40]"
+        :page-size="pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total='length'>
+      </el-pagination>
     </div>
   </div>
 </template>
@@ -199,15 +212,7 @@
             contact_address_detail:'',
           },
 
-          tableData:[{
-            user_id:'1',
-            name:'whatever',
-            id_num:'123466876878987',
-            contact_address:'北京市xx区',
-            contact:'2435465767453',
-            visible : false,
-          }],
-
+          tableData:[],
 
           rules: {
             name: [
@@ -291,9 +296,10 @@
         },
 
         queryUser(){
+          this.loading = true;
           if(this.way=='store'){
             this.queryStore();
-          }else if (this.way=='name'){
+          }else if (this.way=='uname'){
             this.queryName();
           }
         },
@@ -307,9 +313,10 @@
             var that = this;
             this.$axios.post('/api/superadmin/getUserByStore', postData)
               .then(function(response){
-                that.tableData = response.data;
-
+                console.log(response.data.tableData);
+                that.tableData = response.data.tableData;
                 that.length = that.tableData.length;
+                that.loading = false;
                 that.handleCurrentChange(1);
               }).catch(function(error){
               console.log(error);
@@ -323,7 +330,7 @@
             this.$msgbox({
               type: 'info',
               title: '信息不完全',
-              message: '请输入你想要搜索的网点名称！'
+              message: '请选择你想要搜索的网点名称！'
             })
           }
         },
@@ -337,8 +344,10 @@
             var that = this;
             this.$axios.post('/api/superadmin/getUserByName', postData)
               .then(function(response){
-                that.tableData = response.data;
+                console.log(response);
+                that.tableData = response.data.tableData;
                 that.length = that.tableData.length;
+                that.loading = false;
                 that.handleCurrentChange(1);
               }).catch(function(error){
               console.log(error);
@@ -361,6 +370,7 @@
           this.pageSize = val;
           this.handleCurrentChange(1);
         },
+
         handleCurrentChange(val){{
           this.currentPage = val;
           this.currentData = [];
@@ -394,6 +404,7 @@
       mounted(){
         console.log('start to get net list');
         this.getList();
+        this.loading = false;
         // this.getSZList();
       }
     }

@@ -102,6 +102,7 @@
 
   <div class="results">
     <el-table
+      v-loading="loading"
       :data="currentData"
       style="width: 100%">
       <el-table-column
@@ -116,25 +117,28 @@
       </el-table-column>
       <el-table-column
         prop="account"
+        width="150px"
         label="账号">
       </el-table-column>
       <el-table-column
         prop="password"
+        width="150px"
         label="密码">
       </el-table-column>
       <el-table-column
         prop="store"
+        width="250px"
         label="负责网点">
       </el-table-column>
       <el-table-column
         label="操作"
-        width="300">
+        width="200px">
         <template slot-scope="scope">
 
           <el-popover
             placement="bottom"
             v-model="scope.row.visible2">
-            <div style="text-align:center; width: 300px">
+            <div style="text-align:center; width: 200px">
               <el-form ref="modifyForm" :model="modifyForm" :rules="rules" label-width="100px" size="mini">
                 <el-form-item label="管理员名称">
                   <el-input v-model="modifyForm.name"></el-input>
@@ -396,6 +400,7 @@ import area from '../../assets/js/area';
               .then(function(response){
                 that.tableData = response.data;
                 that.length = that.tableData.length;
+                that.loading = false;
                 that.handleCurrentChange(1);
               }).catch(function(error){
               console.log(error);
@@ -425,6 +430,7 @@ import area from '../../assets/js/area';
             .then(function(response){
               that.tableData = response.data;
               that.length = that.tableData.length;
+              that.loading = false;
               that.handleCurrentChange(1);
             }).catch(function(error){
               console.log(error);
@@ -493,6 +499,9 @@ import area from '../../assets/js/area';
   }
     .results{
     margin-top:40px;
+    padding: 10px;
+    width:100%;
+    float: center;
   }
 
 </style>
