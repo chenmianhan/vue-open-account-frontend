@@ -40,7 +40,7 @@
                 :show-all-levels='false'
                 class="wd400">
                 </el-cascader>
-                <!-- <span>{{point}}</!-->
+                <span>{{point}}</span>
             </div>
         </el-col>
         </el-row>
@@ -89,7 +89,7 @@ export default {
             }).then(() => {
                 const postData = {
                     trade_type: this.accountType,
-                    security_id: 50
+                    security_id: this.point[2]
                 };
                 console.log(postData)
                 var that = this;
@@ -98,6 +98,7 @@ export default {
                     if(parseInt(sessionStorage.getItem('status')) < 3){
                         sessionStorage.setItem('status', 3);
                     }
+                    that.$store.state.accountType = 
                     that.$router.push({path: '/login/chooseBank'});
                 });
                     // 否则

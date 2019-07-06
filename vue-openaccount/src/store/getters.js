@@ -3,10 +3,9 @@ export const userInfo = state => state.userInfo
 
 export const answer = state => state.answer
 
-// export const job = state => state.job
+export const accountType = state => state.accountType
 
-// // 系统上线时间
-// export const today = state => state.today
+export const point = state => state.point
 
 // 设备信息
 // export const devices = state => state.devices

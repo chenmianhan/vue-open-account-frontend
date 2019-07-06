@@ -127,9 +127,23 @@ export default {
             })
         })
     },
+    isValid(){
+      var that = this;
+      this.$axios.post('/api/checkInvalid').then(function(response){
+        if(response.data == '801'){
+          that.$message({
+            message: '登录超时，请重新登录！',
+            type: 'error'
+          });
+          that.$router.push({path: '/login'});
+        }
+      });
+    }
+
   },
   mounted() {//获取页头信息：网点名称/审核员名称
       this.getReviewerInfo();
+      this.isValid()
   },
 
   computed: {
