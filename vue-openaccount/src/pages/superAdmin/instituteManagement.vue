@@ -227,13 +227,13 @@
         },
 
         submitAddForm(formName) {
-          this.addForm.address.splice(2,1);
           this.vals = this.getCascaderObj(this.addForm.address, this.address);
           var temp = [];
           for (var i = 0; i < this.vals.length; i++){
             temp[i] = this.vals[i].label;
           };
           this.addForm.address = temp;
+          this.addForm.address.splice(2,1);
           var that = this;
           this.$refs[formName].validate((valid) => {
             if (valid) {

@@ -106,7 +106,7 @@
                   <el-button type="primary" size="mini" @click="scope.row.visible = false; submitModifyForm('modifyForm',scope.row)">保存</el-button>
                 </el-form>
               </div>
-              <el-button slot="reference" size="mini">修改</el-button>
+              <el-button slot="reference" size="mini" @click="handleForm(scope.row)">修改</el-button>
             </el-popover>
             <el-button type="danger" size="mini" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
           </template>
@@ -207,6 +207,11 @@
 
               this.queryTable();
           },
+
+        handleForm(row){
+          this.modifyForm.name = row.name;
+          this.modifyForm.idNum = row.id_num;
+        },
 
           setDefaultDate(){//默认显示最近一周已审核用户信息
               const end = new Date();
@@ -394,7 +399,7 @@
                     title: '修改成功',
                     type: 'succeed'
                   });
-                  that.querytable();
+                  that.queryTable();
                 })
                 .catch(function (error) {
                   that.$msgbox({
@@ -425,7 +430,7 @@
             this.$axios.post('/api/deleteUsers', {user_id: deleteId})//post也可以改成get，但需要对应服务端的请求方法
               .then(function (response) {
                 console.log(response);
-                that.querytable();
+                that.queryTable();
               })
               .catch(function (error) {
                 alert(error);
@@ -444,11 +449,12 @@
           const postData = {
              userId: item.address
           }
+          console.log(postData);
 
           this.$axios.post('/api/admin/getUserInfo', postData
           ).then(function(response){
               console.log(response);
-              that.tableData = response.data.tableData;
+              that.tableData = response.data.tableDate;
           }).catch(function(error){
               console.log(error);
               that.$msgbox({
