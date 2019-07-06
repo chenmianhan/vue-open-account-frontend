@@ -178,6 +178,16 @@
             reviewedNum: '',
             notPassNum: '',
             visible2: false,
+          },{
+            reviewer_id:'2',
+            name:'小黄',
+            account:'xiaohuang',
+            password:'123456',
+            dateValue:'',
+            toReviewNum: '',
+            reviewedNum: '',
+            notPassNum: '',
+            visible2: false,
           }],
 
           modifyForm:{
