@@ -37,7 +37,7 @@ export default {
             var that = this;
             this.$axios.get('/api/contactNum'
             ).then(function(response){
-                that.contactNum = response.data.contactNum;
+                that.contactNum = response.data;
             }).catch(function(error){
                 console.log(error);
                 that.$msgbox({
