@@ -259,7 +259,7 @@
           var that = this;
           this.$axios.get('/api/admin/getReviewerId'
           ).then(function(response){
-              this.reviewerName = response.data;
+              that.reviewerName = response.data;
           }).catch(function(error){
               console.log(error);
               that.$msgbox({
@@ -289,7 +289,7 @@
         handleSelect(item) {
           console.log(item);
           var that = this;
-          this.$axios.get('/api/admin/getReviewerInfo', params={reviewerId: item.address}
+          this.$axios.get('/api/admin/getReviewerInfo', {params:{reviewerId: item.address}}
           ).then(function(response){
               that.tableData = response.data;
               for(var i = 0; i < that.tableData.length; i++){
