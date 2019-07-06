@@ -127,6 +127,7 @@ export default {
     isValid(){
       var that = this;
       this.$axios.post('/api/checkInvalid').then(function(response){
+        console.log(response.data)
         if(response.data == '801'){
           that.$message({
             message: '登录超时，请重新登录！',

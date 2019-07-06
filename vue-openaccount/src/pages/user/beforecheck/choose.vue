@@ -88,12 +88,13 @@ export default {
                 type: 'warning'
             }).then(() => {
                 const postData = {
-                    trade_type: this.accountType,
+                    trade_type: String(this.accountType),
                     security_id: parseInt(this.point[2])
                 };
                 console.log(postData)
                 var that = this;
-                this.$axios.put('/api/updateSecurity', postData).then(function(response){
+                this.$axios.post('/api/updateSecurity', postData).then(function(response){
+                    console.log('choose', response.data);
                     // 成功的话
                     if(parseInt(sessionStorage.getItem('status')) < 3){
                         sessionStorage.setItem('status', 3);

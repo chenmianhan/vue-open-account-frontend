@@ -168,27 +168,29 @@
           state: '',
           timeout:  null,
 
-          tableData:[{//表格审核员对象列表
-            reviewer_id:'1',
-            name:'小红',
-            account:'xiaohong',
-            password:'123456',
-            dateValue:'',
-            toReviewNum: '',
-            reviewedNum: '',
-            notPassNum: '',
-            visible2: false,
-          },{
-            reviewer_id:'2',
-            name:'小黄',
-            account:'xiaohuang',
-            password:'123456',
-            dateValue:'',
-            toReviewNum: '',
-            reviewedNum: '',
-            notPassNum: '',
-            visible2: false,
-          }],
+          tableData:[
+          //   {//表格审核员对象列表
+          //   reviewer_id:'1',
+          //   name:'小红',
+          //   account:'xiaohong',
+          //   password:'123456',
+          //   dateValue:'',
+          //   toReviewNum: '',
+          //   reviewedNum: '',
+          //   notPassNum: '',
+          //   visible2: false,
+          // },{
+          //   reviewer_id:'2',
+          //   name:'小黄',
+          //   account:'xiaohuang',
+          //   password:'123456',
+          //   dateValue:'',
+          //   toReviewNum: '',
+          //   reviewedNum: '',
+          //   notPassNum: '',
+          //   visible2: false,
+          // }
+          ],
 
           modifyForm:{
             name:'',
@@ -259,7 +261,8 @@
           var that = this;
           this.$axios.get('/api/admin/getReviewerId'
           ).then(function(response){
-              this.reviewerName = response.data;
+            console.log(response.data)
+              that.reviewerName = response.data;
           }).catch(function(error){
               console.log(error);
               that.$msgbox({
@@ -289,7 +292,10 @@
         handleSelect(item) {
           console.log(item);
           var that = this;
-          this.$axios.get('/api/admin/getReviewerInfo', params={reviewerId: item.address}
+          const postData = {
+            reviewerId: item.address
+          }
+          this.$axios.get('/api/admin/getReviewerInfo', postData
           ).then(function(response){
               that.tableData = response.data;
               for(var i = 0; i < that.tableData.length; i++){
@@ -365,9 +371,9 @@
               this.$axios.post('/api/admin/addAuditor', postData)
                 .then(function (response) {
                   console.log(response);
-                  that.$msgbox({
-                    title: '修改成功',
-                    type: 'succeed'
+                  that.$message({
+                    message: '添加成功',
+                    type: 'success'
                   });
                 })
                 .catch(function (error) {
@@ -404,7 +410,7 @@
             //向后端传输审核员的ID，后端返回审核员信息
             this.$axios.post('/api/reviewer/getReviewerInfo', this.$Qs.stringify(postData)
             ).then(function(response) {
-              console.log(response.data);
+              console.log('getReviewer', response.data);
               row.toReviewNum = response.data.toReviewNum;
               row.reviewedNum = response.data.reviewedNum;
               row.notPassNum = response.data.notPassNum;
@@ -430,7 +436,7 @@
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            this.$axios.post('/api/superadmin/deleteReviewer', postData)//post也可以改成get，但需要对应服务端的请求方法
+            this.$axios.post('/api/admin/deleteReviewer', postData)//post也可以改成get，但需要对应服务端的请求方法
               .then(function (response) {
                 console.log(response);
               })
@@ -487,6 +493,7 @@
       },
 
       mounted(){
+        console.log(sessionStorage)
         this.reviewerName = this.loadAll();
         }
     }
