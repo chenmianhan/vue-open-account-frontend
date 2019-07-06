@@ -121,7 +121,7 @@
                   <el-button type="primary" size="mini" @click="scope.row.visible = false; submitModifyForm('modifyForm',scope.row)">保存</el-button>
                 </el-form>
               </div>
-              <el-button slot="reference" size="mini">修改</el-button>
+              <el-button slot="reference" size="mini" @click="handleForm(scope.row)">修改</el-button>
             </el-popover>
 
             <el-button type="danger" size="mini" style="margin-left: 15px" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
@@ -227,6 +227,13 @@
         };
       },
       methods: {
+        handleForm(row){
+          row.visible = true;
+          this.modifyForm.name = row.name;
+          this.modifyForm.idNum = row.id_num;
+        },
+
+
         handleDelete(index, row) {
           console.log(index, row);
           let deleteId = row.user_id;
@@ -239,7 +246,7 @@
               this.$axios.post('/api/deleteUsers', {user_id: deleteId})//post也可以改成get，但需要对应服务端的请求方法
                 .then(function (response) {
                   console.log(response);
-                  that.handleSearch();
+                  //that.handleSearch();
                 })
                 .catch(function (error) {
                   alert(error);
