@@ -139,6 +139,24 @@
             });
           });
         },
+
+        GetAttributes(){
+          var that = this;
+          this.$axios.get('/api/superadmin/getAttributes')
+            .then(function (response) {
+              console.log('start to get attributes');
+              that.dateValue = response.data[0];
+              that.score = response.data[1];
+              that.num = response.data[2];
+            })
+            .catch(function (error) {
+              alert(error);
+            });
+        },
+
+      },
+      mounted(){
+        this.GetAttributes();
       }
     }
 </script>
