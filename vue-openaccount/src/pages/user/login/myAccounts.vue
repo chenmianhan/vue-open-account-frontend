@@ -1,11 +1,11 @@
 <template>
-<!-- <div
+<div
     v-loading='loading' 
     element-loading-text="拼命加载中"
     element-loading-spinner="el-icon-loading"
     element-loading-background="rgba(0, 0, 0, 0.8)"
-> -->
-<div>
+>
+<!-- <divsfddfd> -->
     <div class="account-box">
         <el-tabs v-model="accountName" @tab-click='handleClick'>
             <el-tab-pane label="资金账户" name="first">

@@ -346,8 +346,9 @@ import area from '../../../assets/js/area.js'
                     if(parseInt(sessionStorage.getItem('status')) < 1){
                       sessionStorage.setItem('status', 1);
                     }
-                    that.$store.state.userInfo = that.infoForm;
-                    that.$store.commit('modifyUserInfo', that.$store.state.userInfo);
+                    // that.$store.state.userInfo = that.infoForm;
+                    // that.$store.commit('modifyUserInfo', that.$store.state.userInfo);
+                    sessionStorage.setItem('userInfo', JSON.stringify(that.infoForm));
                     console.log('store', that.$store.state);
                     that.$router.push({path: '/login/evaluation'});
                   })
@@ -373,8 +374,12 @@ import area from '../../../assets/js/area.js'
 
       },
       mounted(){
-        if(this.$store.state.userInfo != {}){
-          this.infoForm = this.$store.state.userInfo;
+        // if(this.$store.state.userInfo != null){
+        //   console.log(this.$store.state.userInfo)
+        //   this.infoForm = this.$store.state.userInfo;
+        // }
+        if(sessionStorage.getItem('userInfo') != null){
+          this.infoForm = JSON.parse(sessionStorage.getItem('userInfo'));
         }
         console.log(sessionStorage)
         if(sessionStorage.getItem('Flag') != 'isLogin' 

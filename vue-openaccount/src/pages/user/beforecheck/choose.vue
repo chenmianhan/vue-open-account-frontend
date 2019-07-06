@@ -40,7 +40,7 @@
                 :show-all-levels='false'
                 class="wd400">
                 </el-cascader>
-                <span>{{point}}</span>
+                <!-- <span>{{point}}</span> -->
             </div>
         </el-col>
         </el-row>
@@ -89,7 +89,7 @@ export default {
             }).then(() => {
                 const postData = {
                     trade_type: this.accountType,
-                    security_id: this.point[2]
+                    security_id: parseInt(this.point[2])
                 };
                 console.log(postData)
                 var that = this;
@@ -98,7 +98,10 @@ export default {
                     if(parseInt(sessionStorage.getItem('status')) < 3){
                         sessionStorage.setItem('status', 3);
                     }
-                    that.$store.state.accountType = 
+                    that.$store.state.accountType = that.accountType;
+                    that.$store.commit('modifyAccountType', that.$store.state.accountType);
+                    that.$store.state.point = that.point;
+                    that.$store.commit('modifyPoint', that.$store.state.point);
                     that.$router.push({path: '/login/chooseBank'});
                 });
                     // 否则
@@ -124,6 +127,12 @@ export default {
         || (sessionStorage.getItem('status') != '2' 
         && sessionStorage.getItem('status') != '3')){
             this.$router.push({path: '/403'});
+        }
+        if(this.$store.state.accountType != []){
+            this.accountType = this.$store.state.accountType;
+        }
+        if(this.$store.state.point != []){
+            this.point = this.$store.state.point;
         }
         this.getList();
     }

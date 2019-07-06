@@ -3,15 +3,15 @@ export const modifyUserInfo = (state, userInfo) => {
 	state.userInfo = userInfo
 }
 
-export const modifyAnswer = (state, answer) => {
-	state.answer = answer
+export const modifySubmit = (state, haveSubmit) => {
+	state.haveSubmit = haveSubmit
 }
 
 export const modifyAccountType = (state, accountType) => {
 	state.accountType = accountType
 }
 
-export const modifyJob = (state, point) => {
+export const modifyPoint = (state, point) => {
 	state.point = point
 }
 

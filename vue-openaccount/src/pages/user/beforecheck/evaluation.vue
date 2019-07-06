@@ -89,15 +89,19 @@ export default {
                 };
                 this.$axios.post('/api/risk_evaluation/get_grade', postData).then(function(response){
                     that.haveSubmit = true;
+                    that.$store.state.haveSubmit = true;
+                    that.$store.commit('modifySubmit', that.$store.state.haveSubmit);
                     localStorage.removeItem('answerTemp');
                     that.$message({
                         type: 'success',
                         message: '提交成功！'
                     });
                     // that.$store.state.answer = that.answer;
-                    // that.$store.commit('modifyAnswer', that.$store.state.answers);
+                    // that.$store.commit('modifyAnswer', that.$store.state.answer);
                     that.grade = response.data.grade;
                     that.mark = response.data.mark;
+                    sessionStorage.setItem('grade', that.grade);
+                    sessionStorage.setItem('mark', that.mark);
                     that.dialogVisible = true;
                 }).catch(() => {
                     this.$msgbox({
@@ -153,10 +157,12 @@ export default {
         }
     },
     mounted(){
-        // if(this.$store.state.answers == []){
-        //     this.handleSubmit = true;
-        //     this.answer = this.$store.state.answers;
-        // }
+        if(this.$store.state.haveSubmit == true){
+            this.haveSubmit = true;
+            this.grade = sessionStorage.getItem('grade');
+            this.mark = sessionStorage.getItem('mark');
+            this.dialogVisible = true;
+        }
         console.log(sessionStorage);
         if(sessionStorage.getItem('Flag') != 'isLogin' 
         || sessionStorage.getItem('status') == '0' 

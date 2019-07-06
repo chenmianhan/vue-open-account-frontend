@@ -45,6 +45,9 @@ export default {
                     sessionStorage.removeItem('Flag');
                     sessionStorage.removeItem('Role');
                     sessionStorage.removeItem('status');
+                    sessionStorage.clear();
+                    that.$store.state.haveSubmit = false;
+                    that.$store.commit('modifySubmit', that.$store.state.haveSubmit);
                     that.$router.push('/login');
                 }else if (response.data.code == '105'){
                     that.$msgbox({

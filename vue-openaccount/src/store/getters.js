@@ -1,7 +1,7 @@
 // 保存用户信息
 export const userInfo = state => state.userInfo
 
-export const answer = state => state.answer
+export const haveubmit = state => state.haveSubmit
 
 export const accountType = state => state.accountType
 

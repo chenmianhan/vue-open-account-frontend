@@ -16,8 +16,8 @@ const state = sessionStorage.getItem('state') ? JSON.parse(sessionStorage.getIte
 	// job: '',
 	// // 设备信息表单
     // dataset: []
-    userInfo: {},
-    answer: [],
+    userInfo: null,
+    haveSubmit: false,
     accountType: [],
     point: []
 }
