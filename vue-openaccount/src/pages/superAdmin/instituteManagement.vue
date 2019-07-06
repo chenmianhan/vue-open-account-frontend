@@ -99,14 +99,21 @@
         </el-table-column>
         <el-table-column
           prop="province"
+          width="150px"
           label="省份">
         </el-table-column>
         <el-table-column
           prop="city"
+          width="150px"
           label="城市">
         </el-table-column>
         <el-table-column
+          prop="contact_phone"
+          label="联系电话">
+        </el-table-column>
+        <el-table-column
           prop="user_number"
+          width="100px"
           label="用户数">
         </el-table-column>
         <el-table-column
