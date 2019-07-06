@@ -1,33 +1,30 @@
-//参考：https://www.jqhtml.com/16130.html
-import Vue from 'vue';
-import Vuex from 'vuex';
+import Vue from 'vue'
+import Vuex from 'vuex'
+import * as getters from './getters' //导入相应的模块，*相当于引入了这个组件下所有导出的事例
+import * as actions from './actions'
+import * as mutations from './mutations'
 
-Vue.use(Vuex);
+Vue.use(Vuex)
+
+const state = sessionStorage.getItem('state') ? JSON.parse(sessionStorage.getItem('state')) : {
+	// 用户id
+	// today: new Date(),
+	// username: '',
+	// userId: -1,
+	// role: 0,
+	// workRegion: '',
+	// job: '',
+	// // 设备信息表单
+    // dataset: []
+    userInfo: {},
+    answer: []
+}
 
 const store = new Vuex.Store({
-    //设置属性
-    state:{
-        isLogin: false,
-    },
-    //获取属性的状态
-    getters:{
-        //获取登录状态
-        isLogin: state => state.isLogin,
-    },
-    //设置属性状态
-    mutations:{
-        //保存登录状态
-        userStatus(state, flag){
-            state.isLogin = flag
-        },
-    },
-    //应用mutations
-    actions:{
-        //获取登录状态
-        setUser({commit}, flag){
-            commit("userStatus", flag)
-        },
-    }
+  state,   //共同维护的一个状态，state里面可以是很多个全局状态
+  getters, //获取数据并渲染
+  actions, //数据的异步操作
+  mutations, //处理数据的唯一途径，state的改变或赋值只能在这里
 });
 
-export default store;
+export default store  //导出store并在main.js中应用注册
