@@ -53,6 +53,7 @@
         <el-table-column type="expand">
 
           <template slot-scope="props">
+
             <el-date-picker
               v-model="tableData.dateValue"
               type="daterange"
@@ -67,11 +68,12 @@
               :default-time="['00:00:00', '23:59:59']"
               :picker-options="pickerOptions">
             </el-date-picker>
+
             <el-tooltip class="item" effect="dark" content="所选日期范围最大为一周" placement="right">
               <el-button @click='getReviewerInfo(props.row)' icon='el-icon-search' type='primary' round>查询</el-button>
             </el-tooltip>
 
-            <el-form label-position="left" class="demo-table-expand">
+            <el-form label-position="left" class="demo-table-expand" v-bind:key="refresh">
               <el-form-item style="padding-top: 10px">
                 <span style='color: #99a9bf;'>已审核通过：</span>
                 <span>{{ props.row.reviewedNum }}</span>
@@ -150,6 +152,7 @@
         return {
           visible1: false,
           loading: false,
+          refresh: 0,
 
           pickerOptions: {//日期选择器的快捷选项
             shortcuts: [{
@@ -414,6 +417,7 @@
               row.toReviewNum = response.data.toReviewNum;
               row.reviewedNum = response.data.reviewedNum;
               row.notPassNum = response.data.notPassNum;
+              that.refresh++;
               //that.tableData.notPassNum = response.data.notPassNum;
             }).catch(function(error){
               console.log(error);
