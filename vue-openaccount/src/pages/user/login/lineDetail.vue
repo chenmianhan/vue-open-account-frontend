@@ -59,8 +59,8 @@ export default {
         handleSearch(){
             var that = this;
             const postData = {
-                startDate: that.date[0],
-                endDate: that.date[1],
+                starttime: that.date[0],
+                endtime: that.date[1],
                 // user_id: 44
             }
             console.log(postData)
@@ -81,7 +81,7 @@ export default {
                 // user_id: 44
             }
             console.log(postData)
-            this.$axios.post('/api/timeline/get_timeline', postData).then(function(response){
+            this.$axios.get('/api/timeline/get_timeline', postData).then(function(response){
                 console.log(response.data)
                 that.moreBill = response.data;
             }).catch(() => {
