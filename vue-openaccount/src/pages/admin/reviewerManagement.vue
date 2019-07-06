@@ -17,7 +17,7 @@
               v-model="visible1"
               style="padding-left: 20px">
               <div style="text-align:center; width: 300px">
-                <el-form ref="form" :model="addForm" label-width="100px" size="mini">
+                <el-form ref="addForm" :model="addForm" label-width="100px" size="mini">
                   <el-form-item label="审核员名称">
                     <el-input v-model="addForm.name"></el-input>
                   </el-form-item>
@@ -28,7 +28,7 @@
                     <el-input v-model="addForm.password"></el-input>
                   </el-form-item>
                   <el-button size="mini" type="text" @click="visible1 = false">取消</el-button>
-                  <el-button type="primary" size="mini" @click="visible1 = false; SubmitAddForm">保存</el-button>
+                  <el-button type="primary" size="mini" @click="visible1 = false; submitAddForm('addForm')">保存</el-button>
                 </el-form>
               </div>
               <el-button slot="reference" type="success" size="small" >添加</el-button>
@@ -116,7 +116,7 @@
             placement="bottom"
             v-model="scope.row.visible2">
             <div style="text-align:center; width: 300px">
-              <el-form ref="form" :model="modifyForm" label-width="100px" size="mini">
+              <el-form ref="modifyForm" :model="modifyForm" label-width="100px" size="mini">
                 <el-form-item label="审核员名称">
                   <el-input v-model="modifyForm.name"></el-input>
                 </el-form-item>
@@ -200,6 +200,19 @@
             name:'',
             account:'',
             password:'',
+          },
+
+          rules: {
+            name: [
+              { require: true , message: '请输入姓名', trigger: 'blur' },
+              { min: 2, max: 6, message: '长度在 2 到 6 个字符', trigger: 'blur' }
+            ],
+            account: [
+              { require: true , trigger: 'blur' },
+            ],
+            password: [
+              { require: true , trigger: 'blur' },
+            ],
           },
 
           // 获取row的key值
