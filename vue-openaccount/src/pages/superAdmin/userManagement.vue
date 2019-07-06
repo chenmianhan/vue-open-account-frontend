@@ -228,7 +228,6 @@
       },
       methods: {
         handleForm(row){
-          row.visible = true;
           this.modifyForm.name = row.name;
           this.modifyForm.idNum = row.id_num;
         },
