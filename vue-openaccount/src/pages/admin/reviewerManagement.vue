@@ -114,7 +114,7 @@
 
           <el-popover
             placement="bottom"
-            v-model="visible2">
+            v-model="scope.row.visible2">
             <div style="text-align:center; width: 300px">
               <el-form ref="form" :model="modifyForm" label-width="100px" size="mini">
                 <el-form-item label="审核员名称">
@@ -128,8 +128,8 @@
                 </el-form-item>
 
 
-                <el-button size="mini" type="text" @click="scope.row.visible2 = false">取消</el-button>
-                <el-button type="primary" size="mini" @click="scope.row.visible2 = false; submitModifyForm('modifyForm',scope.row)">保存</el-button>
+                <el-button size="mini" type="text" @click="visible2 = false">取消</el-button>
+                <el-button type="primary" size="mini" @click="visible2 = false; submitModifyForm('modifyForm',scope.row)">保存</el-button>
               </el-form>
             </div>
             <el-button slot="reference" size="mini">修改</el-button>
@@ -213,6 +213,8 @@
               this.$axios.post('/api/admin/getReviewerByName',postData)
               .then(function(response){
                   that.tableData = response.data;
+                  for(var i = 0; i < that.tableData.length; i++)
+                    that.tableData[i].visible2 = false;
               }).catch(function(error){
                   console.log(error);
                   that.$msgbox({
@@ -336,7 +338,6 @@
                 password: that.addForm.password,
                 str: that.addForm.str,
               };
-
               // var that = this;
               console.log(postData);
               this.$axios.post('/api/admin/addAuditor', postData)
