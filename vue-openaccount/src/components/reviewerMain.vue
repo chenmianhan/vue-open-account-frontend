@@ -131,11 +131,11 @@ export default {
       var that = this;
       this.$axios.post('/api/checkInvalid').then(function(response){
         if(response.data == '801'){
-          this.$message({
+          that.$message({
             message: '登录超时，请重新登录！',
             type: 'error'
           });
-          this.$router.push({path: '/login'});
+          that.$router.push({path: '/login'});
         }
       });
     }

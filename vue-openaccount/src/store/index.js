@@ -17,7 +17,9 @@ const state = sessionStorage.getItem('state') ? JSON.parse(sessionStorage.getIte
 	// // 设备信息表单
     // dataset: []
     userInfo: {},
-    answer: []
+    answer: [],
+    accountType: [],
+    point: []
 }
 
 const store = new Vuex.Store({
