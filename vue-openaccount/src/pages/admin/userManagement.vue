@@ -444,11 +444,12 @@
           const postData = {
              userId: item.address
           }
+          console.log(postData);
 
           this.$axios.post('/api/admin/getUserInfo', postData
           ).then(function(response){
               console.log(response);
-              that.tableData = response.data.tableData;
+              that.tableData = response.data.tableDate;
           }).catch(function(error){
               console.log(error);
               that.$msgbox({
