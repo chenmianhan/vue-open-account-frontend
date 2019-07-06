@@ -346,6 +346,9 @@ import area from '../../../assets/js/area.js'
                     if(parseInt(sessionStorage.getItem('status')) < 1){
                       sessionStorage.setItem('status', 1);
                     }
+                    that.$store.state.userInfo = that.infoForm;
+                    that.$store.commit('modifyUserInfo', that.$store.state.userInfo);
+                    console.log('store', that.$store.state);
                     that.$router.push({path: '/login/evaluation'});
                   })
                 .catch(function (error) {
@@ -370,6 +373,9 @@ import area from '../../../assets/js/area.js'
 
       },
       mounted(){
+        if(this.$store.state.userInfo != {}){
+          this.infoForm = this.$store.state.userInfo;
+        }
         console.log(sessionStorage)
         if(sessionStorage.getItem('Flag') != 'isLogin' 
         || parseInt(sessionStorage.getItem('status')) > 3 ){

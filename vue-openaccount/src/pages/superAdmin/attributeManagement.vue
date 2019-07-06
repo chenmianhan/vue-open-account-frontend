@@ -60,6 +60,7 @@
           let postData = {
             expire_date:  this.dateValue,
           };
+          var that = this;
           this.$confirm("确认修改吗？", "提示", {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
@@ -67,7 +68,7 @@
           }).then(() => {
             this.$axios.post('/api/superadmin/changeExpireDate', postData)
               .then(function (response) {
-                this.$message({
+                that.$message({
                   type: 'info',
                   message: '已修改'
                 });
@@ -87,6 +88,7 @@
           let postData = {
             min_score:  this.score,
           };
+          var that = this;
           this.$confirm("确认修改吗？", "提示", {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
@@ -94,7 +96,7 @@
           }).then(() => {
             this.$axios.post('/api/superadmin/changeMinScore', postData)//post也可以改成get，但需要对应服务端的请求方法
               .then(function (response) {
-                this.$message({
+                that.$message({
                   type: 'info',
                   message: '已修改'
                 });
@@ -114,6 +116,7 @@
           let postData = {
             max_num:  this.num,
           };
+          var that = this;
           this.$confirm("确认修改吗？", "提示", {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
@@ -121,7 +124,7 @@
           }).then(() => {
             this.$axios.post('/api/superadmin/changeMaxNum', postData)//post也可以改成get，但需要对应服务端的请求方法
               .then(function (response) {
-                this.$message({
+                that.$message({
                   type: 'info',
                   message: '已修改'
                 });
@@ -136,6 +139,24 @@
             });
           });
         },
+
+        GetAttributes(){
+          var that = this;
+          this.$axios.get('/api/superadmin/getAttributes')
+            .then(function (response) {
+              console.log('start to get attributes');
+              that.dateValue = response.data[0];
+              that.score = response.data[1];
+              that.num = response.data[2];
+            })
+            .catch(function (error) {
+              alert(error);
+            });
+        },
+
+      },
+      mounted(){
+        this.GetAttributes();
       }
     }
 </script>

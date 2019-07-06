@@ -155,7 +155,7 @@
                 </el-form-item>
 
                 <el-button size="mini" type="text" @click="visible2 = false">取消</el-button>
-                <el-button type="primary" size="mini" @click="visible2 = false; submitModifyForm('modifyForm')">保存</el-button>
+                <el-button type="primary" size="mini" @click="visible2 = false; submitModifyForm('modifyForm', scope.row)">保存</el-button>
               </el-form>
             </div>
             <el-button slot="reference" size="mini">修改</el-button>
@@ -305,10 +305,11 @@ import area from '../../assets/js/area';
           });
           },
 
-        submitModifyForm(formName) {
+        submitModifyForm(formName, row) {
           var that = this;
+          var adminID = row.admin_id;
               const postData = {
-                admin_id: 66,
+                admin_id: adminID,
                 name: that.modifyForm.name,
                 account: that.modifyForm.account,
                 password: that.modifyForm.password,

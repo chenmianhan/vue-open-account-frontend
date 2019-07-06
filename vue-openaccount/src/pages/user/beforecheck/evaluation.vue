@@ -94,6 +94,8 @@ export default {
                         type: 'success',
                         message: '提交成功！'
                     });
+                    // that.$store.state.answer = that.answer;
+                    // that.$store.commit('modifyAnswer', that.$store.state.answers);
                     that.grade = response.data.grade;
                     that.mark = response.data.mark;
                     that.dialogVisible = true;
@@ -151,6 +153,10 @@ export default {
         }
     },
     mounted(){
+        // if(this.$store.state.answers == []){
+        //     this.handleSubmit = true;
+        //     this.answer = this.$store.state.answers;
+        // }
         console.log(sessionStorage);
         if(sessionStorage.getItem('Flag') != 'isLogin' 
         || sessionStorage.getItem('status') == '0' 

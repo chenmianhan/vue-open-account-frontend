@@ -17,7 +17,7 @@
               v-model="visible1"
               style="padding-left: 20px">
               <div style="text-align:center; width: 300px">
-                <el-form ref="form" :model="addForm" label-width="100px" size="mini">
+                <el-form ref="addForm" :model="addForm" label-width="100px" size="mini">
                   <el-form-item label="审核员名称">
                     <el-input v-model="addForm.name"></el-input>
                   </el-form-item>
@@ -28,7 +28,7 @@
                     <el-input v-model="addForm.password"></el-input>
                   </el-form-item>
                   <el-button size="mini" type="text" @click="visible1 = false">取消</el-button>
-                  <el-button type="primary" size="mini" @click="visible1 = false; SubmitAddForm">保存</el-button>
+                  <el-button type="primary" size="mini" @click="visible1 = false; submitAddForm('addForm')">保存</el-button>
                 </el-form>
               </div>
               <el-button slot="reference" type="success" size="small" >添加</el-button>
@@ -114,9 +114,9 @@
 
           <el-popover
             placement="bottom"
-            v-model="visible2">
+            v-model="scope.row.visible2">
             <div style="text-align:center; width: 300px">
-              <el-form ref="form" :model="modifyForm" label-width="100px" size="mini">
+              <el-form ref="modifyForm" :model="modifyForm" label-width="100px" size="mini">
                 <el-form-item label="审核员名称">
                   <el-input v-model="modifyForm.name"></el-input>
                 </el-form-item>
@@ -128,8 +128,8 @@
                 </el-form-item>
 
 
-                <el-button size="mini" type="text" @click="scope.row.visible2 = false">取消</el-button>
-                <el-button type="primary" size="mini" @click="scope.row.visible2 = false; submitModifyForm('modifyForm',scope.row)">保存</el-button>
+                <el-button size="mini" type="text" @click="visible2 = false">取消</el-button>
+                <el-button type="primary" size="mini" @click="visible2 = false; submitModifyForm('modifyForm',scope.row)">保存</el-button>
               </el-form>
             </div>
             <el-button slot="reference" size="mini">修改</el-button>
@@ -170,8 +170,18 @@
 
           tableData:[{//表格审核员对象列表
             reviewer_id:'1',
-            name:'whatever',
-            account:'abc',
+            name:'小红',
+            account:'xiaohong',
+            password:'123456',
+            dateValue:'',
+            toReviewNum: '',
+            reviewedNum: '',
+            notPassNum: '',
+            visible2: false,
+          },{
+            reviewer_id:'2',
+            name:'小黄',
+            account:'xiaohuang',
             password:'123456',
             dateValue:'',
             toReviewNum: '',
@@ -190,6 +200,19 @@
             name:'',
             account:'',
             password:'',
+          },
+
+          rules: {
+            name: [
+              { require: true , message: '请输入姓名', trigger: 'blur' },
+              { min: 2, max: 6, message: '长度在 2 到 6 个字符', trigger: 'blur' }
+            ],
+            account: [
+              { require: true , trigger: 'blur' },
+            ],
+            password: [
+              { require: true , trigger: 'blur' },
+            ],
           },
 
           // 获取row的key值
@@ -213,6 +236,8 @@
               this.$axios.post('/api/admin/getReviewerByName',postData)
               .then(function(response){
                   that.tableData = response.data;
+                  for(var i = 0; i < that.tableData.length; i++)
+                    that.tableData[i].visible2 = false;
               }).catch(function(error){
                   console.log(error);
                   that.$msgbox({
@@ -232,7 +257,6 @@
 
         loadAll(){
           var that = this;
-          //后端传回用户姓名和ID对应的列表
           this.$axios.get('/api/admin/getReviewerId'
           ).then(function(response){
               this.reviewerName = response.data;
@@ -336,7 +360,6 @@
                 password: that.addForm.password,
                 str: that.addForm.str,
               };
-
               // var that = this;
               console.log(postData);
               this.$axios.post('/api/admin/addAuditor', postData)
@@ -464,9 +487,7 @@
       },
 
       mounted(){
-        //console.log(this.expands);
-        //console.log(this.tableData[this.expands].reviewer_id);
-        //this.expands.push(this.tableData[this.expands].id);
+        this.reviewerName = this.loadAll();
         }
     }
 </script>
@@ -482,9 +503,9 @@
     display: inline-block;
     padding: 10px;
   }
-  .add-button{
+  /* .add-button{
     /*float:right;*/
-  }
+  /* }  */
   .wd400{
     width: 100%;
   }
