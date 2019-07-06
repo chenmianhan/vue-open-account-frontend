@@ -63,30 +63,14 @@
                 </el-col>
             </el-tab-pane>
             <el-tab-pane label="证券账户" name="second">
-                <!-- <el-card class="box-card" shadow='hover' v-show="netPoint.n_netpoint != null">
-                <div slot="header" class="clearfix">
-                    <span>上海证券交易所</span> -->
-                    <!-- <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button> -->
-                <!-- </div>
-                <div class="text item">
-                    {{netPoint.n_netpoint}}
-                </div>
-                </el-card>
-                <el-card class="box-card" shadow='hover' v-show="netPoint.s_netpoint != null">
-                <div slot="header" class="clearfix">
-                    <span>深圳证券交易所</span> -->
-                    <!-- <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button> -->
-                <!-- </div>
-                <div class="text item">
-                    {{netPoint.s_netpoint}}
-                </div>
-                </el-card> -->
                 <el-row :gutter="100">
+                    <el-row><h3>{{netPoint.netpoint}}</h3></el-row>
+                    <!-- <span>{{netPoint}}</span> -->
                     <el-col :span="10">
-                        <el-card :body-style="{ padding: '0px' }" v-show="netPoint.n_netpoint!=null">
+                        <el-card :body-style="{ padding: '0px' }" v-show="netPoint.trade_type1!=null">
                             <img src="../../../assets/image/sh.jpg" class="image">
                             <div style="padding: 14px;">
-                                <span>{{netPoint.n_netpoint}}</span>
+                                <span>{{netPoint.trade_type1}}</span>
                                 <div class="bottom clearfix">
                                 <time class="time">上海证券交易所</time>
                                 <!-- <el-button type="text" class="button">详情</el-button> -->
@@ -95,10 +79,10 @@
                         </el-card>
                     </el-col>
                     <el-col :span="10">
-                        <el-card :body-style="{ padding: '0px' }" v-show="netPoint.s_netpoint!=null">
+                        <el-card :body-style="{ padding: '0px' }" v-show="netPoint.trade_type2!=null">
                             <img src="../../../assets/image/sz.jpg" class="image">
                             <div style="padding: 14px;">
-                                <span>{{netPoint.s_netpoint}}</span>
+                                <span>{{netPoint.trade_type2}}</span>
                                 <div class="bottom clearfix">
                                 <time class="time">深圳证券交易所</time>
                                 <!-- <el-button type="text" class="button">详情</el-button> -->
@@ -120,11 +104,11 @@
             <el-input size="small" v-model="rechargeForm.value" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item label="账户密码" :label-width="formLabelWidth" prop="password">
-            <el-input size="small" type="password" v-model="rechargeForm.password" autocomplete="off"></el-input>
+            <el-input placeholder="默认密码六个1" size="small" type="password" v-model="rechargeForm.password" autocomplete="off"></el-input>
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-            <el-button @click="rechargeVisible = false" size="small" >取 消</el-button>
+            <el-button @click="rechargeVisible = false; rechargeForm = {}" size="small" >取 消</el-button>
             <el-button type="primary" @click="rechargeOK(rechargeForm.account)" size="small">确 定</el-button>
         </div>
         </el-dialog>
@@ -139,11 +123,11 @@
             <el-button slot="append" @click="allWithdraw(withdrawForm.account)">全部提现</el-button></el-input>
             </el-form-item>
             <el-form-item label="账户密码" :label-width="formLabelWidth" prop="password">
-            <el-input size="small" type="password" v-model="withdrawForm.password" autocomplete="off"></el-input>
+            <el-input placeholder="密码默认六个1" size="small" type="password" v-model="withdrawForm.password" autocomplete="off"></el-input>
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-            <el-button @click="withdrawVisible = false;  withdrawForm.value = ''" size="small" >取 消</el-button>
+            <el-button @click="withdrawVisible = false;  withdrawForm = {}" size="small" >取 消</el-button>
             <el-button type="primary" @click="withdrawOK(withdrawForm.account)" size="small">确 定</el-button>
         </div>
         </el-dialog>
@@ -154,7 +138,7 @@
             <el-input size="small" v-model="addForm.cardID" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item label="账户密码" :label-width="formLabelWidth" prop="password">
-            <el-input size="small" type="password" v-model="addForm.password" autocomplete="off"></el-input>
+            <el-input placeholder="密码默认六个1" size="small" type="password" v-model="addForm.password" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item label="姓名" :label-width="formLabelWidth" prop="name">
             <el-input size="small" v-model="addForm.name" autocomplete="off"></el-input>
@@ -167,7 +151,7 @@
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-            <el-button @click="addVisible = false" size="small" >取 消</el-button>
+            <el-button @click="addVisible = false;addForm = {};" size="small" >取 消</el-button>
             <el-button type="primary" @click="handleAdd" size="small">确 定</el-button>
         </div>
         </el-dialog>
@@ -254,16 +238,17 @@ export default {
                 for(var i = 0;i < response.data.secondaryAccount.length; i++){
                     that.secondaryAccount[i].balance.balance = that.changeTwoDecimal_f(that.secondaryAccount[i].balance.balance);
                 }
-                if(response.data.netPoint.n_netpoint != ''){
-                    that.netPoint.n_netpoint = response.data.netPoint.n_netpoint;
+                if(response.data.netPoint.trade_type1 != ''){
+                    that.netPoint.trade_type1 = response.data.netPoint.trade_type1;
                 } else{
-                    that.netPoint.n_netpoint = null;
+                    that.netPoint.trade_type1 = null;
                 }
-                if(response.data.netPoint.s_netpoint != ''){
-                    that.netPoint.s_netpoint = response.data.netPoint.s_netpoint;
+                if(response.data.netPoint.trade_type2 != ''){
+                    that.netPoint.trade_type2 = response.data.netPoint.trade_type2;
                 } else{
-                    that.netPoint.s_netpoint = null;
+                    that.netPoint.trade_type2 = null;
                 }
+                that.netPoint.netpoint = response.data.netPoint.netpoint;
                 that.loading = false;
                 // that.netPoint = response.data.netPoint;
             }).catch((error) => {
@@ -280,8 +265,8 @@ export default {
             const postData = {
                 // user_id: 17
             };
-            this.$axios.post('/api/timeline/get_timeline', postData).then(function(response){
-                // console.log(response.data);
+            this.$axios.get('/api/timeline/get_timeline').then(function(response){
+                console.log(response.data);
                 if(response.data.length >= 5){
                     that.bill = response.data.slice(0, 5);
                 }else{
@@ -304,6 +289,7 @@ export default {
                                     type: 'success'
                                 });
                                 that.addVisible = false;
+                                that.addForm = {};
                                 that.getData();
                         }).catch(() => {
                             that.$message({
@@ -341,6 +327,7 @@ export default {
                         });
                         this.rechargeForm.password = '';
                         this.rechargeVisible = false;
+                        this.rechargeForm = {};
                     } else {
                         this.$message({
                             message: '密码错误',
@@ -368,6 +355,7 @@ export default {
                             });
                             this.withdrawForm.password = '';
                             this.withdrawVisible = false;
+                            this.withdrawForm = {};
                         }
                     }else{
                         this.$message({

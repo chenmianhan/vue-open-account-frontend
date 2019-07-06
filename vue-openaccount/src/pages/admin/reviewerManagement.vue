@@ -114,7 +114,7 @@
 
           <el-popover
             placement="bottom"
-            v-model="visible2">
+            v-model="scope.row.visible2">
             <div style="text-align:center; width: 300px">
               <el-form ref="form" :model="modifyForm" label-width="100px" size="mini">
                 <el-form-item label="审核员名称">
