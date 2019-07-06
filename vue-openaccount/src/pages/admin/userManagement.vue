@@ -169,37 +169,33 @@
             ]
           },
 
-          tableData:[{//表格用户对象列表
-            user_id:'1',
-            name:'张三',
-            id_num:'510504199901010000',
-            contact:'13300000101',
-            address:'广东省广州市大学城',
-            date:'2019-01-01 00:00:00',
-            visible : false,
-          },{
-            user_id:'2',
-            name:'张三',
-            id_num:'510504199901010000',
-            contact:'13300000101',
-            address:'广东省广州市大学城',
-            date:'2019-01-01 00:00:00',
-            visible : false,
-          }],
+          tableData:[],
 
           pickerOptions: {//日期选择器的快捷选项
                 shortcuts: [{
                         text: '最近一周',
                         onClick(picker) {
-                        const end = new Date();
-                        const start = new Date();
+                        var end = new Date();
+                        var start = new Date();
                         start.setTime(start.getTime() - 3600 * 1000 * 24 * 6);
                         end.setTime(end.getTime());
+
+                        var dateRange = new Array(start, end);
+                        var reg = new RegExp( '/' , "g" );
+                        dateRange[0] = dateRange[0].toLocaleDateString().replace(reg,'-');
+                        dateRange[1] = dateRange[1].toLocaleDateString().replace(reg,'-');
+                        dateRange[0] += ' 00:00:00';
+                        dateRange[1] += ' 23:59:59';
+
+                        this.dateValue = dateRange;
+                        start = this.dateValue[0];
+                        end = this.dateValue[1];
+
                         picker.$emit('pick', [start, end]);
                     }
                 }]
              },
-          loading: false
+          loading: true
         };
       },
       methods: {
@@ -275,10 +271,11 @@
                     end: this.dateValue[1]
                 }
                 var that = this;
+                console.log(postData);
                 //console.log(this.$Qs.stringify(postData));
                 //向后端传输日期范围，后端返回该范围中所有审核通过用户信息对象列表
                 //一个对象元素对应一个用户信息
-                this.$axios.get('/api/admin/getUserByDate', postData
+                this.$axios.post('/api/admin/getUserByDate', postData
                 ).then(function(response){
                     console.log(response.data);
                     that.tableData = response.data;
@@ -307,9 +304,10 @@
               };
               var that = this;
               //console.log(this.$Qs.stringify(postData));
-              this.$axios.get('/api/admin/getUserByName', postData
+              this.$axios.post('/api/admin/getUserByName', postData
               ).then(function(response){
                   that.tableData = response.data;
+                  that.loading = false;
                   for(var i = 0; i < that.tableData.length; i++){
                    that.tableData[i].visible = false;
                  }
@@ -335,7 +333,8 @@
           //后端传回用户姓名和ID对应的列表
           this.$axios.get('/api/admin/getUserId'
           ).then(function(response){
-              this.username = response.data;
+              console.log(response.data);
+              that.username = response.data.username;
           }).catch(function(error){
               console.log(error);
               that.$msgbox({
@@ -430,10 +429,14 @@
         handleSelect(item) {
           console.log(item);
           var that = this;
+          const postData = {
+             userId: item.address
+          }
 
-          this.$axios.get('/api/admin/getUserInfo', params={userId: item.address}
+          this.$axios.post('/api/admin/getUserInfo', postData
           ).then(function(response){
-              that.tableData = response.data;
+              console.log(response);
+              that.tableData = response.data.tableData;
           }).catch(function(error){
               console.log(error);
               that.$msgbox({
@@ -447,6 +450,8 @@
 
       mounted(){
           this.setDefaultDate();
+          this.queryTable();
+          this.username = this.loadAll();
       }
     }
 </script>

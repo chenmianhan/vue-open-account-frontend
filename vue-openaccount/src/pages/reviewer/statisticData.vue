@@ -164,7 +164,7 @@
                 <el-pagination
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
-                :current-page="currentPage"
+                :current-page.sync="currentPage"
                 :page-sizes="[8, 16, 24]"
                 :page-size="pageSize"
                 layout="total, sizes, prev, pager, next, jumper"
@@ -316,8 +316,8 @@ export default {
 
         queryDate(){
             if(this.dateValue != ''){
-                this.tableData = [];
-                this.totalNum = 0;
+                // this.tableData = [];
+                // this.totalNum = 0;
                 console.log(this.dateValue);
                 const postData = {
                     start: this.dateValue[0],
@@ -508,14 +508,14 @@ export default {
         },
 
         handleSizeChange(val) {
-            console.log(`每页 ${val} 条`);
+            // console.log(`每页 ${val} 条`);
             this.pageSize = val;
             console.log(this.pageSize);
             this.queryTable();
         },
 
         handleCurrentChange(val) {
-            console.log(`当前页: ${val}`);
+            // console.log(`当前页: ${val}`);
             this.currentPage = val;
             console.log(this.currentPage);
             this.queryTable();
