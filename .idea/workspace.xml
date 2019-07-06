@@ -63,8 +63,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/vue-openaccount/src/pages/superAdmin/adminManagement.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="110">
-              <caret line="236" lean-forward="true" selection-start-line="236" selection-end-line="236" />
+            <state relative-caret-position="2090">
+              <caret line="242" column="22" lean-forward="true" selection-start-line="242" selection-start-column="22" selection-end-line="242" selection-end-column="22" />
               <folding>
                 <element signature="n#style#0;n#el-form#0;n#div#0;n#div#0;n#template#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#div#0;n#el-popover#0;n#el-form-item#3;n#el-form#0;n#div#0;n#div#0;n#template#0;n#!!top" expanded="true" />
@@ -81,8 +81,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/vue-openaccount/src/pages/admin/reviewerManagement.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-500">
-              <caret line="214" column="14" lean-forward="true" selection-start-line="214" selection-start-column="14" selection-end-line="214" selection-end-column="14" />
+            <state relative-caret-position="1612">
+              <caret line="308" column="22" selection-start-line="308" selection-start-column="22" selection-end-line="308" selection-end-column="22" />
               <folding>
                 <element signature="n#style#0;n#el-popover#0;n#div#0;n#el-row#0;n#div#0;n#div#0;n#template#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#el-table#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
@@ -333,12 +333,12 @@
       <workItem from="1562220206156" duration="6547000" />
       <workItem from="1562288760250" duration="9601000" />
       <workItem from="1562307098998" duration="7194000" />
-      <workItem from="1562376093950" duration="6523000" />
+      <workItem from="1562376093950" duration="6779000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="116655000" />
+    <option name="totallyTimeSpent" value="116911000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="878" extended-state="6" />
@@ -621,8 +621,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/vue-openaccount/src/pages/superAdmin/adminManagement.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="110">
-          <caret line="236" lean-forward="true" selection-start-line="236" selection-end-line="236" />
+        <state relative-caret-position="2090">
+          <caret line="242" column="22" lean-forward="true" selection-start-line="242" selection-start-column="22" selection-end-line="242" selection-end-column="22" />
           <folding>
             <element signature="n#style#0;n#el-form#0;n#div#0;n#div#0;n#template#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#0;n#el-popover#0;n#el-form-item#3;n#el-form#0;n#div#0;n#div#0;n#template#0;n#!!top" expanded="true" />
@@ -637,8 +637,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/vue-openaccount/src/pages/admin/reviewerManagement.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-500">
-          <caret line="214" column="14" lean-forward="true" selection-start-line="214" selection-start-column="14" selection-end-line="214" selection-end-column="14" />
+        <state relative-caret-position="1612">
+          <caret line="308" column="22" selection-start-line="308" selection-start-column="22" selection-end-line="308" selection-end-column="22" />
           <folding>
             <element signature="n#style#0;n#el-popover#0;n#div#0;n#el-row#0;n#div#0;n#div#0;n#template#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#el-table#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />

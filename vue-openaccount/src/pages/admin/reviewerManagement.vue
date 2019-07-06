@@ -257,7 +257,6 @@
 
         loadAll(){
           var that = this;
-          //后端传回用户姓名和ID对应的列表
           this.$axios.get('/api/admin/getReviewerId'
           ).then(function(response){
               this.reviewerName = response.data;
@@ -488,9 +487,7 @@
       },
 
       mounted(){
-        //console.log(this.expands);
-        //console.log(this.tableData[this.expands].reviewer_id);
-        //this.expands.push(this.tableData[this.expands].id);
+        this.reviewerName = this.loadAll();
         }
     }
 </script>
