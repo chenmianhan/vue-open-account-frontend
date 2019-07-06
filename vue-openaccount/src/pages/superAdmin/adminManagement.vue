@@ -308,13 +308,14 @@ import area from '../../assets/js/area';
         submitModifyForm(formName) {
           var that = this;
               const postData = {
+                admin_id: 66,
                 name: that.modifyForm.name,
                 account: that.modifyForm.account,
                 password: that.modifyForm.password,
                 store: that.modifyForm.store[2],
               };
               console.log(postData);
-              this.$axios.post('/api/superadmin/modifyAdmin', postData)
+              this.$axios.put('/api/superadmin/modifyAdmin', postData)
                 .then(function (response) {
                   console.log(response);
                   that.loadAllAdmin();
