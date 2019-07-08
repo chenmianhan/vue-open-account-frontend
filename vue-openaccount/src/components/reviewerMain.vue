@@ -68,8 +68,7 @@ let data = () => {
     collapsed: false,
     systemName: '金证开户平台',
     netName: 'xx营业网点',
-    reviewerName: 'xx审核员',
-    reviewerId: 1000
+    reviewerName: 'xx审核员'
   }
 }
 
