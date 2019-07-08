@@ -103,9 +103,9 @@
                   <el-form-item label="姓名" prop="name">
                     <el-input v-model="modifyForm.name"></el-input>
                   </el-form-item>
-                  <el-form-item label="身份证号码" prop="idNum">
+                 <!-- <el-form-item label="身份证号码" prop="idNum">
                     <el-input v-model="modifyForm.idNum"></el-input>
-                  </el-form-item>
+                  </el-form-item>-->
                   <el-form-item label="联系地址" prop="contact_address">
                     <el-cascader
                       :options="address"
@@ -207,7 +207,7 @@
 
           modifyForm:{
             name:'',
-            idNum:'',
+            //idNum:'',
             contact_address:'',
             contact_address_detail:'',
           },
@@ -267,7 +267,7 @@
             if (valid) {
               const postData = {
                 name: that.modifyForm.name,
-                ID_number: that.modifyForm.idNum,
+                //ID_number: that.modifyForm.idNum,
                 contact_address: that.modifyForm.contact_address,
                 contact_address_detail: that.modifyForm.contact_address_detail,
                 user_id:row.user_id,
