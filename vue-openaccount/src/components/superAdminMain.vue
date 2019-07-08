@@ -10,22 +10,22 @@
           </span>
           <span v-else class="system-name">{{systemName}}</span>
         </el-header>
-        <el-main>
+        <el-main style="text-align:left;">
           <el-menu :collapse="collapsed" background-color="#F2F6FC" router :default-active='onRoutes'>
             <el-menu-item index="/superadmin/home">
-              <i class="el-icon-notebook-1"></i>
+              <i class="el-icon-user-solid"></i>
               <span slot="title">用户管理</span>
             </el-menu-item>
             <el-menu-item index="/superadmin/manageAdmin">
-              <i class="el-icon-user"></i>
+              <i class="el-icon-s-custom"></i>
               <span slot="title">管理员管理</span>
             </el-menu-item>
             <el-menu-item index="/superadmin/manageInstitute">
-              <i class="el-icon-user"></i>
+              <i class="el-icon-s-flag"></i>
               <span slot="title">机构管理</span>
             </el-menu-item>
             <el-menu-item index="/superadmin/manageAttribute">
-              <i class="el-icon-user"></i>
+              <i class="el-icon-s-tools"></i>
               <span slot="title">公共参数管理</span>
             </el-menu-item>
           </el-menu>
@@ -44,7 +44,7 @@
             </span>
           </el-col>
            <el-col :span="1">
-            <div class="user-avator"><img src='../assets/image/user.jpg'></div>
+            <div class="user-avator"><img src='../assets/image/super.png'></div>
           </el-col>
           <el-col :span="3">
             <el-dropdown @command="handleCommand">
