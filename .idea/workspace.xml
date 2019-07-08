@@ -96,8 +96,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/vue-openaccount/src/pages/admin/reviewerManagement.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="539">
-              <caret line="447" column="17" lean-forward="true" selection-start-line="447" selection-start-column="17" selection-end-line="447" selection-end-column="17" />
+            <state relative-caret-position="363">
+              <caret line="439" column="27" lean-forward="true" selection-start-line="439" selection-start-column="27" selection-end-line="439" selection-end-column="27" />
               <folding>
                 <element signature="n#style#0;n#el-popover#0;n#div#0;n#el-row#0;n#div#0;n#div#0;n#template#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#el-table#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
@@ -345,12 +345,12 @@
       <workItem from="1562307098998" duration="7194000" />
       <workItem from="1562376093950" duration="8266000" />
       <workItem from="1562396809019" duration="4093000" />
-      <workItem from="1562565431521" duration="766000" />
+      <workItem from="1562565431521" duration="1135000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="123257000" />
+    <option name="totallyTimeSpent" value="123626000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="878" extended-state="6" />
@@ -642,8 +642,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/vue-openaccount/src/pages/admin/reviewerManagement.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="539">
-          <caret line="447" column="17" lean-forward="true" selection-start-line="447" selection-start-column="17" selection-end-line="447" selection-end-column="17" />
+        <state relative-caret-position="363">
+          <caret line="439" column="27" lean-forward="true" selection-start-line="439" selection-start-column="27" selection-end-line="439" selection-end-column="27" />
           <folding>
             <element signature="n#style#0;n#el-popover#0;n#div#0;n#el-row#0;n#div#0;n#div#0;n#template#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#el-table#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
