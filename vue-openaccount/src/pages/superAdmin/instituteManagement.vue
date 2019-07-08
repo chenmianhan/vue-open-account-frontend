@@ -41,49 +41,6 @@
       </el-form>
     </div>
 
-
-
-    <!-- <div class="search-bar">
-      <div class="block">
-        <el-input v-model="store" placeholder="营业网点名称" class="wd400"></el-input> -->
-        <!--<el-autocomplete
-          v-model="store"
-          :fetch-suggestions="querySearchAsync"
-          placeholder="营业网点名称"
-          @select="handleSelect"
-          class="wd400"
-        ></el-autocomplete>-->
-      <!-- </div>
-      <el-button icon="el-icon-search" @click="queryStore" circle></el-button>
-
-      <el-popover
-        placement="bottom"
-        v-model="visible">
-        <div style="text-align:center; width: 300px">
-          <el-form ref="addForm" :model="addForm" :rules="rules" label-width="100px" size="mini">
-            <el-form-item label="营业网点名称" prop="store">
-              <el-input v-model="addForm.store"></el-input>
-            </el-form-item>
-            <el-form-item label="网点地址" prop="address">
-            <el-cascader
-              :options="address"
-              props.checkStrictly
-              v-model="addForm.address"
-              style="width: 100%"
-              props.expandTrigger="hover">
-            </el-cascader>
-            </el-form-item>
-            <el-form-item label="网点电话" prop="contact_phone">
-              <el-input v-model="addForm.contact_phone"></el-input>
-            </el-form-item>
-            <el-button size="mini" type="text" @click="visible = false">取消</el-button>
-            <el-button type="primary" size="mini" @click="visible = false; submitAddForm('addForm')">保存</el-button>
-          </el-form>
-        </div>
-        <el-button slot="reference" type="primary" size="small" style="margin-left: 700px">添加</el-button>
-      </el-popover>
-    </div> -->
-
     <div class="results">
       <el-table
         :data="currentData"

@@ -10,7 +10,7 @@
           </span>
           <span v-else class="system-name">{{systemName}}</span>
         </el-header>
-        <el-main>
+        <el-main style="text-align:left;">
           <el-menu :collapse="collapsed" background-color="#F2F6FC" router :default-active='onRoutes'>
             <el-menu-item index="/user/home">
               <i class="el-icon-notebook-1"></i>
