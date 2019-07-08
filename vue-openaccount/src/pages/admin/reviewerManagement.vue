@@ -103,6 +103,7 @@
       </el-table-column>
       <el-table-column
         prop="account"
+        width="150px"
         label="账号">
       </el-table-column>
       <el-table-column

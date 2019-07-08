@@ -82,8 +82,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/vue-openaccount/src/pages/admin/reviewerManagement.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1683">
-              <caret line="244" column="33" lean-forward="true" selection-start-line="244" selection-start-column="33" selection-end-line="244" selection-end-column="33" />
+            <state relative-caret-position="891">
+              <caret line="265" column="51" selection-start-line="265" selection-start-column="51" selection-end-line="265" selection-end-column="51" />
               <folding>
                 <element signature="n#style#0;n#el-popover#0;n#div#0;n#el-row#0;n#div#0;n#div#0;n#template#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#el-table#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
@@ -342,12 +342,12 @@
       <workItem from="1562307098998" duration="7194000" />
       <workItem from="1562376093950" duration="8266000" />
       <workItem from="1562396809019" duration="4093000" />
-      <workItem from="1562565431521" duration="9904000" />
+      <workItem from="1562565431521" duration="10194000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="132395000" />
+    <option name="totallyTimeSpent" value="132685000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="878" extended-state="6" />
@@ -407,7 +407,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/vue-openaccount/src/pages/user/beforecheck/evaluation.vue</url>
-          <line>158</line>
+          <line>161</line>
           <option name="timeStamp" value="2" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
@@ -656,8 +656,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/vue-openaccount/src/pages/admin/reviewerManagement.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1683">
-          <caret line="244" column="33" lean-forward="true" selection-start-line="244" selection-start-column="33" selection-end-line="244" selection-end-column="33" />
+        <state relative-caret-position="891">
+          <caret line="265" column="51" selection-start-line="265" selection-start-column="51" selection-end-line="265" selection-end-column="51" />
           <folding>
             <element signature="n#style#0;n#el-popover#0;n#div#0;n#el-row#0;n#div#0;n#div#0;n#template#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#el-table#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
