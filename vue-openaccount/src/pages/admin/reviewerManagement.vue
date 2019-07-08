@@ -230,6 +230,28 @@
         };
       },
       methods: {
+        queryTable(){
+            var that = this;
+            this.$axios.get('/api/admin/getAllReviewers')
+              .then(function(response){
+                console.log(response.data);
+                that.tableData = response.data;
+                for(var i = 0; i < that.tableData.length; i++)
+                  that.tableData[i].visible2 = false;
+                //that.length = that.tableData.length;
+                that.loading = false;
+                //that.handleCurrentChange(1);
+              }).catch(function(error){
+              console.log(error);
+              that.$msgbox({
+                type: 'error',
+                title: '连接失败',
+                message: '获取审核员信息失败！'
+              })
+            })
+        },
+
+
         queryName(){
            if (this.state != ''){
               console.log(this.state);
@@ -501,7 +523,8 @@
       },
 
       mounted(){
-        console.log(sessionStorage)
+        this.queryTable();
+        console.log(sessionStorage);
         this.reviewerName = this.loadAll();
         }
     }

@@ -36,25 +36,25 @@
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="js" value="22" />
-          <entry key="vue" value="160" />
+          <entry key="vue" value="166" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="JavaScript" value="22" />
-          <entry key="Vue.js" value="160" />
+          <entry key="Vue.js" value="166" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="js" value="162" />
-          <entry key="vue" value="8267" />
+          <entry key="vue" value="8849" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="JavaScript" value="162" />
-          <entry key="Vue.js" value="8267" />
+          <entry key="Vue.js" value="8849" />
         </counts>
       </usages-collector>
     </session>
@@ -64,8 +64,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/vue-openaccount/src/pages/superAdmin/adminManagement.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="5280">
-              <caret line="275" column="10" selection-start-line="272" selection-start-column="8" selection-end-line="275" selection-end-column="10" />
+            <state relative-caret-position="211">
+              <caret line="464" column="38" lean-forward="true" selection-start-line="464" selection-start-column="38" selection-end-line="464" selection-end-column="38" />
               <folding>
                 <element signature="n#style#0;n#el-form#0;n#div#0;n#div#0;n#template#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#div#0;n#el-popover#0;n#el-form-item#3;n#el-form#0;n#div#0;n#div#0;n#template#0;n#!!top" expanded="true" />
@@ -79,25 +79,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/vue-openaccount/src/pages/admin/userManagement.vue">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="440">
-              <caret line="92" column="35" lean-forward="true" selection-start-line="92" selection-start-column="35" selection-end-line="92" selection-end-column="35" />
-              <folding>
-                <element signature="n#style#0;n#el-table#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#0;n#el-popover#0;n#template#0;n#el-table-column#6;n#el-table#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#el-input#0;n#el-form-item#2;n#el-form#0;n#div#0;n#el-popover#0;n#template#0;n#el-table-column#6;n#el-table#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/vue-openaccount/src/pages/admin/reviewerManagement.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="363">
-              <caret line="439" column="27" lean-forward="true" selection-start-line="439" selection-start-column="27" selection-end-line="439" selection-end-column="27" />
+            <state relative-caret-position="1683">
+              <caret line="244" column="33" lean-forward="true" selection-start-line="244" selection-start-column="33" selection-end-line="244" selection-end-column="33" />
               <folding>
                 <element signature="n#style#0;n#el-popover#0;n#div#0;n#el-row#0;n#div#0;n#div#0;n#template#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#el-table#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
@@ -107,6 +93,17 @@
                 <element signature="n#style#0;n#span#0;n#el-form-item#2;n#el-form#0;n#template#0;n#el-table-column#0;n#el-table#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#div#0;n#el-popover#0;n#template#0;n#el-table-column#5;n#el-table#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#el-button#0;n#template#0;n#el-table-column#5;n#el-table#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="e#8307#8758#0" />
+                <element signature="e#8803#9117#0" />
+                <element signature="e#9159#9302#0" />
+                <element signature="e#9332#9989#0" />
+                <element signature="e#10032#11324#0" />
+                <element signature="e#11359#12593#0" />
+                <element signature="e#12628#12674#0" />
+                <element signature="e#12705#13837#0" />
+                <element signature="e#13873#14599#0" />
+                <element signature="e#14622#15778#0" />
+                <element signature="e#15843#15943#0" />
               </folding>
             </state>
           </provider>
@@ -138,14 +135,14 @@
         <option value="$PROJECT_DIR$/vue-openaccount/src/pages/superAdmin/AttributeManagement.vue" />
         <option value="$PROJECT_DIR$/vue-openaccount/src/components/superAdminMain.vue" />
         <option value="$PROJECT_DIR$/vue-openaccount/src/router/index.js" />
-        <option value="$PROJECT_DIR$/vue-openaccount/src/pages/user/beforecheck/inputInfo.vue" />
         <option value="$PROJECT_DIR$/vue-openaccount/src/components/adminMain.vue" />
         <option value="$PROJECT_DIR$/vue-openaccount/src/assets/js/area.js" />
         <option value="$PROJECT_DIR$/vue-openaccount/src/pages/superAdmin/attributeManagement.vue" />
-        <option value="$PROJECT_DIR$/vue-openaccount/src/pages/superAdmin/userManagement.vue" />
         <option value="$PROJECT_DIR$/vue-openaccount/src/pages/superAdmin/adminManagement.vue" />
         <option value="$PROJECT_DIR$/vue-openaccount/src/pages/superAdmin/instituteManagement.vue" />
         <option value="$PROJECT_DIR$/vue-openaccount/src/pages/admin/userManagement.vue" />
+        <option value="$PROJECT_DIR$/vue-openaccount/src/pages/superAdmin/userManagement.vue" />
+        <option value="$PROJECT_DIR$/vue-openaccount/src/pages/user/beforecheck/inputInfo.vue" />
         <option value="$PROJECT_DIR$/vue-openaccount/src/pages/admin/reviewerManagement.vue" />
       </list>
     </option>
@@ -345,12 +342,12 @@
       <workItem from="1562307098998" duration="7194000" />
       <workItem from="1562376093950" duration="8266000" />
       <workItem from="1562396809019" duration="4093000" />
-      <workItem from="1562565431521" duration="1135000" />
+      <workItem from="1562565431521" duration="9904000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="123626000" />
+    <option name="totallyTimeSpent" value="132395000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="878" extended-state="6" />
@@ -425,7 +422,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/vue-openaccount/src/pages/admin/reviewerManagement.vue</url>
-          <line>357</line>
+          <line>379</line>
           <option name="timeStamp" value="7" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
@@ -435,8 +432,14 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/vue-openaccount/src/pages/admin/reviewerManagement.vue</url>
-          <line>278</line>
+          <line>300</line>
           <option name="timeStamp" value="9" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/vue-openaccount/src/pages/admin/reviewerManagement.vue</url>
+          <line>423</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="10" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -466,13 +469,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="396">
           <caret line="45" column="23" lean-forward="true" selection-start-line="45" selection-start-column="23" selection-end-line="45" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/vue-openaccount/src/pages/user/beforecheck/evaluation.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="473">
-          <caret line="111" column="72" selection-start-line="111" selection-start-column="72" selection-end-line="111" selection-end-column="72" />
         </state>
       </provider>
     </entry>
@@ -564,23 +560,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/vue-openaccount/src/pages/superAdmin/instituteManagement.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1562">
-          <caret line="245" column="33" lean-forward="true" selection-start-line="245" selection-start-column="33" selection-end-line="245" selection-end-column="33" />
-          <folding>
-            <element signature="n#style#0;n#el-form#0;n#div#0;n#div#0;n#template#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#0;n#el-popover#0;n#el-form-item#2;n#el-form#0;n#div#0;n#div#0;n#template#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#el-cascader#0;n#el-form-item#1;n#el-form#0;n#div#0;n#el-popover#0;n#el-form-item#2;n#el-form#0;n#div#0;n#div#0;n#template#0;n#!!top" expanded="true" />
-            <element signature="e#1836#1976#0" />
-            <element signature="e#1985#2198#0" />
-            <element signature="e#2205#3519#0" />
-            <element signature="n#style#0;n#el-table#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#2;n#div#0;n#template#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/vue-openaccount/src/pages/superAdmin/attributeManagement.vue">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="44">
@@ -592,39 +571,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="305">
           <caret line="112" column="22" lean-forward="true" selection-start-line="112" selection-start-column="22" selection-end-line="112" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/vue-openaccount/src/pages/superAdmin/userManagement.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="242">
-          <caret line="116" column="26" lean-forward="true" selection-start-line="116" selection-start-column="26" selection-end-line="116" selection-end-column="26" />
-          <folding>
-            <element signature="n#style#0;n#el-form#0;n#div#0;n#div#0;n#template#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/vue-openaccount/src/pages/user/beforecheck/inputInfo.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="517">
-          <caret line="129" column="40" lean-forward="true" selection-start-line="129" selection-start-column="40" selection-end-line="129" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/vue-openaccount/src/pages/superAdmin/adminManagement.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5280">
-          <caret line="275" column="10" selection-start-line="272" selection-start-column="8" selection-end-line="275" selection-end-column="10" />
-          <folding>
-            <element signature="n#style#0;n#el-form#0;n#div#0;n#div#0;n#template#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#0;n#el-popover#0;n#el-form-item#3;n#el-form#0;n#div#0;n#div#0;n#template#0;n#!!top" expanded="true" />
-            <element signature="e#2447#3923#0" />
-            <element signature="n#style#0;n#el-table#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#0;n#el-popover#0;n#template#0;n#el-table-column#5;n#el-table#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#el-button#0;n#template#0;n#el-table-column#5;n#el-table#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#2;n#div#0;n#template#0;n#!!top" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -640,10 +586,78 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/vue-openaccount/src/pages/superAdmin/userManagement.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="396">
+          <caret line="276" column="36" lean-forward="true" selection-start-line="276" selection-start-column="36" selection-end-line="276" selection-end-column="36" />
+          <folding>
+            <element signature="n#style#0;n#el-form#0;n#div#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vue-openaccount/src/pages/user/beforecheck/reviewInfo.vue">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vue-openaccount/src/pages/user/beforecheck/inputInfo.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="258">
+          <caret line="430" column="42" selection-start-line="430" selection-start-column="42" selection-end-line="430" selection-end-column="42" />
+          <folding>
+            <element signature="n#style#0;n#el-button#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="e#3794#4220#0" />
+            <element signature="e#9422#11524#0" />
+            <element signature="e#9145#9198#0" />
+            <element signature="e#9228#9271#0" />
+            <element signature="e#9310#9377#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vue-openaccount/src/pages/user/beforecheck/evaluation.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="220">
+          <caret line="49" column="32" lean-forward="true" selection-start-line="49" selection-start-column="32" selection-end-line="49" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vue-openaccount/src/pages/superAdmin/instituteManagement.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="22">
+          <caret line="245" column="33" lean-forward="true" selection-start-line="245" selection-start-column="33" selection-end-line="245" selection-end-column="33" />
+          <folding>
+            <element signature="n#style#0;n#el-form#0;n#div#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#el-popover#0;n#el-form-item#2;n#el-form#0;n#div#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#el-cascader#0;n#el-form-item#1;n#el-form#0;n#div#0;n#el-popover#0;n#el-form-item#2;n#el-form#0;n#div#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="e#1836#1976#0" />
+            <element signature="e#1985#2198#0" />
+            <element signature="e#2205#3519#0" />
+            <element signature="n#style#0;n#el-table#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#2;n#div#0;n#template#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vue-openaccount/src/pages/superAdmin/adminManagement.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="211">
+          <caret line="464" column="38" lean-forward="true" selection-start-line="464" selection-start-column="38" selection-end-line="464" selection-end-column="38" />
+          <folding>
+            <element signature="n#style#0;n#el-form#0;n#div#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#el-popover#0;n#el-form-item#3;n#el-form#0;n#div#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="e#2447#3923#0" />
+            <element signature="n#style#0;n#el-table#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#el-popover#0;n#template#0;n#el-table-column#5;n#el-table#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#el-button#0;n#template#0;n#el-table-column#5;n#el-table#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#2;n#div#0;n#template#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/vue-openaccount/src/pages/admin/reviewerManagement.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="363">
-          <caret line="439" column="27" lean-forward="true" selection-start-line="439" selection-start-column="27" selection-end-line="439" selection-end-column="27" />
+        <state relative-caret-position="1683">
+          <caret line="244" column="33" lean-forward="true" selection-start-line="244" selection-start-column="33" selection-end-line="244" selection-end-column="33" />
           <folding>
             <element signature="n#style#0;n#el-popover#0;n#div#0;n#el-row#0;n#div#0;n#div#0;n#template#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#el-table#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
@@ -653,6 +667,17 @@
             <element signature="n#style#0;n#span#0;n#el-form-item#2;n#el-form#0;n#template#0;n#el-table-column#0;n#el-table#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#0;n#el-popover#0;n#template#0;n#el-table-column#5;n#el-table#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#el-button#0;n#template#0;n#el-table-column#5;n#el-table#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="e#8307#8758#0" />
+            <element signature="e#8803#9117#0" />
+            <element signature="e#9159#9302#0" />
+            <element signature="e#9332#9989#0" />
+            <element signature="e#10032#11324#0" />
+            <element signature="e#11359#12593#0" />
+            <element signature="e#12628#12674#0" />
+            <element signature="e#12705#13837#0" />
+            <element signature="e#13873#14599#0" />
+            <element signature="e#14622#15778#0" />
+            <element signature="e#15843#15943#0" />
           </folding>
         </state>
       </provider>
