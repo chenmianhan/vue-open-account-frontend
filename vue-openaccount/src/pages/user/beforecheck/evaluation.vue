@@ -46,6 +46,9 @@
         <span style="font-size:15px;line-height:60px">得分为{{mark}}分</span>
         <div style="font=size:12px;color:#909399;"><span>对测评结果不满意？可以</span>
         <el-link type="primary" @click="haveSubmit=false;dialogVisible = false;">重新测评</el-link></div>
+        <span>        
+            <el-button type="primary" :disabled="!haveSubmit" size="mini" round style="margin: 20px;" @click="nextStep()">下一步<i class="el-icon-caret-right icon"></i></el-button>
+        </span>
     </el-dialog>
     <div style="height: 100px;">
         <el-button size="medium" type='success' :disabled="haveSubmit" @click="handleSave">保 存</el-button>
