@@ -134,7 +134,7 @@
                 <el-button type="primary" size="mini" @click="visible2 = false; submitModifyForm('modifyForm',scope.row)">保存</el-button>
               </el-form>
             </div>
-            <el-button slot="reference" size="mini">修改</el-button>
+            <el-button slot="reference" size="mini" @click="handleForm(scope.row)">修改</el-button>
           </el-popover>
 
           <el-button type="danger" size="mini" style="margin-left: 15px" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
@@ -325,13 +325,12 @@
                 name: that.modifyForm.name,
                 account: that.modifyForm.account,
                 password: that.modifyForm.password,
-                str: that.modifyForm.str,
                 auditor_id: row.reviewer_id,
               };
 
               // var that = this;
               console.log(postData);
-              this.$axios.post('/api/admin/modifyAuditor', postData)
+              this.$axios.put('/api/admin/modifyAuditor', postData)
                 .then(function (response) {
                   console.log(response);
                   that.$msgbox({
@@ -492,6 +491,11 @@
           }else{
             return true;
           }
+        },
+
+        handleForm(row){
+          this.modifyForm.name = row.name;
+          this.modifyForm.account = row.account;
         },
 
       },
