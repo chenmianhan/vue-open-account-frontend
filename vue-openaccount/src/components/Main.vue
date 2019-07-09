@@ -143,10 +143,10 @@ export default {
     netName: 'xx营业网点',
     rules: {
       phone: [
-        // {validator: validatePhone, trigger:'blur'}
+        {validator: validatePhone, trigger:'blur'}
       ],
       code: [
-        // {required: true, message: '请输入验证码', trigger: 'blur'}
+        {required: true, message: '请输入验证码', trigger: 'blur'}
       ],
       password: [
         {required: true, message: '密码不能为空', trigger: 'blur'}
@@ -227,12 +227,8 @@ export default {
     },
     handleConfirm(value){
       var that = this;
-      let postData = {
-        phone: value
-      }
-      this.$axios.post('', postData).then(function(response){
-        console.log(response.data);
-        if(true){ // 用户不存在
+      this.$axios.get('/api/checkPhone', {params:{phone: value}}).then(function(response){
+        if(response.data.code == '300'){ // 用户不存在
           that.$msgbox({
             message: '账号不存在',
             type: 'error'
@@ -243,15 +239,15 @@ export default {
       })
     },
     handleSend(value){
-      this.time = 5;
+      this.time = 60;
       this.second = true;
       this.resend = false;
       var that = this;
       let postData = {
         phone: value
       }
-      this.$axios.post('', postData).then(function(response){
-        // console.log('send',response);
+      this.$axios.post('/api/askForCheckSum', that.$Qs.stringify(postData)).then(function(response){
+        console.log('send',response);
           that.c = window.setInterval(() => {
             if(that.time > 0){
               that.time = that.time - 1;
@@ -268,19 +264,18 @@ export default {
       this.$refs[form].validate((valid) => {
         if(valid){
           var that = this;
-          let postData = {
-            code: this.form.code
-          }
-          this.$axios.post('', postData).then(function(response){
+          this.$axios.get('/api/checkNum', {params:{checkNum:this.form.code}}).then(function(response){
             // 成功
-            that.dialogFormVisible = false;
-            that.visible = true;
-            // 失败
-            that.$msgbox({
-              message: '验证码有误',
-              type: 'error'
-            })
-          })
+            if(response.data.code == '302'){
+              that.dialogFormVisible = false;
+              that.visible = true;
+            }else{
+              that.$msgbox({
+                message: '验证码有误',
+                type: 'error'
+              });
+            }
+          });
         }else{
           return false;
         }
@@ -292,19 +287,30 @@ export default {
           var that = this;
           let postData = {
             phone: this.form.phone,
-            password: this.newform.password
+            newPassword: this.newform.password
           }
-          this.$axios.post('', postData).then(function(response){
+          this.$axios.get('/api/updatePassword', {
+            params:{
+              phone:that.form.phone,
+              newPassword:that.newform.password
+              }
+            }).then(function(response){
+            console.log('update', response.data)
             // 成功
-            that.$message({
-              message: '修改成功',
-              type: 'success'
-            });
+            if(response.data.code == '306'){
+              that.$message({
+                message: '修改成功',
+                type: 'success'
+              });
+            }else{
+              that.$message({
+                message: '修改失败',
+                type: 'error'
+              });
+              that.dialogFormVisible = true;
+              that.visible = false;
+            }
             // 失败
-            that.$message({
-              message: '修改失败',
-              type: 'error'
-            });
           })
         }
       })
