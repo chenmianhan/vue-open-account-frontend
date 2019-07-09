@@ -25,7 +25,7 @@
                     <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
                 </div>
                 <el-button type="text" class="login-tips" @click="forget">忘记密码？</el-button>
-                <!-- <el-button type="text" class="login-tips" @click="$router.push({path: '/user/home'})">点击这里看审核通过界面</!--> 
+                <el-button type="text" class="login-tips" @click="$router.push({path: '/signup'})">新用户注册</el-button>
             </el-form>
         </div>
         <div>
@@ -234,14 +234,6 @@
         //登录即注册提示
         mounted: function(){
             // console.log(sessionStorage);
-            if(this.notifyInstance) {
-                this.notifyInstance.close();
-            }
-            this.notifyInstance=this.$notify({
-                title: '提示',
-                message: '初次登录用户会自动创建账号，账号名为手机号，初始密码为用户输入密码！',
-                type: 'info'
-            });
         }
     }
 </script>

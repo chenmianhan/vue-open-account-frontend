@@ -77,7 +77,15 @@ export default new Router({
         component: resolve => require(['../pages/user/beforecheck/reviewInfo.vue'], resolve),
         name: '待审核资料'
       }]
-    }, {
+    }, 
+    //注册界面
+    {
+      path:'/signup',
+      component: resolve => require(['../pages/SignUp.vue'], resolve),
+      name: '新用户注册'
+    },
+    //用户界面
+    {
       path: '/user/home',
       component: resolve => require(['../components/Main.vue'], resolve),
       meta:{
