@@ -130,18 +130,17 @@
 </template>
 
 <script>
-import Info from '../../assets/js/userInfo.js'
+// import Info from '../../assets/js/userInfo.js'
 export default {
     data: function(){
         return {
-            //reviewerId: localStorage.getItem('ms_username'),
-            reviewerId: '1000',
+            userId:'',
             imageUrl_1:'../../assets/image/user.jpg',
             imageUrl_2:'../../assets/image/user.jpg',
             imageUrl_3:'../../assets/image/user.jpg',
-            userType: '保守型',
-            userGrade: 78,
-            userInfo: userInfo,//属性中增加用户id
+            userType: '',
+            userGrade: 0,
+            userInfo: [],//属性中增加用户id
             checked:{//是否已经选择过审核结果
                 info: false,
                 grade: false,
@@ -157,15 +156,19 @@ export default {
     },
     methods:{
         getFullInfo(){//从后端获取当前审核用户的全部信息
+            this.userId = this.$route.query.userId;//获取跳转界面的userId
+            console.log(this.userId);
+
             this.checked.info = false;
             this.checked.grade = false;
             this.checked.image = false;
 
-            // const postData = {
-            //     reviewerId: this.reviewerId
-            // }
+            const postData = {
+                userId: this.userId
+            }
+            console.log(postData);
             var that = this;
-            this.$axios.post('/api/reviewer/getUserInfo'
+            this.$axios.post('/api/reviewer/getUserInfo', this.$Qs.stringify(postData)
             ).then(function(response){
                 console.log(response.data);
                 that.userInfo = response.data.userInfo;

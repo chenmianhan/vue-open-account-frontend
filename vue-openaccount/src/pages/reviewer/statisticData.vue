@@ -25,14 +25,10 @@
                             end-placeholder="结束日期"
                             format="yyyy 年 MM 月 dd 日"
                             value-format="yyyy-MM-dd HH:mm:ss"
-                            @change="checkRange()"
                             :default-time="['00:00:00', '23:59:59']"
                             :picker-options="pickerOptions">
                         </el-date-picker>
-                        <el-tooltip v-show="way=='date'"
-                        class="item" effect="dark" content="所选日期范围最大为一周" placement="right">
-                            <el-button @click='queryTable' icon='el-icon-search' type='primary' circle></el-button>
-                        </el-tooltip>
+                        <el-button v-show="way=='date'" @click='queryTable' icon='el-icon-search' type='primary' circle></el-button>
                     </div>
                     <!-- 按用户姓名查询 -->
                     <div class="block" v-show="way == 'name'">
@@ -52,7 +48,7 @@
             <div class='show-item'>
                 <el-row :gutter="12">
                     <el-col :span="4">
-                            <div class="show-text-item" style="text-align: left;">
+                            <div class="show-text-item" style="color:#215181">
                                 <el-row>{{ reviewedNum }} </el-row>
                             </div>
                             <div class="show-data-item">
@@ -68,7 +64,7 @@
                             </div>
                     </el-col>
                     <el-col :span="4">
-                            <div class="show-text-item" style="text-align: left;">
+                            <div class="show-text-item" style="color:gray;">
                                 <el-row>{{ toReviewNum }} </el-row>
                             </div>
                             <div class="show-data-item">
@@ -133,9 +129,9 @@
                 </el-table-column>
                 <el-table-column prop="idInstitute" label="发证机关" width="80">
                 </el-table-column>-->
-                <el-table-column prop="userJob" label="职业" width="100">
+                <el-table-column prop="userJob" label="职业" width="95">
                 </el-table-column>
-                <el-table-column prop="education" label="学历" width="100">
+                <el-table-column prop="education" label="学历" width="95">
                 </el-table-column>
                 <!--<el-table-column prop="email" label="联系邮箱" width='110'>
                 </el-table-column>
@@ -150,12 +146,23 @@
                     column-key="reviewStatus"
                     label="审核状态"
                     width="100"
-                    :filters="[{ text: '通过', value: '通过' }, { text: '未通过', value: '未通过' }]"
+                    :filters="[{ text: '通过', value: '通过' }, { text: '未通过', value: '未通过' }
+                    ,{ text:'待审核', value: '待审核'},{ text:'审核中', value:'审核中'}]"
+                    :filter-multiple="false"
                     filter-placement="bottom-end">
                     <template slot-scope="scope">
                         <el-tag
                         :type="filterTagColor(scope.row.reviewStatus)"
                         disable-transitions>{{scope.row.reviewStatus}}</el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作">
+                    <template slot-scope="scope">
+                        <el-button
+                        v-show="scope.row.reviewStatus=='待审核'"
+                        size="mini"
+                        type="primary"
+                        @click="handleReview(scope.row.userId)">立即审核</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -186,6 +193,7 @@ export default {
             toReviewNum: 0,
             reviewedNum: 0,
             notPassNum: 0,
+            reviewingNum: 0,
 
             way: 'date',//默认日期
 
@@ -207,35 +215,121 @@ export default {
 
 
             tableData: [],
-             pickerOptions: {//日期选择器的快捷选项
+            pickerOptions: {//日期选择器的快捷选项
                 shortcuts: [{
                         text: '最近一周',
                         onClick(picker) {
-                        var end = new Date();
-                        var start = new Date();
-                        start.setTime(start.getTime() - 3600 * 1000 * 24 * 6);
-                        end.setTime(end.getTime());
+                            var end = new Date();
+                            var start = new Date();
+                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 6);
+                            end.setTime(end.getTime());
 
-                        var dateRange = new Array(start, end);
-                        var reg = new RegExp( '/' , "g" );
-                        dateRange[0] = dateRange[0].toLocaleDateString().replace(reg,'-');
-                        dateRange[1] = dateRange[1].toLocaleDateString().replace(reg,'-');
-                        dateRange[0] += ' 00:00:00';
-                        dateRange[1] += ' 23:59:59';
+                            var dateRange = new Array(start, end);
+                            var reg = new RegExp( '/' , "g" );
+                            dateRange[0] = dateRange[0].toLocaleDateString().replace(reg,'-');
+                            dateRange[1] = dateRange[1].toLocaleDateString().replace(reg,'-');
+                            dateRange[0] += ' 00:00:00';
+                            dateRange[1] += ' 23:59:59';
 
-                        this.dateValue = dateRange;
-                        start = this.dateValue[0];
-                        end = this.dateValue[1];
+                            this.dateValue = dateRange;
+                            start = this.dateValue[0];
+                            end = this.dateValue[1];
 
-                        picker.$emit('pick', [start, end]);
-                    }
-                }]
-             },
-             loading: true
+                            picker.$emit('pick', [start, end]);
+                        }
+                    }, {
+                        text: '最近一个月',
+                        onClick(picker) {
+                            var end = new Date();
+                            var start = new Date();
+                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+                            end.setTime(end.getTime());
+
+                            var dateRange = new Array(start, end);
+                            var reg = new RegExp( '/' , "g" );
+                            dateRange[0] = dateRange[0].toLocaleDateString().replace(reg,'-');
+                            dateRange[1] = dateRange[1].toLocaleDateString().replace(reg,'-');
+                            dateRange[0] += ' 00:00:00';
+                            dateRange[1] += ' 23:59:59';
+
+                            this.dateValue = dateRange;
+                            start = this.dateValue[0];
+                            end = this.dateValue[1];
+
+                            picker.$emit('pick', [start, end]);
+                        }
+                    }, {
+                        text: '最近三个月',
+                            onClick(picker) {
+                            var end = new Date();
+                            var start = new Date();
+                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+                            end.setTime(end.getTime());
+
+                            var dateRange = new Array(start, end);
+                            var reg = new RegExp( '/' , "g" );
+                            dateRange[0] = dateRange[0].toLocaleDateString().replace(reg,'-');
+                            dateRange[1] = dateRange[1].toLocaleDateString().replace(reg,'-');
+                            dateRange[0] += ' 00:00:00';
+                            dateRange[1] += ' 23:59:59';
+
+                            this.dateValue = dateRange;
+                            start = this.dateValue[0];
+                            end = this.dateValue[1];
+
+                            picker.$emit('pick', [start, end]);
+                        }
+                    },{
+                        text: '最近一年',
+                            onClick(picker) {
+                            var end = new Date();
+                            var start = new Date();
+
+                            end.setTime(end.getTime());
+                            var year = end.getFullYear();
+
+                            var a = year % 4;
+                            var b = year % 100;
+                            var c = year % 400;
+                            
+                            if (( (a == 0) && (b != 0) ) || (c == 0) ){//闰年
+                                start.setTime(start.getTime() - 3600 * 1000 * 24 * 366);
+                            }else{
+                                start.setTime(start.getTime() - 3600 * 1000 * 24 * 365);
+                            }
+
+                            var dateRange = new Array(start, end);
+                            var reg = new RegExp( '/' , "g" );
+                            dateRange[0] = dateRange[0].toLocaleDateString().replace(reg,'-');
+                            dateRange[1] = dateRange[1].toLocaleDateString().replace(reg,'-');
+                            dateRange[0] += ' 00:00:00';
+                            dateRange[1] += ' 23:59:59';
+
+                            this.dateValue = dateRange;
+                            start = this.dateValue[0];
+                            end = this.dateValue[1];
+
+                            picker.$emit('pick', [start, end]);
+                        }
+                    }]
+            },
+            loading: true
           }
     },
 
     methods: {
+        isLeapYear(year){
+            console.log("is leap year")
+            var a = year % 4;
+            var b = year % 100;
+            var c = year % 400;
+            if( ( (a == 0) && (b != 0) ) || (c == 0) ){
+                return true;
+            }else{
+                return false;
+            }
+        },
+
         handleSelectChange(){
             this.tableData = [];
             this.totalNum = 0;
@@ -252,6 +346,10 @@ export default {
                     this.filterCode = 1;
                 }else if (filters.reviewStatus[0] == '未通过'){
                     this.filterCode = 2;
+                }else if (filters.reviewStatus[0] == '待审核'){
+                    this.filterCode = 3;
+                }else if (filters.reviewStatus[0] == '审核中'){
+                    this.filterCode = 4;
                 }else{
                     this.filterCode = 0;
                 }
@@ -264,8 +362,10 @@ export default {
                 return 'success';
             }else if (statu === '未通过'){
                 return 'danger';
+            }else if (statu === '待审核'){
+                return 'info';
             }else{
-                return 'primary';
+                return 'warning';
             }
         },
 
@@ -303,6 +403,22 @@ export default {
             }
         },
 
+        getReviewingNum(){//获取审核中数据
+            var that = this;
+            this.$axios.post('/api/reviewer/getReviewingNum')
+            .then(function(response){
+                console.log(response);
+                that.reviewingNum = response.data.reviewingNum;
+                return that.reviewingNum;
+            }).catch(function(error){
+                that.$msgbox({
+                    type:'error',
+                    title:'连接失败',
+                    message:'获取审核中数据失败'
+                });
+            });
+        },
+
         queryTable(){
             this.tableData = [];
             this.totalNum = 0;
@@ -336,12 +452,17 @@ export default {
                     console.log(response.data);
                     that.currentPage = postData.pageNum;
                     that.tableData = response.data;
+                    that.getReviewingNum();
                     if (that.filterCode == 0){
-                        that.totalNum = that.reviewedNum + that.notPassNum;
+                        that.totalNum = that.reviewedNum + that.notPassNum + that.toReviewNum + that.reviewingNum;
                     }else if (that.filterCode == 1){
                         that.totalNum = that.reviewedNum;
                     }else if (that.filterCode == 2){
                         that.totalNum = that.notPassNum;
+                    }else if (that.filterCode == 3){
+                        that.totalNum = that.toReviewNum;
+                    }else if(that.filterCode == 4){
+                        that.totalNum = that.reviewingNum;
                     }
                     that.loading = false;
                 }).catch(function(error){
@@ -467,47 +588,47 @@ export default {
             return true;
         },
 
-        goToReview(){//跳转到开始审核界面
-            this.$router.push('/reviewer/reviewUser');
+        handleReview(userId){//跳转到开始审核界面并且传参
+            this.$router.push({path:'/reviewer/reviewUser', query:{userId: userId}});
         },
 
-        checkRange(){//检查选择的日期范围
-            var end = new Date(this.dateValue[1]);
-            var start = new Date(this.dateValue[0]);
-            var now = new Date();
+        // checkRange(){//检查选择的日期范围
+        //     var end = new Date(this.dateValue[1]);
+        //     var start = new Date(this.dateValue[0]);
+        //     var now = new Date();
 
-            now.setTime(now.getTime());
-            var reg = new RegExp( '/' , "g" );
-            now = now.toLocaleDateString().replace(reg, '-');
-            var hintDate = now;
-            now += ' 23:59:59';
-            now = new Date(now);
+        //     now.setTime(now.getTime());
+        //     var reg = new RegExp( '/' , "g" );
+        //     now = now.toLocaleDateString().replace(reg, '-');
+        //     var hintDate = now;
+        //     now += ' 23:59:59';
+        //     now = new Date(now);
 
-            var dateRange = end.getTime() - start.getTime();
-            var isBeyond = now.getTime() - end.getTime();
-            console.log(dateRange);
-            console.log(isBeyond);
+        //     var dateRange = end.getTime() - start.getTime();
+        //     var isBeyond = now.getTime() - end.getTime();
+        //     console.log(dateRange);
+        //     console.log(isBeyond);
 
-            if(isBeyond < 0){
-                this.$msgbox({
-                    type:'error',
-                    title: '超出范围',
-                    message: '结束日期不能超过今天（' + hintDate + '），请重新选择！'
-                });
-                this.dateValue = '';
-                return false;
-            }else if (dateRange >= 3600 * 1000 * 24 * 7){
-                this.$msgbox({
-                    type:'error',
-                    title: '超出范围',
-                    message: '所选日期范围不能超过一周，请重新选择！'
-                });
-                this.dateValue = '';
-                return false;
-            }else{
-                return true;
-            }
-        },
+        //     if(isBeyond < 0){
+        //         this.$msgbox({
+        //             type:'error',
+        //             title: '超出范围',
+        //             message: '结束日期不能超过今天（' + hintDate + '），请重新选择！'
+        //         });
+        //         this.dateValue = '';
+        //         return false;
+        //     }else if (dateRange >= 3600 * 1000 * 24 * 7){
+        //         this.$msgbox({
+        //             type:'error',
+        //             title: '超出范围',
+        //             message: '所选日期范围不能超过一周，请重新选择！'
+        //         });
+        //         this.dateValue = '';
+        //         return false;
+        //     }else{
+        //         return true;
+        //     }
+        // },
 
         handleSizeChange(val) {
             // console.log(`每页 ${val} 条`);
@@ -544,7 +665,7 @@ export default {
     .search-bar{
         /*position: relative;*/
         float:left;
-        margin-left: 45px
+        margin-left: 50px
     }
     
     .block{
@@ -558,8 +679,8 @@ export default {
     }
     .statistic-item {
         margin-top: 40px;
-        margin-left: 120px;
-        margin-right: 120px;
+        margin-left: 100px;
+        margin-right: 100px;
     }
     /* .text {
         font-size: 14px;
@@ -571,7 +692,7 @@ export default {
     
     .show-item {
         text-align: left;
-        margin-left: 50px;
+        margin-left: 60px;
     }
 
     .show-data-item {
