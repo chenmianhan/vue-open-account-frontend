@@ -321,7 +321,7 @@
           const postData = {
             reviewerId: item.address
           }
-          this.$axios.get('/api/admin/getReviewerInfo', postData
+          this.$axios.post('/api/admin/getReviewerInfo', postData
           ).then(function(response){
               that.tableData = response.data;
               for(var i = 0; i < that.tableData.length; i++){
