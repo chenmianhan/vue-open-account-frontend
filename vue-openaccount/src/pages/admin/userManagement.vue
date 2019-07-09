@@ -394,10 +394,10 @@
               console.log(postData);
               this.$axios.post('/api/updateAccountInfo', postData)
                 .then(function (response) {
-                  console.log(response);
-                  that.$msgbox({
-                    title: '修改成功',
-                    type: 'succeed'
+                  console.log('修改', response);
+                  that.$message({
+                    message: '修改成功',
+                    type: 'success'
                   });
                   that.queryTable();
                 })
@@ -429,7 +429,11 @@
           }).then(() => {
             this.$axios.post('/api/deleteUsers', {user_id: deleteId})//post也可以改成get，但需要对应服务端的请求方法
               .then(function (response) {
-                console.log(response);
+                console.log('delete',response);
+                that.$message({
+                  message: '删除成功',
+                  type: 'success'
+                })
                 that.queryTable();
               })
               .catch(function (error) {

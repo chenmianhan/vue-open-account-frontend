@@ -191,7 +191,7 @@ import area from '../../../assets/js/area.js'
           dialogVisible: false,
           address: areajson,
           haveSubmit: false,
-          allDone: false,
+          allDone: true,
 
           front: [],
           back: [],

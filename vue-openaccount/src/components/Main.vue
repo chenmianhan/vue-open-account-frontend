@@ -46,7 +46,8 @@
                 </span>
                 <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item :disabled='true'>{{netName}}</el-dropdown-item>
-                  <el-dropdown-item command="loginout" icon="el-icon-switch-button" :divided='true'>退出登录</el-dropdown-item>
+                  <el-dropdown-item command="forget" icon="el-icon-key" :divided='true'>修改密码</el-dropdown-item>
+                  <el-dropdown-item command="loginout" icon="el-icon-switch-button" :divided='false'>退出登录</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
           </el-col>
@@ -57,6 +58,43 @@
         <transition name="fade" mode="out-in">
           <router-view></router-view>
         </transition>
+
+        <el-dialog title="忘记密码" :visible.sync="dialogFormVisible" width="35%">
+          <el-form :model="form" size="small" ref="form1" :rules="rules">
+            <el-form-item label="手机号" prop="phone">
+              <el-input v-model="form.phone" style="width:300px" @blur="handleConfirm(form.phone)"></el-input>
+            </el-form-item>
+            <el-form-item label="验证码" prop="code">
+              <el-input :disabled="buttonDis" v-model="form.code" style="width:300px">
+                <el-button slot="append" v-show="!second" @click="handleSend(form.phone)">发送验证码</el-button>
+                <el-button slot="append" v-show="second" :disabled="!resend" @click="handleSend(form.phone)">({{time}}s)重新发送</el-button>
+              </el-input>
+            </el-form-item>
+
+            <el-form-item>
+              <el-button type="primary" @click="handleValid('form1')">确定</el-button>
+            </el-form-item>
+          </el-form>
+        </el-dialog>
+
+        <el-dialog title="重设密码" :visible.sync="visible" width="35%">
+          <el-form :model="newform" size="small" :rules="rules" ref="form2">
+            <el-form-item label="新密码" prop="password">
+              <el-input v-model="newform.password" type="password" style="width:300px"></el-input>
+            </el-form-item>
+            <el-form-item label="确认密码" prop="confirm">
+              <el-input v-model="newform.confirm" type="password" style="width:300px">
+                <!-- <el-button slot="append">发送验证码</!-->
+                <!-- <el-button slot="append">({{}})重新发送</el-button> -->
+              </el-input>
+            </el-form-item>
+
+            <el-form-item>
+              <el-button type="primary" @click="handleSubmit('form2')">确定</el-button>
+            </el-form-item>
+          </el-form>
+        </el-dialog>
+
       </el-main>
     </el-container>
   </el-container>
@@ -64,17 +102,61 @@
 </template>
 
 <script>
-let data = () => {
+export default {
+  data(){
+    var validatePhone = (rule, value, callback) => {
+      //验证手机号格式是否正确
+      const reg = /^1[3|4|5|7|8][0-9]\d{8}$/;
+      console.log(reg.test(value));
+      if (reg.test(value)) {//格式正确
+          callback();
+      } else {//格式错误
+          return callback(new Error('请输入格式正确的手机号（长度11位）'));
+      }
+  };
+  let confirmPassword = (rule, value, callback) => {
+    if(value === ''){
+      return callback(new Error('请输入确认密码'));
+    }else if(value !== this.newform.password){
+      return callback(new Error('两次密码输入不一致'));
+    } else {
+      callback();
+    }
+  };
+
   return {
+    newform: {
+      confirm: '',
+      password: ''
+    },
+    c: null,
+    form: {},
+    time: 10,
+    resend: false,
+    second: false,
+    visible: false,
+    dialogFormVisible: false,
     collapsed: false,
+    buttonDis: false,
     systemName: '金证开户平台',
     userName: 'xx用户',
-    netName: 'xx营业网点'
+    netName: 'xx营业网点',
+    rules: {
+      phone: [
+        {validator: validatePhone, trigger:'blur'}
+      ],
+      code: [
+        {required: true, message: '请输入验证码', trigger: 'blur'}
+      ],
+      password: [
+        {required: true, message: '密码不能为空', trigger: 'blur'}
+      ],
+      confirm: [
+        {validator: confirmPassword, trigger: 'blur'}
+      ]
+    }
   }
-}
-
-export default {
-  data: data,
+  },
   methods: {
     handleCommand(command) {
         var that = this;
@@ -109,6 +191,9 @@ export default {
                 })
             })
         }
+        if(command == 'forget'){
+          this.dialogFormVisible = true;
+        }
     },
 
     getUserInfo(){
@@ -139,15 +224,105 @@ export default {
           that.$router.push({path: '/login'});
         }
       });
+    },
+    handleConfirm(value){
+      var that = this;
+      this.$axios.get('/api/checkPhone', {params:{phone: value}}).then(function(response){
+        if(response.data.code == '300'){ // 用户不存在
+          that.$msgbox({
+            message: '账号不存在',
+            type: 'error'
+          })
+        }else{
+          that.buttonDis = false;
+        }
+      })
+    },
+    handleSend(value){
+      this.time = 60;
+      this.second = true;
+      this.resend = false;
+      var that = this;
+      let postData = {
+        phone: value
+      }
+      this.$axios.post('/api/askForCheckSum', that.$Qs.stringify(postData)).then(function(response){
+        console.log('send',response);
+          that.c = window.setInterval(() => {
+            if(that.time > 0){
+              that.time = that.time - 1;
+            }else{
+              console.log('stop')
+              clearTimeout(that.c);
+              that.c = null;
+              that.resend = true;
+            }
+          }, 1000)
+      });
+    },
+    handleValid(form){
+      this.$refs[form].validate((valid) => {
+        if(valid){
+          var that = this;
+          this.$axios.get('/api/checkNum', {params:{checkNum:this.form.code}}).then(function(response){
+            // 成功
+            if(response.data.code == '302'){
+              that.dialogFormVisible = false;
+              that.visible = true;
+            }else{
+              that.$msgbox({
+                message: '验证码有误',
+                type: 'error'
+              });
+            }
+          });
+        }else{
+          return false;
+        }
+      })
+    },
+    handleSubmit(form){
+      this.$refs[form].validate((valid) => {
+        if(valid){
+          var that = this;
+          let postData = {
+            phone: this.form.phone,
+            newPassword: this.newform.password
+          }
+          this.$axios.get('/api/updatePassword', {
+            params:{
+              phone:that.form.phone,
+              newPassword:that.newform.password
+              }
+            }).then(function(response){
+            console.log('update', response.data)
+            // 成功
+            if(response.data.code == '306'){
+              that.$message({
+                message: '修改成功',
+                type: 'success'
+              });
+            }else{
+              that.$message({
+                message: '修改失败',
+                type: 'error'
+              });
+              that.dialogFormVisible = true;
+              that.visible = false;
+            }
+            // 失败
+          })
+        }
+      })
     }
 
   },
   mounted: function() {
-        console.log(sessionStorage);
-        if(sessionStorage.getItem('Flag') != 'isLogin'
-        || sessionStorage.getItem('status') != '7'){
-            this.$router.push({path: '/403'});
-        }
+        // console.log(sessionStorage);
+        // if(sessionStorage.getItem('Flag') != 'isLogin'
+        // || sessionStorage.getItem('status') != '7'){
+        //     this.$router.push({path: '/403'});
+        // }
         this.isValid();
         this.getUserInfo();
   },
