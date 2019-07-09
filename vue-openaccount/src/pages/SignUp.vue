@@ -216,13 +216,13 @@
                         this.$axios.post('/api/addUser',this.$Qs.stringify(postData)
                         ).then(function(response){
                             console.log('response', response);
-                            if (response.data.code =='309'){
+                            if (response.data.code =='102'){
                                 that.$message({
                                     type:'success',
                                     message:'注册成功！'
                                 });
                                 that.$router.push({path: '/login'});
-                            }else if (response.data.code == '310'){
+                            }else if (response.data.code == '103'){
                                 that.$message({
                                     type:'error',
                                     message:'注册失败！'
