@@ -429,7 +429,7 @@
           }).then(() => {
             this.$axios.post('/api/deleteUsers', {user_id: deleteId})//post也可以改成get，但需要对应服务端的请求方法
               .then(function (response) {
-                console.log(response);
+                console.log('delete',response);
                 that.queryTable();
               })
               .catch(function (error) {

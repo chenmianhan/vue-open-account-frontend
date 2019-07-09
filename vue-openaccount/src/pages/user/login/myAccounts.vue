@@ -108,7 +108,7 @@
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-            <el-button @click="rechargeVisible = false; rechargeForm = {}" size="small" >取 消</el-button>
+            <el-button @click="rechargeVisible = false; rechargeForm = {cardID:'',value:'',password:''}" size="small" >取 消</el-button>
             <el-button type="primary" @click="rechargeOK(rechargeForm.account)" size="small">确 定</el-button>
         </div>
         </el-dialog>
@@ -127,7 +127,7 @@
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-            <el-button @click="withdrawVisible = false;  withdrawForm = {}" size="small" >取 消</el-button>
+            <el-button @click="withdrawVisible = false;  withdrawForm = {cardID:'',value:'',password:''}" size="small" >取 消</el-button>
             <el-button type="primary" @click="withdrawOK(withdrawForm.account)" size="small">确 定</el-button>
         </div>
         </el-dialog>
@@ -151,7 +151,7 @@
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-            <el-button @click="addVisible = false;addForm = {};" size="small" >取 消</el-button>
+            <el-button @click="addVisible = false;addForm = {cardID:'',password:'',name:'',phone:'',bank:''};" size="small" >取 消</el-button>
             <el-button type="primary" @click="handleAdd" size="small">确 定</el-button>
         </div>
         </el-dialog>
@@ -226,6 +226,8 @@ export default {
     },
     methods: {
         allWithdraw(item){
+            // this.withdrawForm.value = '';
+            console.log('item', item)
             this.withdrawForm.value = item.balance.balance;
         },
         getData(){

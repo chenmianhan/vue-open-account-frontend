@@ -395,15 +395,16 @@
               console.log(postData);
               this.$axios.post('/api/admin/addAuditor', postData)
                 .then(function (response) {
-                  console.log(response);
+                  console.log('修改',response);
                   that.$message({
                     message: '添加成功',
                     type: 'success'
                   });
                 })
                 .catch(function (error) {
+                  console.log(error)
                   that.$msgbox({
-                    title: '连接失败',
+                    message: error,
                     type: 'error'
                   });
                 });
@@ -464,7 +465,7 @@
           }).then(() => {
             this.$axios.post('/api/admin/deleteReviewer', postData)//post也可以改成get，但需要对应服务端的请求方法
               .then(function (response) {
-                console.log(response);
+                console.log('删除',response);
               })
               .catch(function (error) {
                 alert(error);
