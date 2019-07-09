@@ -4,20 +4,6 @@
         </el-page-header>
         <!-- 选择器 -->
         <div>
-            <!-- <el-date-picker
-            value-format="yyyy-MM-dd HH:mm:ss"
-            v-model="startDate"
-            type="date"
-            placeholder="选择日期" 
-            size="small">
-            </el-date-picker>
-            <span style="margin: 20px">至</span>
-            <el-date-picker
-            value-format="yyyy-MM-dd HH:mm:ss"
-            v-model="endDate"
-            type="date"
-            placeholder="选择日期" size="small">
-            </el-date-picker> -->
             <el-date-picker
                 v-model="date"
                 type="daterange"
