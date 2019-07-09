@@ -1,7 +1,7 @@
 <template>
     <div class="login-wrap">
         <div class="ms-login">
-            <div class="ms-title">金证在线开户平台</div>
+            <div class="ms-title">新用户注册</div>
             <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="0px" class="ms-content">
                 <el-form-item prop="username">
                     <el-input v-model="ruleForm.username" placeholder="手机号码">
@@ -58,6 +58,7 @@
                         console.log(response);
                         var code = response.data.code;
                         if (code == '300'){
+                            that.isDisabled = false;
                             return callback();
                         }else if (code =='301'){
                             return callback(new Error('该手机号已注册！请直接登录或输入新的手机号'));
@@ -124,7 +125,7 @@
 
             return {
                 isChecked: false,
-                isDisabled: false,
+                isDisabled: true,
                 signUpAllowed: false,
 
                 buttonName: '发送验证码',
