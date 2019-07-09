@@ -24,14 +24,48 @@
                 <div class="login-btn">
                     <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
                 </div>
-                <el-button type="text" class="login-tips" @click="forget">忘记密码？</el-button>
+                <el-button type="text" class="login-tips" @click="isDialogShow = true">忘记密码？</el-button>
                 <el-button type="text" class="login-tips" @click="$router.push({path: '/signup'})">新用户注册</el-button>
             </el-form>
         </div>
+        <!-- 忘记密码 -->
         <div>
-            <el-form>
-
-            </el-form>
+            <el-dialog
+                title="忘记密码"
+                :visible.sync="isDialogShow"
+                width="30%"
+                center>
+                <el-form :model="changeForm" status-icon :rules="rules" ref="changeForm" label-width="0px" class="ms-change-content">
+                    <el-form-item v-show="!isChecked" prop="phone">
+                        <el-input v-model="changeForm.phone" placeholder="手机号码">
+                            <el-button slot="prepend" icon="el-icon-mobile-phone"></el-button>
+                        </el-input>
+                    </el-form-item>
+                    <el-form-item prop="valCode" v-show="!isChecked">
+                        <el-input
+                        type="text" placeholder="验证码" v-model="changeForm.valCode">
+                            <el-button slot="prepend" icon="el-icon-s-promotion"></el-button>
+                            <el-button slot="append" size="mini" :disabled="isDisabled" @click="sendValCode">{{buttonName}}</el-button>
+                        </el-input>
+                    </el-form-item>
+                    <el-form-item prop="newPpassword" v-show="isChecked">
+                        <span>请输入新密码：</span>
+                        <el-input
+                        show-password
+                        type="password" placeholder="新密码" v-model="changeForm.password" @keyup.enter.native="submitChangeForm('changeForm')">
+                            <el-button slot="prepend" icon="el-icon-lock"></el-button>
+                        </el-input>
+                    </el-form-item>
+                </el-form>
+                <div style="text-align: center;">
+                    <el-button @click="isDialogShow = false">取消</el-button>
+                    <el-button type="primary" :disabled="!submitAllowed" @click="submitChangeForm('changeForm')">提交</el-button>
+                </div>
+                <!-- <span slot="footer" class="dialog-footer">
+                    <el-button @click="isDialogShow = false">取消</el-button>
+                    <el-button type="primary" :disabled="!submitAllowed" @click="submitChangeForm('changeForm')">提交</el-button>
+                </span> -->
+            </el-dialog>
         </div>
     </div>
 </template>
@@ -58,11 +92,27 @@
                 const reg = /^1[3|4|5|7|8][0-9]\d{8}$/;
                 console.log(reg.test(value));
                 if (reg.test(value)) {//格式正确
-                    callback();
+                    this.$axios.get('/api/checkPhone',{params:{phone: value}})
+                    .then(function(response){
+                        console.log(response);
+                        var code = response.data.code;
+                        if (code == '301'){
+                            that.isDisabled = false;
+                            return callback();
+                        }else if (code =='300'){
+                            return callback(new Error('该手机号未注册！请先注册'));
+                        }else{
+                            return callback(new Error('服务器异常'));
+                        }
+                    }).catch(function(error){
+                        console.log(error);
+                        return callback(new Error('服务器异常'));
+                    });
                 } else {//格式错误
                     return callback(new Error('请输入格式正确的手机号（长度11位）'));
                 }
             };
+
             var validateAdminId = (rule, value, callback) => {
                 //验证非用户账号格式是否正确
                 const reg = /^[A-Za-z0-9]{1,12}$/;
@@ -74,16 +124,59 @@
                 }
                 callback();
             };
+
             var validatePass = (rule, value, callback) => {
                 //验证密码格式是否正确
                 if (!value)
                     return callback(new Error('请输入密码'));
                 else if (value.length > 12)
                     return callback(new Error('长度不超过12位'))
-                else
+                else{
+                    this.submitAllowed = true;
                     callback();
+                }
             };
+            //验证码检查
+            var validateCode = (rule, value, callback) => {
+                var that = this;
+                if (value != ''){
+                    const postData = {
+                        checkNum: value,
+                    }
+                    this.$axios.get('/api/checkNum', {params:{checkNum: value}})
+                    .then(function(response){
+                        console.log(response);
+                        if (response.data.code == '302'){
+                            that.isChecked = true;
+                            that.$message({
+                                message:'验证码正确',
+                                type: 'success'
+                            })
+                            callback();
+                        }else if(response.data.code == '303'){
+                            return callback(new Error('验证码错误'));
+                        }else{
+                            return callback(new Error('服务器异常'));
+                        }
+                    }).catch(function(error){
+                        console.log(error);
+                    })
+                }
+            };
+
             return {
+                isDialogShow: false,
+                isChecked: false,
+                isDisabled: true,
+                submitAllowed:false,
+
+                buttonName: "发送验证码",
+
+                changeForm:{
+                    phone: '',//用户手机号
+                    valCode: '', //短信验证码
+                    newPassword: '',//密码
+                },
                 //表单格式
                 ruleForm: {
                     username: '',//用户id||手机号
@@ -98,30 +191,66 @@
                     password: [
                         { validator: validatePass, trigger: 'blur'}
                     ],
+                    newPassword: [
+                        { validator: validatePass, trigger: 'blur'}
+                    ],
                     role: [
                         { required: !null, message: '请选择您的账号类别', trigger: 'blur'}
+                    ],
+                    phone: [
+                        { validator: validatePhone, trigger:'blur'}
+                    ],
+                    valCode:[
+                        { validator: validateCode, trigger: 'blur'}
                     ]
                 },
                 isLogin: false //登录状态变量
             }
         },
         methods: {
-            forget(){
-                this.$prompt('请输入邮箱', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
-                inputErrorMessage: '邮箱格式不正确'
-                }).then(({ value }) => {
-                this.$message({
-                    type: 'success',
-                    message: '已发送验证码至你的邮箱: ' + value
-                });
-                }).catch(() => {
-                this.$message({
-                    type: 'info',
-                    message: '取消输入'
-                });       
+            sendValCode(){//60秒计时器以及发送验证码
+                var that = this;
+                const postData = {
+                    phone: this.ruleForm.username,
+                }
+                console.log(postData);
+
+                this.$axios.post('/api/askForCheckSum', this.$Qs.stringify(postData)
+                ).then(function(response){
+                    console.log(response);
+                    if (response.data.code == '308'){
+                        const TIME_COUNT = 60;
+                        that.count = TIME_COUNT;
+                        that.timer = window.setInterval(() => {
+                            if (that.count > 0 && that.count <= TIME_COUNT){
+                                that.isDisabled = true;
+                                that.count--;
+                                that.buttonName = that.count + 's后重新获取';
+                            }else{
+                                that.isDisabled = false;
+                                that.buttonName = '发送验证码';
+                                clearInterval(that.timer);
+                                that.timer = null;
+                            }
+                        }, 1000)
+                    }else if(response.data.code =='100015'){
+                        that.$msgbox({
+                            type: 'error',
+                            message:'手机号不合法'
+                        });
+                    }else{
+                        that.$msgbox({
+                            type:'error',
+                            message:'服务器异常'
+                        })
+                    }
+                }).catch(function(error){
+                    console.log(error);
+                    that.$msgbox({
+                        type:'error',
+                        title:'连接失败',
+                        message:'发送短信验证码失败！'
+                    })
                 });
             },
             //表单验证，主要验证输入格式是否正确；验证正确后向后端传输数据
@@ -130,10 +259,11 @@
                     if (valid) {
                         //前->后端传输
                         var that = this;
+                        
                         const postData = {//打包传输数据，类型均为string
-                            account: that.ruleForm.username,
-                            password: that.ruleForm.password,
-                            role: String(that.ruleForm.role)
+                            account: that.formName.username,
+                            password: that.formName.password,
+                            role: String(that.formName.role)
                         }
                         console.log(postData);
                         console.log(this.$Qs.stringify(postData));
@@ -184,16 +314,54 @@
                             });
                             console.log('error', error);
                         })
-                        //将用户名缓存
-                        sessionStorage.setItem('ms_username',this.ruleForm.account);
-                        //this.$router.push('/login/warning');//暂时直接跳转风险提示界面
-                        // console.log('submit!');
                     } else {
                         // console.log('error submit!!');
                         // return false;
                     }
                 });
             },
+
+            submitChangeForm(formName){
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        var that = this;
+                        const postData = {
+                            phone: this.formName.phone,
+                            newPassword: this.formName.newPassword
+                        }
+                        console.log(this.$Qs.stringify(postData));
+                        this.$axios.post('/api/updatePassword',this.$Qs.stringify(postData)
+                        ).then(function(response){
+                            console.log('response', response);
+                            if (response.data.code =='306'){
+                                that.$message({
+                                    type:'success',
+                                    message:'修改成功！'
+                                });
+                                that.isDialogShow = false;
+                            }else if (response.data.code == '307'){
+                                that.$message({
+                                    type:'error',
+                                    message:'系统异常！'
+                                })
+                            }else{
+                                that.$message({
+                                    type:'error',
+                                    message:'未知状态码'
+                                })
+                            }
+                        }).catch(function(error){
+                            console.log(error);
+                            that.$$msgbox({
+                                type:'error',
+                                title:'连接失败',
+                                message:'与后台服务器通讯失败！'
+                            })
+                        });
+                    }
+                });
+            },
+
             goPage(){
                 var that = this;
                 this.$axios.post('/api/getReviewResult').then(function(response){
@@ -267,6 +435,9 @@
     }
     .ms-content{
         padding: 30px 30px;
+    }
+    .ms-change-content{
+        padding: 10px;
     }
     .login-btn{
         text-align: center;
