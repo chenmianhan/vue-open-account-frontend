@@ -11,16 +11,16 @@
   </div>
     <el-divider><i class="el-icon-star-off"></i><i class="el-icon-star-off"></i><i class="el-icon-star-off"></i></el-divider>
     <el-row>
-        <el-col :span="10"><img src="../../assets/image/cry.gif" class="image"></el-col>
-        <el-col :span="12">
-    <h1>您未通过审核</h1><span>点此</span><el-link @click="$router.push({path: '/login/warning'})">重新开户</el-link>
-    <!-- <div v-for="title in titles" :key="title"> -->
-        <el-alert type="error" show-icon style="margin:10px auto;width:70%;" :closable="false">
-            <h3>{{message}}</h3>
-        </el-alert>
-    <!-- </div> -->
-    <h3>如有问题，请联系客服：xxx-xxxx-xxxx</h3>
-
+        <el-col :span="12"><img src="../../assets/image/cry.gif" class="image"></el-col>
+        <el-col :span="10">
+            <el-alert type="error" show-icon style="margin:10px auto;width:70%;" :closable="false">
+                <h3>{{message}}</h3>
+            </el-alert>
+            <h3 style="margin:20px auto;">如有问题，请联系客服：{{contactNum}}</h3>
+            <el-button 
+            style="margin: 20px auto;"
+            @click="goToWarning" 
+            type="primary">重新开户</el-button>
         </el-col>
     </el-row>
 </div>
@@ -30,10 +30,16 @@
 export default {
     data(){
         return{
-            message: '您的XXXXXXX都没有通过'
+            message: '',
+            contactNum: ''
         }
     },
     methods:{
+        goToWarning(){
+            sessionStorage.setItem('status', 0);
+            this.$router.push({path: '/login/warning'})
+        },
+
         getMsg(){
         var that = this;
         this.$axios.post('/api/getReviewResult').then(function(response){
@@ -44,6 +50,22 @@ export default {
                 title: '连接失败'
             });
         });
+        },
+
+        getContactNum(){
+            var that = this;
+            this.$axios.get('/api/contactNum'
+            ).then(function(response){
+                console.log(response.data);
+                that.contactNum = response.data;
+            }).catch(function(error){
+                console.log(error);
+                that.$msgbox({
+                    type: 'error',
+                    title: '连接失败',
+                    message: '与后台服务器通讯失败！'
+                })
+            })
         }
     },
     mounted(){
@@ -53,6 +75,7 @@ export default {
             this.$router.push({path: '/403'});
         }
         this.getMsg();
+        this.getContactNum();
     }
 }
 </script>

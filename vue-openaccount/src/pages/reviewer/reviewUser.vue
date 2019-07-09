@@ -156,7 +156,8 @@ export default {
     },
     methods:{
         getFullInfo(){//从后端获取当前审核用户的全部信息
-            this.userId = this.$route.query.userId;//获取跳转界面的userId
+            //this.userId = this.$route.query.userId;//获取跳转界面的userId
+            console.log(this.$route.query.userId);
             console.log(this.userId);
 
             this.checked.info = false;
@@ -164,13 +165,18 @@ export default {
             this.checked.image = false;
 
             const postData = {
-                userId: this.userId
+                    userId: ''
             }
-            console.log(postData);
+
+            if (this.$route.query.userId != undefined){
+                postData.userId= this.$route.query.userId
+            }
+            
+            console.log("userId: " + postData.userId);
             var that = this;
             this.$axios.post('/api/reviewer/getUserInfo', this.$Qs.stringify(postData)
             ).then(function(response){
-                console.log(response.data);
+                console.log("response: " + response.data);
                 that.userInfo = response.data.userInfo;
                 that.imageUrl_1 = response.data.imageUrl_1;
                 that.imageUrl_2 = response.data.imageUrl_2;
