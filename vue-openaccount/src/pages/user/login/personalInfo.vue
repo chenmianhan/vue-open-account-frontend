@@ -1,5 +1,6 @@
 <template>
-    <div>
+    <div
+    >
         <el-col :span="8">
             <img class="photo" src="../../../assets/image/user.jpg">
           <el-row>
@@ -9,7 +10,11 @@
 
         </el-col>
         <el-col :span="16">
-            <div class="info-box">
+            <div class="info-box"
+               v-loading='loading' 
+               element-loading-text="拼命加载中"
+               element-loading-spinner="el-icon-loading"
+               element-loading-background="rgba(0, 0, 0, 0.8)">
                  <el-tabs v-model="title">
                       <el-tab-pane label="身份信息" name="1">
                          <el-row>
@@ -163,7 +168,6 @@
             <el-button type="primary" @click="visible = false">知道了</el-button>
         </span>
         </el-dialog>
-
     </div>
 </template>
 
@@ -173,6 +177,7 @@ import area from '../../../assets/js/area'
 export default {
     data(){
         return {
+             loading: true,
              star: 0,
              address: areajson,
              options: [
@@ -229,6 +234,7 @@ export default {
             that.contactAddress = response.data.contact_address;
             that.postAddress = response.data.postal_address;
             that.star = parseFloat(that.accountInfo.risk_assessment_mark) / parseFloat(20.00);
+            that.loading = false;
         }).catch(() => {
             that.msgbox({
                 message: '连接失败',

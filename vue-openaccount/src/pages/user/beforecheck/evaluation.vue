@@ -44,12 +44,29 @@
     <el-dialog title='您的风险评级为' :visible.sync='dialogVisible' width="30%">
         <div style="margin: 0 auto;font-size:25px;background-color:#E4E7ED;width:50%;border-radius:7px;">{{grade}}</div>
         <span style="font-size:15px;line-height:60px">得分为{{mark}}分</span>
+        <el-rate
+        v-model="star"
+        disabled>
+        </el-rate>
         <div style="font=size:12px;color:#909399;"><span>对测评结果不满意？可以</span>
         <el-link type="primary" @click="haveSubmit=false;dialogVisible = false;">重新测评</el-link></div>
         <span>        
             <el-button type="primary" :disabled="!haveSubmit" size="mini" round style="margin: 20px;" @click="nextStep()">下一步<i class="el-icon-caret-right icon"></i></el-button>
         </span>
     </el-dialog>
+
+    <el-dialog title='您的风险评级为' :visible.sync='notPassVisible' width="30%">
+        <div style="margin: 0 auto;font-size:25px;background-color:#E4E7ED;width:50%;border-radius:7px;">{{grade}}</div>
+        <span style="font-size:15px;line-height:60px">得分为{{mark}}分</span>
+                <el-rate
+        v-model="star"
+        disabled>
+        </el-rate>
+
+        <div style="font=size:12px;color:#909399;"><span>不好意思，您没有达到{{scoreLine}}分的分数要求，需要</span>
+        <el-link type="primary" @click="haveSubmit=false;notPassVisible = false;">重新测评</el-link></div>
+    </el-dialog>
+
     <div style="height: 100px;">
         <el-button size="medium" type='success' :disabled="haveSubmit" @click="handleSave">保 存</el-button>
         <el-button size="medium" type='danger' :disabled="haveSubmit" @click="handleSubmit">提 交</el-button>
@@ -68,6 +85,10 @@ import Test from '../../../assets/js/test.js'
 export default {
     data(){
         return{
+            iconClasses: ['icon-rate-face-1', 'icon-rate-face-2', 'icon-rate-face-3'],
+            star: 0,
+            scoreLine: 0,
+            pass: false,
             userName: '用户姓名',
             account: '资金账号',
             test: null,
@@ -76,6 +97,7 @@ export default {
             grade: '保守型',
             mark: 25,
             dialogVisible: false,
+            notPassVisible: false,
             haveSubmit: false,
         }
     },
@@ -91,10 +113,6 @@ export default {
                     answers: that.answer
                 };
                 this.$axios.post('/api/risk_evaluation/get_grade', postData).then(function(response){
-                    that.haveSubmit = true;
-                    that.$store.state.haveSubmit = true;
-                    that.$store.commit('modifySubmit', that.$store.state.haveSubmit);
-                    localStorage.removeItem('answerTemp');
                     that.$message({
                         type: 'success',
                         message: '提交成功！'
@@ -103,9 +121,20 @@ export default {
                     // that.$store.commit('modifyAnswer', that.$store.state.answer);
                     that.grade = response.data.grade;
                     that.mark = response.data.mark;
+                    that.star = parseFloat(that.mark) / parseFloat(20.00);
                     sessionStorage.setItem('grade', that.grade);
                     sessionStorage.setItem('mark', that.mark);
-                    that.dialogVisible = true;
+                    sessionStorage.setItem('star', that.star);
+                    if(that.mark >= that.scoreLine){
+                        that.haveSubmit = true;
+                        that.$store.state.haveSubmit = true;
+                        that.$store.commit('modifySubmit', that.$store.state.haveSubmit);
+                        localStorage.removeItem('answerTemp');
+                        that.dialogVisible = true;
+                    } else{
+                        that.notPassVisible = true;
+                    }
+                    // that.dialogVisible = true;
                 }).catch(() => {
                     this.$msgbox({
                         title: '提交失败',
@@ -157,6 +186,17 @@ export default {
                     message:'获取题目失败'
                 });
             });
+        },
+        getScoreLine(){
+          var that = this;
+          this.$axios.get('/api/superadmin/getMinScore').then(function(response){
+            that.scoreLine = response.data.min_score;
+          }).catch(() => {
+            that.$msgbox({
+              message:'连接异常',
+              type: 'error'
+            });
+          });
         }
     },
     mounted(){
@@ -164,6 +204,7 @@ export default {
             this.haveSubmit = true;
             this.grade = sessionStorage.getItem('grade');
             this.mark = sessionStorage.getItem('mark');
+            this.star = sessionStorage.getItem('star');
             this.dialogVisible = true;
         }
         console.log(sessionStorage);
@@ -173,6 +214,7 @@ export default {
             this.$router.push({path: '/403'});
         }
         this.getData();
+        this.getScoreLine();
     }
 }
 </script>
