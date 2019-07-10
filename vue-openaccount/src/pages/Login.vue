@@ -92,14 +92,15 @@
                 const reg = /^1[3|4|5|7|8][0-9]\d{8}$/;
                 console.log(reg.test(value));
                 if (reg.test(value)) {//格式正确
+                    var that = this;
                     this.$axios.get('/api/checkPhone',{params:{phone: value}})
                     .then(function(response){
                         console.log(response);
                         var code = response.data.code;
-                        if (code == '301'){
+                        if (code == '300'){
                             that.isDisabled = false;
                             return callback();
-                        }else if (code =='300'){
+                        }else if (code =='301'){
                             return callback(new Error('该手机号未注册！请先注册'));
                         }else{
                             return callback(new Error('服务器异常'));

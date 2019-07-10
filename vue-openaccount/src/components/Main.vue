@@ -289,12 +289,7 @@ export default {
             phone: this.form.phone,
             newPassword: this.newform.password
           }
-          this.$axios.get('/api/updatePassword', {
-            params:{
-              phone:that.form.phone,
-              newPassword:that.newform.password
-              }
-            }).then(function(response){
+          this.$axios.post('/api/updatePassword', that.$Qs.stringify(postData)).then(function(response){
             console.log('update', response.data)
             // 成功
             if(response.data.code == '306'){
