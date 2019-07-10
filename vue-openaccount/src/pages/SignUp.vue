@@ -18,7 +18,7 @@
                 <el-form-item prop="password" v-show="isChecked">
                     <el-input
                     show-password
-                    type="password" placeholder="密码" v-model="ruleForm.password" @keyup.enter.native="submitForm('ruleForm')">
+                    type="password" placeholder="密码" v-model="ruleForm.password">
                         <el-button slot="prepend" icon="el-icon-lock"></el-button>
                     </el-input>
                 </el-form-item>
@@ -57,10 +57,10 @@
                     .then(function(response){
                         console.log(response);
                         var code = response.data.code;
-                        if (code == '300'){
+                        if (code == '301'){
                             that.isDisabled = false;
                             return callback();
-                        }else if (code =='301'){
+                        }else if (code =='300'){
                             return callback(new Error('该手机号已注册！请直接登录或输入新的手机号'));
                         }else{
                             return callback(new Error('服务器异常'));
@@ -144,13 +144,13 @@
                         { validator: validatePhone, trigger: 'blur'}    
                     ],
                     valCode:[
-                        { validator: validateCode, trigger: 'blur'}
+                        { validator: validateCode, trigger: 'change'}
                     ],
                     password: [
-                        { validator: validatePass, trigger: 'blur'}
+                        { validator: validatePass, trigger: 'change'}
                     ],
                     checkPassword: [
-                        { validator: checkPass, trigger:'blur'}
+                        { validator: checkPass, trigger:'change'}
                     ]
                 },
             }
@@ -203,8 +203,8 @@
             },
             //表单验证，主要验证输入格式是否正确；验证正确后向后端传输数据注册新用户
             submitForm(formName) {
-                this.$refs[formName].validate((valid) => {
-                    if (valid) {
+                this.$refs[formName].validateField('checkPassword', (passError) => {
+                    if (!passError) {
                         //前->后端传输
                         var that = this;
                         const postData = {//打包传输数据，类型均为string

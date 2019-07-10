@@ -43,23 +43,25 @@
                     </el-form-item>
                     <el-form-item prop="valCode" v-show="!isChecked">
                         <el-input
-                        type="text" placeholder="验证码" v-model="changeForm.valCode">
+                        type="text" placeholder="验证码"
+                        v-model="changeForm.valCode">
                             <el-button slot="prepend" icon="el-icon-s-promotion"></el-button>
                             <el-button slot="append" size="mini" :disabled="isDisabled" @click="sendValCode">{{buttonName}}</el-button>
                         </el-input>
                     </el-form-item>
-                    <el-form-item prop="newPpassword" v-show="isChecked">
+                    <el-form-item prop="newPassword" v-show="isChecked">
                         <span>请输入新密码：</span>
-                        <el-input
-                        show-password
-                        type="password" placeholder="新密码" v-model="changeForm.password" @keyup.enter.native="submitChangeForm('changeForm')">
+                        <el-input show-password type="password" placeholder="新密码" 
+                        v-model="changeForm.newPassword" 
+                        @keyup.enter.native="submitChangeForm('changeForm')">
                             <el-button slot="prepend" icon="el-icon-lock"></el-button>
                         </el-input>
                     </el-form-item>
                 </el-form>
                 <div style="text-align: center;">
                     <el-button @click="isDialogShow = false">取消</el-button>
-                    <el-button type="primary" :disabled="!submitAllowed" @click="submitChangeForm('changeForm')">提交</el-button>
+                    <el-button v-show="!isChecked" :disabled="!nextAllowed" type="primary" @click="isChecked=true">下一步</el-button>
+                    <el-button v-show="isChecked" type="primary" :disabled="!submitAllowed" @click="submitChangeForm('changeForm')">提交</el-button>
                 </div>
                 <!-- <span slot="footer" class="dialog-footer">
                     <el-button @click="isDialogShow = false">取消</el-button>
@@ -90,6 +92,7 @@
             var validatePhone = (rule, value, callback) => {
                 //验证手机号格式是否正确
                 const reg = /^1[3|4|5|7|8][0-9]\d{8}$/;
+                console.log(value);
                 console.log(reg.test(value));
                 if (reg.test(value)) {//格式正确
                     var that = this;
@@ -133,6 +136,17 @@
                 else if (value.length > 12)
                     return callback(new Error('长度不超过12位'))
                 else{
+                    callback();
+                }
+            };
+
+            var validateNewPass = (rule, value, callback) => {
+                //验证密码格式是否正确
+                if (!value)
+                    return callback(new Error('请输入密码'));
+                else if (value.length > 12)
+                    return callback(new Error('长度不超过12位'))
+                else{
                     this.submitAllowed = true;
                     callback();
                 }
@@ -140,36 +154,35 @@
             //验证码检查
             var validateCode = (rule, value, callback) => {
                 var that = this;
-                if (value != ''){
-                    const postData = {
-                        checkNum: value,
-                    }
-                    this.$axios.get('/api/checkNum', {params:{checkNum: value}})
-                    .then(function(response){
-                        console.log(response);
-                        if (response.data.code == '302'){
-                            that.isChecked = true;
-                            that.$message({
-                                message:'验证码正确',
-                                type: 'success'
-                            })
-                            callback();
-                        }else if(response.data.code == '303'){
-                            return callback(new Error('验证码错误'));
-                        }else{
-                            return callback(new Error('服务器异常'));
-                        }
-                    }).catch(function(error){
-                        console.log(error);
-                    })
+                const postData = {
+                    checkNum: value,
                 }
+                this.$axios.get('/api/checkNum', {params:{checkNum: value}})
+                .then(function(response){
+                    console.log(response);
+                    if (response.data.code == '302'){
+                        that.nextAllowed = true;
+                        that.$message({
+                            message:'验证码正确',
+                            type: 'success'
+                        })
+                        callback();
+                    }else if(response.data.code == '303'){
+                        return callback(new Error('验证码错误'));
+                    }else{
+                        return callback(new Error('服务器异常'));
+                    }
+                }).catch(function(error){
+                    console.log(error);
+                })
             };
 
             return {
                 isDialogShow: false,
                 isChecked: false,
                 isDisabled: true,
-                submitAllowed:false,
+                nextAllowed: false,
+                submitAllowed:true,
 
                 buttonName: "发送验证码",
 
@@ -190,10 +203,10 @@
                         { validator: validateId, trigger: 'blur'}    
                     ],
                     password: [
-                        { validator: validatePass, trigger: 'blur'}
+                        { validator: validatePass, trigger: 'change'}
                     ],
                     newPassword: [
-                        { validator: validatePass, trigger: 'blur'}
+                        { validator: validateNewPass, trigger: 'change'}
                     ],
                     role: [
                         { required: !null, message: '请选择您的账号类别', trigger: 'blur'}
@@ -202,7 +215,7 @@
                         { validator: validatePhone, trigger:'blur'}
                     ],
                     valCode:[
-                        { validator: validateCode, trigger: 'blur'}
+                        { validator: validateCode, trigger: 'change'}
                     ]
                 },
                 isLogin: false //登录状态变量
@@ -212,7 +225,7 @@
             sendValCode(){//60秒计时器以及发送验证码
                 var that = this;
                 const postData = {
-                    phone: this.ruleForm.username,
+                    phone: this.changeForm.phone,
                 }
                 console.log(postData);
 
@@ -323,15 +336,16 @@
             },
 
             submitChangeForm(formName){
-                this.$refs[formName].validate((valid) => {
-                    if (valid) {
+                this.$refs[formName].validateField('newPassword',(passError) => {
+                    if (!passError) {
                         var that = this;
                         const postData = {
                             phone: this.changeForm.phone,
                             newPassword: this.changeForm.newPassword
                         }
                         console.log(this.$Qs.stringify(postData));
-                        this.$axios.post('/api/updatePassword',this.$Qs.stringify(postData)
+                        this.$axios.get('/api/updatePassword',
+                        {params:{phone: this.changeForm.phone,newPassword: this.changeForm.newPassword}}
                         ).then(function(response){
                             console.log('response', response);
                             if (response.data.code =='306'){
@@ -353,7 +367,7 @@
                             }
                         }).catch(function(error){
                             console.log(error);
-                            that.$$msgbox({
+                            that.$msgbox({
                                 type:'error',
                                 title:'连接失败',
                                 message:'与后台服务器通讯失败！'
@@ -394,7 +408,8 @@
                             that.$router.push({path: '/login/notPass'});
                             break;
                         case '7':
-                            sessionStorage.setItem('status', 7)
+                            sessionStorage.setItem('status', 7);
+                            sessionStorage.setItem('phone', that.ruleForm.username);
                             that.$router.push({path: '/user/home'});
                     }
                 });
@@ -449,8 +464,8 @@
         margin-bottom: 10px;
     }
     .login-tips{
-        font-size:12px;
-        line-height:30px;
-        color:#909399;
+        font-size:14px;
+        line-height:15px;
+        color:dimgrey;
     }
 </style>
