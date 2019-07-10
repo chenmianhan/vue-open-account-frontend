@@ -105,7 +105,7 @@
                     <el-input v-model="modifyForm.contact_address_detail" class="wd400" style="padding-top: 10px" placeholder="详细地址"></el-input>
                   </el-form-item>
 
-                  <el-button size="mini" type="text" @click="scope.row.visible = false">取消</el-button>
+                  <!--<el-button size="mini" type="text" @click="scope.row.visible = false">取消</el-button>-->
                   <el-button type="primary" size="mini" @click="scope.row.visible = false; submitModifyForm('modifyForm',scope.row)">保存</el-button>
                 </el-form>
               </div>
