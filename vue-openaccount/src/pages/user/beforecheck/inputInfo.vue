@@ -99,7 +99,7 @@
         <el-upload
           class="upload-demo"
           action="/api/upload"
-          :on-change="onUpload"
+          :on-success="getURL"
           :on-preview="handlePreview"
           :on-remove="handleRemove"
           :before-remove="beforeRemove"
@@ -350,6 +350,10 @@ import area from '../../../assets/js/area.js'
             .then(function(response){
               console.log(response.data);
             })
+        },
+
+        getURL(response, file, fileList){
+          console.log(response);
         },
 
         handleRemove(file, fileList) {
