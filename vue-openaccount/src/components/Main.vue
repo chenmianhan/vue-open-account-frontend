@@ -293,7 +293,7 @@ export default {
           console.log(this.form.phone,this.newform.password);
           this.$axios.get('/api/updatePassword', {
             params:{
-              phone:that.form.phone,
+              phone:'',
               newPassword:that.newform.password
               }
             }).then(function(response){
