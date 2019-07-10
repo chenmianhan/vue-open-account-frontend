@@ -410,7 +410,8 @@
                             that.$router.push({path: '/login/notPass'});
                             break;
                         case '7':
-                            sessionStorage.setItem('status', 7)
+                            sessionStorage.setItem('status', 7);
+                            sessionStorage.setItem('phone', that.ruleForm.username);
                             that.$router.push({path: '/user/home'});
                     }
                 });
