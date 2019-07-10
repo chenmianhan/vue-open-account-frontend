@@ -31,8 +31,11 @@
       <el-form-item label="确认银行账号" prop="check_account">
         <el-input v-model="bankForm.check_account" aria-placeholder="确认卡号" class="wd400"></el-input>
       </el-form-item>
-      <el-form-item label="密码" prop="bank_password">
+      <el-form-item label="储蓄卡密码" prop="bank_password">
         <el-input type="password" v-model="bankForm.bank_password" aria-placeholder="输入取款密码" class="wd400"></el-input>
+      </el-form-item>
+      <el-form-item label="交易密码" prop="trade_password">
+        <el-input type="password" v-model="bankForm.trade_password" aria-placeholder="输入交易密码" class="wd400"></el-input>
       </el-form-item>
     </el-form>
   </div>
@@ -80,6 +83,9 @@
              ],
              bank_password: [
                {required: true, message: '请输入密码',trigger: 'blur'}
+             ],
+             trade_password: [
+               {required: true, message: '请输入交易密码', trigger: 'change'}
              ]
           }
 
@@ -96,6 +102,7 @@
                 deposit_bank: that.bankForm.user_bank,
                 deposit_account: that.bankForm.bank_account,
                 deposit_password: that.bankForm.bank_password,
+                trade_password: that.bankForm.trade_password
               };
                this.$axios.put('/api/updateDeposit',postData)
                  .then(

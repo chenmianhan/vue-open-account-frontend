@@ -41,7 +41,7 @@
                     </div>
                     <el-row style="margin-bottom:50px;">
                         <el-col :span='16'>
-                            <a @click="addVisible = true">
+                            <a @click="handleShow()">
                             <el-card class="secon-account-plus" shadow='hover'>
                                 <el-row class="seco-account-plus">
                                     <i class='el-icon-circle-plus plus'></i><span class="second-money">添加资金账户</span>
@@ -137,8 +137,8 @@
             <el-form-item label="储蓄卡" :label-width="formLabelWidth" prop="cardID">
             <el-input size="small" v-model="addForm.cardID" autocomplete="off"></el-input>
             </el-form-item>
-            <el-form-item label="账户密码" :label-width="formLabelWidth" prop="password">
-            <el-input placeholder="密码默认六个1" size="small" type="password" v-model="addForm.password" autocomplete="off"></el-input>
+            <el-form-item label="储蓄卡密码" :label-width="formLabelWidth" prop="password">
+            <el-input placeholder="请输入密码" size="small" type="password" v-model="addForm.password" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item label="姓名" :label-width="formLabelWidth" prop="name">
             <el-input size="small" v-model="addForm.name" autocomplete="off"></el-input>
@@ -198,7 +198,7 @@ export default {
                 cardID: '',
                 password: ''
             },
-            formLabelWidth: '80px',
+            formLabelWidth: '100px',
             rules: {
                 value: [
                     {required: true, message: '请输入金额', trigger: 'blur'},
@@ -225,6 +225,10 @@ export default {
         }
     },
     methods: {
+        handleShow(){
+            this.addForm.phone = sessionStorage.getItem('phone');
+            this.addVisible = true;
+        },
         allWithdraw(item){
             // this.withdrawForm.value = '';
             console.log('item', item)
@@ -276,14 +280,35 @@ export default {
                 }
             });
         },
+        checkPassword(id, val){
+            var that = this;
+            let postData = {
+                // account: id,
+                password: val
+            };
+            this.$axios.post('/api/checkFund', that.$Qs.stringify(postData)).then(function(response){
+                console.log('checkPassword', response.data);
+                if(response.data.code == '201'){
+                    return true;
+                }else{
+                    return false;
+                }
+            }).catch(() => {
+                that.$msgbox({
+                    message: '连接失败',
+                    type: 'error'
+                });
+            });
+        },
         handleAdd(){
             this.$refs['addForm'].validate((valid) => {
                 if(valid){
-                    if(this.addForm.password == '111111'){
+                    // if(this.addForm.password == '111111'){
                         var that = this;
                         const postData = {
                             bank_account: this.addForm.cardID,
-                            bank: this.addForm.bank
+                            bank: this.addForm.bank,
+                            password: this.addForm.password
                         }
                         this.$axios.post('/api/account/addFundAccount', postData).then(function(response){
                                 that.$message({
@@ -299,12 +324,12 @@ export default {
                                 type: 'error'
                             });
                         });
-                    }else{
-                        this.$message({
-                            message: '密码错误',
-                            type:'error'
-                        });
-                    } 
+                    // }else{
+                    //     this.$message({
+                    //         message: '密码错误',
+                    //         type:'error'
+                    //     });
+                    // } 
                 }
             });
         },
@@ -317,19 +342,39 @@ export default {
             this.rechargeVisible = true;
         },
         rechargeOK(account){
+            console.log('account',account);
             this.$refs['rechargeForm'].validate((valid) => {
                 if(valid){
-                    if(this.rechargeForm.password == '111111'){
-                        account.balance.balance = parseFloat(account.balance.balance) + parseFloat(this.rechargeForm.value);
-                        // console.log(parseFloat(this.rechargeForm.value));
-                        account.balance.balance = this.changeTwoDecimal_f(account.balance.balance);
-                        this.$message({
-                            message: '充值成功',
-                            type:'success'
+                    if(this.checkPassword(account.cardID, this.rechargeForm.password)){
+                        var that = this;
+                        let postData = {
+                            fund_id: account.cardID,
+                            amount: this.rechargeForm.value
+                        }
+                        this.$axios.post('/api/user/recharge', postData).then(function(response){
+                            if(response.data == 1){
+                                that.$message({
+                                    message: '充值成功',
+                                    type:'success'
+                                });
+                                that.getData();
+                                that.rechargeForm.password = '';
+                                that.rechargeVisible = false;
+                                that.rechargeForm = {};
+                            } else{
+                                that.$msgbox({
+                                    message: '充值失败',
+                                    type: 'error'
+                                });
+                            }
+                        }).catch(() => {
+                            that.$msgbox({
+                                message: '连接失败',
+                                type: 'error'
+                            });
                         });
-                        this.rechargeForm.password = '';
-                        this.rechargeVisible = false;
-                        this.rechargeForm = {};
+                        // account.balance.balance = parseFloat(account.balance.balance) + parseFloat(this.rechargeForm.value);
+                        // account.balance.balance = this.changeTwoDecimal_f(account.balance.balance);
                     } else {
                         this.$message({
                             message: '密码错误',
@@ -342,22 +387,42 @@ export default {
         withdrawOK(account){
             this.$refs['withdrawForm'].validate((valid) => {
                 if(valid){
-                    if(this.withdrawForm.password == '111111'){
+                    if(this.checkPassword(account.cardID, this.withdrawForm.password)){
                         if(account.balance.balance < parseFloat(this.withdrawForm.value)){
                             this.$message({
                                 message: '余额不足',
                                 type:'error'
                             });
                         } else{
-                            account.balance.balance = parseFloat(account.balance.balance) - parseFloat(this.withdrawForm.value);
-                            account.balance.balance = this.changeTwoDecimal_f(account.balance.balance);
-                            this.$message({
-                                message: '提现成功，将在24小时内到账',
-                                type: 'success'
+                            var that = this;
+                            let postData = {
+                                fund_id: account.cardID,
+                                amount: this.withdrawForm.value
+                            }
+                            this.$axios.post('/api/user/withdrawal', postData).then(function(response){
+                                if(response.data == 1){
+                                    that.$message({
+                                        message: '提现成功，将在24小时内到账',
+                                        type: 'success'
+                                    });
+                                    that.getData();
+                                    that.withdrawForm.password = '';
+                                    that.withdrawVisible = false;
+                                    that.withdrawForm = {};
+                                }else{
+                                    that.$msgbox({
+                                        message: '提现失败',
+                                        type: 'error'
+                                    });
+                                }
+                            }).catch(() => {
+                                that.$msgbox({
+                                    message: '连接失败',
+                                    type: 'error'
+                                });
                             });
-                            this.withdrawForm.password = '';
-                            this.withdrawVisible = false;
-                            this.withdrawForm = {};
+                            // account.balance.balance = parseFloat(account.balance.balance) - parseFloat(this.withdrawForm.value);
+                            // account.balance.balance = this.changeTwoDecimal_f(account.balance.balance);
                         }
                     }else{
                         this.$message({

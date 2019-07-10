@@ -134,7 +134,6 @@
 export default {
     data: function(){
         return {
-
             userId:'',
             imageUrl_1:'../../assets/image/user.jpg',
             imageUrl_2:'../../assets/image/user.jpg',
