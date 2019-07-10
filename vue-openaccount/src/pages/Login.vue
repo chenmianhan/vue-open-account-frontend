@@ -261,9 +261,9 @@
                         var that = this;
                         
                         const postData = {//打包传输数据，类型均为string
-                            account: that.formName.username,
-                            password: that.formName.password,
-                            role: String(that.formName.role)
+                            account: that.ruleForm.username,
+                            password: that.ruleForm.password,
+                            role: String(that.ruleForm.role)
                         }
                         console.log(postData);
                         console.log(this.$Qs.stringify(postData));
@@ -326,8 +326,8 @@
                     if (valid) {
                         var that = this;
                         const postData = {
-                            phone: this.formName.phone,
-                            newPassword: this.formName.newPassword
+                            phone: this.changeForm.phone,
+                            newPassword: this.changeForm.newPassword
                         }
                         console.log(this.$Qs.stringify(postData));
                         this.$axios.post('/api/updatePassword',this.$Qs.stringify(postData)

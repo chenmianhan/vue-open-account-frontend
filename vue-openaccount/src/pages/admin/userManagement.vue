@@ -69,7 +69,6 @@
         </el-table-column>
         <el-table-column
           prop="address"
-          width="100px"
           label="联系地址">
         </el-table-column>
         <el-table-column
