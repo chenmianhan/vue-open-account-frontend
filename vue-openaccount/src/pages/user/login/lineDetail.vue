@@ -52,6 +52,11 @@ export default {
             console.log(postData)
             this.$axios.post('/api/timeline/get_optional_timeline', postData).then(function(response){
                 console.log(response.data)
+                for(var i = 0; i < response.data.length; i++){
+                    if(response.data[i].value > 0){
+                        response.data[i].value = '+' + response.data[i].value;
+                    }
+                }
                 that.moreBill = response.data;
             }).catch(() => {
                 that.$message.error({
@@ -69,6 +74,11 @@ export default {
             // console.log(postData)
             this.$axios.get('/api/timeline/get_timeline', postData).then(function(response){
                 console.log('line',response.data)
+                for(var i = 0; i < response.data.length; i++){
+                    if(response.data[i].value > 0){
+                        response.data[i].value = '+' + response.data[i].value;
+                    }
+                }
                 that.moreBill = response.data;
             }).catch(() => {
                 that.$message.error({
