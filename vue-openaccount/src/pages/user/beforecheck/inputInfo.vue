@@ -118,7 +118,10 @@
           list-type="picture">
           <el-button size="small" type="primary">上传反面照</el-button>
         </el-upload> -->
-        <el-upload
+
+
+
+        <!--<el-upload
           class="upload-demo"
           action=""
           :auto-upload="false"
@@ -144,7 +147,7 @@
           list-type="picture">
           <el-button size="small" type="primary">上传大头照</el-button>
           <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-        </el-upload>
+        </el-upload>-->
       </el-form-item>
     </el-form>
   </div>

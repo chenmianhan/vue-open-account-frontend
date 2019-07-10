@@ -360,6 +360,7 @@
                     title: '修改成功',
                     type: 'succeed'
                   });
+                  that.queryTable();
                 })
                 .catch(function (error) {
                   that.$msgbox({
@@ -400,6 +401,7 @@
                     message: '添加成功',
                     type: 'success'
                   });
+                  that.queryTable();
                 })
                 .catch(function (error) {
                   console.log(error)
@@ -458,6 +460,7 @@
           let postData = {
             reviewer_id : row.reviewer_id,
           };
+          var that = this;
           this.$confirm("确认删除该审核员吗？", "提示", {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
@@ -466,6 +469,7 @@
             this.$axios.post('/api/admin/deleteReviewer', postData)//post也可以改成get，但需要对应服务端的请求方法
               .then(function (response) {
                 console.log('删除',response);
+                that.queryTable();
               })
               .catch(function (error) {
                 alert(error);

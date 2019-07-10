@@ -342,7 +342,7 @@
               that.$msgbox({
                 type: 'error',
                 title: '连接失败',
-                message: '获取管理员信息失败！'
+                message: '获取用户信息失败！'
               })
             })
           }else{
