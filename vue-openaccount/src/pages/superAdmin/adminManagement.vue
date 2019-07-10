@@ -107,38 +107,38 @@
       style="width: 100%">
       <el-table-column
         prop="admin_id"
-        width="100px"
+        width="150px"
         label="管理员id">
       </el-table-column>
       <el-table-column
         prop="name"
-        width="150px"
+
         label="管理员名称">
       </el-table-column>
       <el-table-column
         prop="account"
-        width="150px"
+
         label="账号">
       </el-table-column>
-      <el-table-column
+      <!--<el-table-column
         prop="password"
         width="150px"
         label="密码">
-      </el-table-column>
+      </el-table-column>-->
       <el-table-column
         prop="store"
-        width="250px"
+
         label="负责网点">
       </el-table-column>
       <el-table-column
         label="操作"
-        width="200px">
+        width="250px">
         <template slot-scope="scope">
 
           <el-popover
             placement="bottom"
             v-model="scope.row.visible2">
-            <div style="text-align:center; width: 200px">
+            <div style="text-align:center; width: 300px">
               <el-form ref="modifyForm" :model="modifyForm" :rules="rules" label-width="100px" size="mini">
                 <el-form-item label="管理员名称">
                   <el-input v-model="modifyForm.name"></el-input>
@@ -221,7 +221,7 @@ import area from '../../assets/js/area';
             admin_id:'1',
             name:'whatever',
             account:'',
-            password:'',
+            /*password:'',*/
             store:'',
           }],
 

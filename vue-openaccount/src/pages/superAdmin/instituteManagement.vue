@@ -16,7 +16,7 @@
         v-model="visible">
         <div style="text-align:center; width: 300px">
           <el-form ref="addForm" :model="addForm" :rules="rules" label-width="100px" size="mini">
-            <el-form-item label="营业网点名称" prop="store">
+            <el-form-item label="网点名称" prop="store">
               <el-input v-model="addForm.store"></el-input>
             </el-form-item>
             <el-form-item label="网点地址" prop="address">
