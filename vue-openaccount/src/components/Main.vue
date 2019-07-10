@@ -62,7 +62,7 @@
         <el-dialog title="忘记密码" :visible.sync="dialogFormVisible" width="35%">
           <el-form :model="form" size="small" ref="form1" :rules="rules">
             <el-form-item label="手机号" prop="phone">
-              <el-input v-model="form.phone" style="width:300px" @blur="handleConfirm(form.phone)"></el-input>
+              <el-input v-model="form.phone" style="width:300px" :disabled="true"></el-input>
             </el-form-item>
             <el-form-item label="验证码" prop="code">
               <el-input :disabled="buttonDis" v-model="form.code" style="width:300px">
@@ -192,6 +192,7 @@ export default {
             })
         }
         if(command == 'forget'){
+          this.form.phone = sessionStorage.getItem('phone');
           this.dialogFormVisible = true;
         }
     },
@@ -289,7 +290,13 @@ export default {
             phone: this.form.phone,
             newPassword: this.newform.password
           }
-          this.$axios.post('/api/updatePassword', that.$Qs.stringify(postData)).then(function(response){
+          console.log(this.form.phone,this.newform.password);
+          this.$axios.get('/api/updatePassword', {
+            params:{
+              phone:that.form.phone,
+              newPassword:that.newform.password
+              }
+            }).then(function(response){
             console.log('update', response.data)
             // 成功
             if(response.data.code == '306'){
@@ -297,6 +304,7 @@ export default {
                 message: '修改成功',
                 type: 'success'
               });
+              that.visible = false;
             }else{
               that.$message({
                 message: '修改失败',

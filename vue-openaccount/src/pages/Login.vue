@@ -353,7 +353,7 @@
                             }
                         }).catch(function(error){
                             console.log(error);
-                            that.$$msgbox({
+                            that.$msgbox({
                                 type:'error',
                                 title:'连接失败',
                                 message:'与后台服务器通讯失败！'
@@ -394,7 +394,8 @@
                             that.$router.push({path: '/login/notPass'});
                             break;
                         case '7':
-                            sessionStorage.setItem('status', 7)
+                            sessionStorage.setItem('status', 7);
+                            sessionStorage.setItem('phone', that.ruleForm.username);
                             that.$router.push({path: '/user/home'});
                     }
                 });
