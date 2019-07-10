@@ -8,6 +8,7 @@
               :fetch-suggestions="querySearchAsync"
               placeholder="请输入审核员姓名"
               @select="handleSelect"
+              @focus="loadAll()"
             ></el-autocomplete>
           <el-button icon="el-icon-search" @click="queryName" type="info" circle></el-button>
 

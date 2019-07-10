@@ -38,6 +38,7 @@
             :fetch-suggestions="querySearchAsync"
             placeholder="请输入用户姓名"
             @select="handleSelect"
+            @focus="loadAll()"
           ></el-autocomplete>
         </div>
         <el-button @click="queryTable" icon="el-icon-search" type="info" circle></el-button>
