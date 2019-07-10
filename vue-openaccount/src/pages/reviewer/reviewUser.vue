@@ -159,8 +159,8 @@ export default {
     methods:{
         getFullInfo(){//从后端获取当前审核用户的全部信息
             //this.userId = this.$route.query.userId;//获取跳转界面的userId
-            console.log(this.$route.query.userId);
-            console.log(this.userId);
+            console.log('this.$route.query.userId',this.$route.query.userId);
+            console.log('this.userId',this.userId);
 
             //let Base64 = require('js-base64').Base64;
 
@@ -172,8 +172,9 @@ export default {
                     userId: ''
             }
 
-            if (this.$route.query.userId != undefined){
-                postData.userId= this.$route.query.userId
+            if (this.$route.query.userId != '' && this.$route.query.userId != undefined){
+                postData.userId= this.$route.query.userId;
+                this.$route.query.userId = undefined;
             }
             
             console.log("userId: " + postData.userId);
