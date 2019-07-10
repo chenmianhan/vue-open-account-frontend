@@ -144,6 +144,8 @@
           state: '',
           timeout:  null,
 
+          vals:[],
+
           wayOptions:[{
             way: 'date',
             label:'按日期查询',
@@ -377,7 +379,24 @@
           };
         },
 
+        getCascaderObj(val,opt) {
+          return val.map(function (value, index, array) {
+            for (var itm of opt) {
+              if (itm.value == value) { opt = itm.children; return itm; }
+            }
+            return null;
+          });
+        },
+
         submitModifyForm(formName, row) {
+          this.vals = this.getCascaderObj(this.modifyForm.address, this.address);
+          var temp = [];
+          for (var i = 0; i < this.vals.length; i++){
+            temp[i] = this.vals[i].label;
+          };
+          this.modifyForm.address = temp;
+          console.log(this.modifyForm.address);
+
           var that = this;
           this.$refs[formName].validate((valid) => {
             if (valid) {
