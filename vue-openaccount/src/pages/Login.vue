@@ -92,6 +92,7 @@
             var validatePhone = (rule, value, callback) => {
                 //验证手机号格式是否正确
                 const reg = /^1[3|4|5|7|8][0-9]\d{8}$/;
+                console.log(value);
                 console.log(reg.test(value));
                 if (reg.test(value)) {//格式正确
                     var that = this;
@@ -226,7 +227,7 @@
             sendValCode(){//60秒计时器以及发送验证码
                 var that = this;
                 const postData = {
-                    phone: this.ruleForm.username,
+                    phone: this.changeForm.phone,
                 }
                 console.log(postData);
 
