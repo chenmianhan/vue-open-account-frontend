@@ -98,7 +98,8 @@
         <h3>上传身份证正反面照和个人大头照</h3>
         <el-upload
           class="upload-demo"
-          action=""
+          action="/api/upload"
+          :on-change="onUpload"
           :on-preview="handlePreview"
           :on-remove="handleRemove"
           :before-remove="beforeRemove"
@@ -343,6 +344,13 @@ import area from '../../../assets/js/area.js'
             this.scr3 = this.result.split(",")[1];
           }
         },*/
+
+        onUpload(file) {
+          this.$axios.post('/api/upload',file)
+            .then(function(response){
+              console.log(response.data);
+            })
+        },
 
         handleRemove(file, fileList) {
           // console.log(file, fileList);

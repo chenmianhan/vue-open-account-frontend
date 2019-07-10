@@ -181,9 +181,9 @@ export default {
             ).then(function(response){
                 console.log("response: " , response.data);
                 that.userInfo = response.data.userInfo;
-                that.imageUrl_1 = response.data.imageUrl_1;
-                that.imageUrl_2 = response.data.imageUrl_2;
-                that.imageUrl_3 = response.data.imageUrl_3;
+                that.imageUrl_1 = 'data:image/png;base64,' + response.data.imageUrl_1;
+                that.imageUrl_2 = 'data:image/png;base64,' + response.data.imageUrl_2;
+                that.imageUrl_3 = 'data:image/png;base64,' + response.data.imageUrl_3;
                 that.userType = response.data.userType;
                 that.userGrade = response.data.userGrade;
                 var code = response.data.code;
