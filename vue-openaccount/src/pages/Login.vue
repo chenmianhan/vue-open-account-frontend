@@ -92,6 +92,7 @@
                 const reg = /^1[3|4|5|7|8][0-9]\d{8}$/;
                 console.log(reg.test(value));
                 if (reg.test(value)) {//格式正确
+                    var that = this;
                     this.$axios.get('/api/checkPhone',{params:{phone: value}})
                     .then(function(response){
                         console.log(response);
