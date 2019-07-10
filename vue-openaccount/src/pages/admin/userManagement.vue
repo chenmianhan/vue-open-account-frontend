@@ -74,6 +74,7 @@
         </el-table-column>
         <el-table-column
           prop="date"
+          width="100"
           label="开户日期">
         </el-table-column>
         <el-table-column

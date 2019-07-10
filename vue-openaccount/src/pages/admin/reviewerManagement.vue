@@ -108,6 +108,7 @@
       </el-table-column>
       <el-table-column
         prop="password"
+        width="300"
         label="密码">
       </el-table-column>
       <el-table-column
