@@ -281,6 +281,11 @@ export default {
                 // user_id: 17
             };
             this.$axios.get('/api/timeline/get_timeline').then(function(response){
+                for(var i = 0; i < response.data.length; i++){
+                    if(response.data[i].value > 0){
+                        response.data[i].value = '+' + response.data[i].value;
+                    }
+                }
                 if(response.data.length >= 5){
                     that.bill = response.data.slice(0, 5);
                 }else{
