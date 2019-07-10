@@ -99,7 +99,7 @@
         <el-upload
           class="upload-demo"
           action="/api/upload"
-          :on-success="getURL"
+          :on-success="getFront"
           :on-preview="handlePreview"
           :on-remove="handleRemove"
           :before-remove="beforeRemove"
@@ -118,11 +118,8 @@
           :file-list="infoForm.back"
           list-type="picture">
           <el-button size="small" type="primary">上传反面照</el-button>
-        </el-upload> -->
-
-
-
-        <!--<el-upload
+        </el-upload>
+         <el-upload
           class="upload-demo"
           action=""
           :auto-upload="false"
@@ -135,11 +132,24 @@
           list-type="picture">
           <el-button size="small" type="primary">上传反面照</el-button>
         </el-upload>
+        -->
+
         <el-upload
           class="upload-demo"
-          action=""
-          :auto-upload="false"
-          :on-change="onUploadHead"
+          action="/api/upload"
+          :on-success="getBack"
+          :on-preview="handlePreview"
+          :on-remove="handleRemove"
+          :before-remove="beforeRemove"
+          :file-list="back"
+          :disabled="!haveSubmit"
+          list-type="picture">
+          <el-button size="small" type="primary">上传反面照</el-button>
+        </el-upload>
+        <el-upload
+          class="upload-demo"
+          action="/api/upload"
+          :on-success="getHead"
           :on-preview="handlePreview"
           :on-remove="handleRemove"
           :before-remove="beforeRemove"
@@ -147,14 +157,14 @@
           :disabled="!haveSubmit"
           list-type="picture">
           <el-button size="small" type="primary">上传大头照</el-button>
-          <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-        </el-upload>-->
+          <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过1M</div>
+        </el-upload>
       </el-form-item>
     </el-form>
   </div>
     <el-row style="height:50px;">
         <el-button class="button" icon="el-icon-caret-left" round @click="$router.push({path:'/login/warning'})">上一步</el-button>
-        <el-button class="button" type="primary" :disabled="!allDone" round @click="$router.push({path: '/login/evaluation'})">下一步<i class="el-icon-caret-right icon"></i></el-button>
+        <el-button class="button" type="primary" :disabled="!allDone" round @click="submitPics">下一步<i class="el-icon-caret-right icon"></i></el-button>
     </el-row>
 </div>
 </template>
@@ -205,9 +215,9 @@ import area from '../../../assets/js/area.js'
           back: [],
           head: [],
 
-          scr1:'',
-          scr2:'',
-          scr3:'',
+          frontUrl: '',
+          backUrl: '',
+          headUrl: '',
 
           infoForm: {
             name: '',
@@ -224,9 +234,6 @@ import area from '../../../assets/js/area.js'
             contact_address_detail: '',
             job:'',
             degree:'',
-            frontUrl: '',
-            backUrl: '',
-            headUrl: ''
           },
 
           degree:[
@@ -283,68 +290,6 @@ import area from '../../../assets/js/area.js'
         };
       },
       methods: {
-        /*onUploadFront(file) {
-          const isIMAGE = (file.raw.type === 'image/jpeg' || file.raw.type === 'image/png'|| file.raw.type === 'image/gif');
-          const isLt1M = file.size / 1024 / 1024 < 1;
-
-          if (!isIMAGE) {
-            this.$message.error('上传文件只能是图片格式!');
-            return false;
-          }
-          if (!isLt1M) {
-            this.$message.error('上传文件大小不能超过 1MB!');
-            return false;
-          }
-          var reader = new FileReader();
-          reader.readAsDataURL(file.raw);
-          reader.onload = function(e){
-            //console.log(this.result);
-            this.scr1 = this.result.split(",")[1];
-            //this.scr1 = this.result;
-            //console.log(this.scr1);
-          }
-        },
-
-        onUploadBack(file) {
-          const isIMAGE = (file.raw.type === 'image/jpeg' || file.raw.type === 'image/png'|| file.raw.type === 'image/gif');
-          const isLt1M = file.size / 1024 / 1024 < 1;
-
-          if (!isIMAGE) {
-            this.$message.error('上传文件只能是图片格式!');
-            return false;
-          }
-          if (!isLt1M) {
-            this.$message.error('上传文件大小不能超过 1MB!');
-            return false;
-          }
-          var reader = new FileReader();
-          reader.readAsDataURL(file.raw);
-          reader.onload = function(e){
-            //console.log(this.result);
-            this.scr2 = this.result.split(",")[1];
-          }
-        },
-
-        onUploadHead(file) {
-          const isIMAGE = (file.raw.type === 'image/jpeg' || file.raw.type === 'image/png'|| file.raw.type === 'image/gif');
-          const isLt1M = file.size / 1024 / 1024 < 1;
-
-          if (!isIMAGE) {
-            this.$message.error('上传文件只能是图片格式!');
-            return false;
-          }
-          if (!isLt1M) {
-            this.$message.error('上传文件大小不能超过 1MB!');
-            return false;
-          }
-          var reader = new FileReader();
-          reader.readAsDataURL(file.raw);
-          reader.onload = function(e){
-            //console.log(this.result);
-            this.scr3 = this.result.split(",")[1];
-          }
-        },*/
-
         onUpload(file) {
           this.$axios.post('/api/upload',file)
             .then(function(response){
@@ -352,8 +297,17 @@ import area from '../../../assets/js/area.js'
             })
         },
 
-        getURL(response, file, fileList){
+        getFront(response, file, fileList){
           console.log(response);
+          this.frontUrl = response;
+        },
+        getBack(response, file, fileList){
+          console.log(response);
+          this.backUrl = response;
+        },
+        getHead(response, file, fileList){
+          console.log(response);
+          this.headUrl = response;
         },
 
         handleRemove(file, fileList) {
@@ -364,14 +318,6 @@ import area from '../../../assets/js/area.js'
         },
         beforeRemove(file, fileList) {
           return this.$confirm(`确定移除 ${ file.name }？`);
-        },
-
-        beforeuploadBack(file) {
-          // console.log(file);
-          //创建临时的路径来展示图片
-          var windowURL = window.URL || window.webkitURL;
-          this.scr2 = windowURL.createObjectURL(file);
-          this.infoForm.backUrl = this.scr2;
         },
 
         getCascaderObj(val,opt) {
@@ -402,11 +348,6 @@ import area from '../../../assets/js/area.js'
           this.infoForm.mail_address = temp3;
 
           var that = this;
-          // console.log(this.infoForm);
-          // debugger;
-         /* this.infoForm.frontUrl = this.scr1;
-          this.infoForm.backUrl = this.scr2;
-          this.infoForm.headUrl = this.scr3;*/
           this.$refs[formName].validate((valid) => {
             // console.log(valid);
             if (valid) {
@@ -420,10 +361,6 @@ import area from '../../../assets/js/area.js'
                   profession:that.infoForm.job,
                   education:that.infoForm.degree[0],
                   email: that.infoForm.email,
-                  /*id_picture:that.infoForm.frontUrl,
-                  id_card_inverse_side:that.infoForm.backUrl,
-                  headshot:that.infoForm.headUrl,*/
-                  // user_id: 1
                   },
                 id_address: that.infoForm.id_address,
                 id_address_detail: that.infoForm.id_address_detail,
@@ -463,9 +400,27 @@ import area from '../../../assets/js/area.js'
               return false;
             }
           });
+        },
 
-
-
+        submitPics(){
+          var that = this;
+          const pics = {
+            id_picture: this.frontUrl,
+            id_card_inverse_side : this.backUrl,
+            headShot: this.headUrl,
+          };
+          console.log(pics);
+          this.$axios.post('/api/updatePicture', pics)
+            .then(function(response){
+              console.log(response.data);
+              that.$router.push({path: '/login/evaluation'});
+            })
+            .catch(function (error) {
+              that.$msgbox({
+                title: '连接失败',
+                type: 'error'
+              });
+            });
         }
 
       },
