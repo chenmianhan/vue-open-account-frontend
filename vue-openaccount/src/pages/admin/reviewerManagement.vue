@@ -31,7 +31,7 @@
                   <el-button type="primary" size="mini" @click="visible1 = false; submitAddForm('addForm')">保存</el-button>
                 </el-form>
               </div>
-              <el-button slot="reference" type="success" size="small" >添加</el-button>
+              <el-button slot="reference" type="primary">添加</el-button>
             </el-popover>
 
         </div>
@@ -64,7 +64,6 @@
               end-placeholder="结束日期"
               format="yyyy 年 MM 月 dd 日"
               value-format="yyyy-MM-dd HH:mm:ss"
-              @change="checkRange()"
               :default-time="['00:00:00', '23:59:59']"
               :picker-options="pickerOptions">
             </el-date-picker>
@@ -150,7 +149,7 @@
       data() {
         return {
           visible1: false,
-          loading: false,
+          loading: true,
           refresh: 0,
 
           pickerOptions: {//日期选择器的快捷选项
@@ -163,6 +162,80 @@
                 end.setTime(end.getTime());
                 picker.$emit('pick', [start, end]);
               }
+              }, {
+                  text: '最近一个月',
+                  onClick(picker) {
+                      var end = new Date();
+                      var start = new Date();
+                      start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+                      end.setTime(end.getTime());
+
+                      var dateRange = new Array(start, end);
+                      var reg = new RegExp( '/' , "g" );
+                      dateRange[0] = dateRange[0].toLocaleDateString().replace(reg,'-');
+                      dateRange[1] = dateRange[1].toLocaleDateString().replace(reg,'-');
+                      dateRange[0] += ' 00:00:00';
+                      dateRange[1] += ' 23:59:59';
+
+                      this.dateValue = dateRange;
+                      start = this.dateValue[0];
+                      end = this.dateValue[1];
+
+                      picker.$emit('pick', [start, end]);
+                  }
+              }, {
+                  text: '最近三个月',
+                      onClick(picker) {
+                      var end = new Date();
+                      var start = new Date();
+                      start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+                      end.setTime(end.getTime());
+
+                      var dateRange = new Array(start, end);
+                      var reg = new RegExp( '/' , "g" );
+                      dateRange[0] = dateRange[0].toLocaleDateString().replace(reg,'-');
+                      dateRange[1] = dateRange[1].toLocaleDateString().replace(reg,'-');
+                      dateRange[0] += ' 00:00:00';
+                      dateRange[1] += ' 23:59:59';
+
+                      this.dateValue = dateRange;
+                      start = this.dateValue[0];
+                      end = this.dateValue[1];
+
+                      picker.$emit('pick', [start, end]);
+                  }
+              },{
+                  text: '最近一年',
+                      onClick(picker) {
+                      var end = new Date();
+                      var start = new Date();
+
+                      end.setTime(end.getTime());
+                      var year = end.getFullYear();
+
+                      var a = year % 4;
+                      var b = year % 100;
+                      var c = year % 400;
+                      
+                      if (( (a == 0) && (b != 0) ) || (c == 0) ){//闰年
+                          start.setTime(start.getTime() - 3600 * 1000 * 24 * 366);
+                      }else{
+                          start.setTime(start.getTime() - 3600 * 1000 * 24 * 365);
+                      }
+
+                      var dateRange = new Array(start, end);
+                      var reg = new RegExp( '/' , "g" );
+                      dateRange[0] = dateRange[0].toLocaleDateString().replace(reg,'-');
+                      dateRange[1] = dateRange[1].toLocaleDateString().replace(reg,'-');
+                      dateRange[0] += ' 00:00:00';
+                      dateRange[1] += ' 23:59:59';
+
+                      this.dateValue = dateRange;
+                      start = this.dateValue[0];
+                      end = this.dateValue[1];
+
+                      picker.$emit('pick', [start, end]);
+                  }
             }]
           },
 
@@ -264,6 +337,7 @@
                   that.tableData = response.data;
                   for(var i = 0; i < that.tableData.length; i++)
                     that.tableData[i].visible2 = false;
+                  that.loading = false;
               }).catch(function(error){
                   console.log(error);
                   that.$msgbox({
@@ -480,44 +554,44 @@
           });
         },
 
-        checkRange(){//检查选择的日期范围
+        // checkRange(){//检查选择的日期范围
 
-          var end = new Date(this.tableData.dateValue[1]);
-          var start = new Date(this.tableData.dateValue[0]);
-          var now = new Date();
+        //   var end = new Date(this.tableData.dateValue[1]);
+        //   var start = new Date(this.tableData.dateValue[0]);
+        //   var now = new Date();
 
-          now.setTime(now.getTime());
-          var reg = new RegExp( '/' , "g" );
-          now = now.toLocaleDateString().replace(reg, '-');
-          var hintDate = now;
-          now += ' 23:59:59';
-          now = new Date(now);
+        //   now.setTime(now.getTime());
+        //   var reg = new RegExp( '/' , "g" );
+        //   now = now.toLocaleDateString().replace(reg, '-');
+        //   var hintDate = now;
+        //   now += ' 23:59:59';
+        //   now = new Date(now);
 
-          var dateRange = end.getTime() - start.getTime();
-          var isBeyond = now.getTime() - end.getTime();
-          console.log(dateRange);
-          console.log(isBeyond);
+        //   var dateRange = end.getTime() - start.getTime();
+        //   var isBeyond = now.getTime() - end.getTime();
+        //   console.log(dateRange);
+        //   console.log(isBeyond);
 
-          if(isBeyond < 0){
-            this.$msgbox({
-              type:'error',
-              title: '超出范围',
-              message: '结束日期不能超过今天（' + hintDate + '），请重新选择！'
-            });
-            this.dateValue = '';
-            return false;
-          }else if (dateRange >= 3600 * 1000 * 24 * 7){
-            this.$msgbox({
-              type:'error',
-              title: '超出范围',
-              message: '所选日期范围不能超过一周，请重新选择！'
-            });
-            this.dateValue = '';
-            return false;
-          }else{
-            return true;
-          }
-        },
+        //   if(isBeyond < 0){
+        //     this.$msgbox({
+        //       type:'error',
+        //       title: '超出范围',
+        //       message: '结束日期不能超过今天（' + hintDate + '），请重新选择！'
+        //     });
+        //     this.dateValue = '';
+        //     return false;
+        //   }else if (dateRange >= 3600 * 1000 * 24 * 7){
+        //     this.$msgbox({
+        //       type:'error',
+        //       title: '超出范围',
+        //       message: '所选日期范围不能超过一周，请重新选择！'
+        //     });
+        //     this.dateValue = '';
+        //     return false;
+        //   }else{
+        //     return true;
+        //   }
+        // },
 
         handleForm(row){
           this.modifyForm.name = row.name;

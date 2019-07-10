@@ -138,6 +138,8 @@ export default {
             imageUrl_1:'../../assets/image/user.jpg',
             imageUrl_2:'../../assets/image/user.jpg',
             imageUrl_3:'../../assets/image/user.jpg',
+            serverUrl: 'http://47.106.126.84:8082/',
+
             userType: '',
             userGrade: 0,
             userInfo: [],//属性中增加用户id
@@ -180,9 +182,9 @@ export default {
             ).then(function(response){
                 console.log("response: " , response.data);
                 that.userInfo = response.data.userInfo;
-                that.imageUrl_1 = 'data:image/png;base64,' + response.data.imageUrl_1;
-                that.imageUrl_2 = 'data:image/png;base64,' + response.data.imageUrl_2;
-                that.imageUrl_3 = 'data:image/png;base64,' + response.data.imageUrl_3;
+                that.imageUrl_1 = that.serverUrl + response.data.imageUrl_1;
+                that.imageUrl_2 = that.serverUrl + response.data.imageUrl_2;
+                that.imageUrl_3 = that.serverUrl + response.data.imageUrl_3;
                 that.userType = response.data.userType;
                 that.userGrade = response.data.userGrade;
                 var code = response.data.code;

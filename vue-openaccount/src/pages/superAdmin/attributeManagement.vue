@@ -56,7 +56,7 @@
     export default {
       data() {
         return {
-          activeNames: ['1'],
+          activeNames: ['1','2','3'],
           dateValue: '',
           score:'',
           num:1,

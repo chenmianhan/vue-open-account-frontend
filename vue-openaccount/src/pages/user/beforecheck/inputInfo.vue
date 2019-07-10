@@ -96,6 +96,7 @@
     <el-form :model="picForm" ref="picForm">
       <el-form-item>
         <h3>上传身份证正反面照和个人大头照</h3>
+        <el-tooltip effect="dark" :disabled="haveSubmit" content="上传图片前请先保存用户信息噢！" placement="top">
         <el-upload
           class="upload-demo"
           action="/api/upload"
@@ -108,6 +109,7 @@
           list-type="picture">
           <el-button size="small" type="primary">上传正面照</el-button>
         </el-upload>
+        </el-tooltip>
         <!-- <el-upload
           class="upload-demo"
           action="https://jsonplaceholder.typicode.com/posts/"

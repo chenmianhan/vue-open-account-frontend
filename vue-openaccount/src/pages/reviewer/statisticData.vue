@@ -36,6 +36,7 @@
                             v-model="state"
                             :fetch-suggestions="querySearchAsync"
                             placeholder="请输入用户姓名"
+                            @focus="loadAll()"
                             @select="handleSelect"
                         ></el-autocomplete>
                     </div>
