@@ -172,7 +172,7 @@ export default {
                     userId: ''
             }
 
-            if (this.$route.query.userId != undefined){
+            if (this.$route.query.userId != ''){
                 postData.userId= this.$route.query.userId
             }
             
