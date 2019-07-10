@@ -93,7 +93,7 @@
 
     <el-divider content-position="center">请保存以上信息后再上传照片</el-divider>
 
-    <el-form>
+    <el-form :model="picForm" ref="picForm">
       <el-form-item>
         <h3>上传身份证正反面照和个人大头照</h3>
         <el-upload
@@ -205,7 +205,7 @@ import area from '../../../assets/js/area.js'
           dialogVisible: false,
           address: areajson,
           haveSubmit: false,
-          allDone: true,
+          allDone: false,
 
           vals_id:[],
           vals_con:[],
@@ -215,9 +215,11 @@ import area from '../../../assets/js/area.js'
           back: [],
           head: [],
 
-          frontUrl: '',
-          backUrl: '',
-          headUrl: '',
+          picForm:{
+            frontUrl: '',
+            backUrl: '',
+            headUrl: '',
+          },
 
           infoForm: {
             name: '',
@@ -299,15 +301,16 @@ import area from '../../../assets/js/area.js'
 
         getFront(response, file, fileList){
           console.log(response);
-          this.frontUrl = response;
+          this.picForm.frontUrl = response;
         },
         getBack(response, file, fileList){
           console.log(response);
-          this.backUrl = response;
+          this.picForm.backUrl = response;
         },
         getHead(response, file, fileList){
           console.log(response);
-          this.headUrl = response;
+          this.picForm.headUrl = response;
+          this.allDone = true;
         },
 
         handleRemove(file, fileList) {
@@ -405,14 +408,16 @@ import area from '../../../assets/js/area.js'
         submitPics(){
           var that = this;
           const pics = {
-            id_picture: this.frontUrl,
-            id_card_inverse_side : this.backUrl,
-            headShot: this.headUrl,
+            id_picture: this.picForm.frontUrl,
+            id_card_inverse_side : this.picForm.backUrl,
+            headShot: this.picForm.headUrl,
           };
           console.log(pics);
           this.$axios.post('/api/updatePicture', pics)
             .then(function(response){
               console.log(response.data);
+            /*  sessionStorage.setItem('pics', JSON.stringify(that.picForm));
+              console.log('store', that.$store.state);*/
               that.$router.push({path: '/login/evaluation'});
             })
             .catch(function (error) {
@@ -431,7 +436,12 @@ import area from '../../../assets/js/area.js'
         // }
         if(sessionStorage.getItem('userInfo') != null){
           this.infoForm = JSON.parse(sessionStorage.getItem('userInfo'));
+          this.haveSubmit = true;
         }
+        /*if(sessionStorage.getItem('pic') != null){
+          this.infoForm = JSON.parse(sessionStorage.getItem('pics'));
+          this.allDone = true;
+        }*/
         console.log(sessionStorage)
         if(sessionStorage.getItem('Flag') != 'isLogin' 
         || parseInt(sessionStorage.getItem('status')) > 3 ){

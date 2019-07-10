@@ -51,10 +51,12 @@
         style="width: 100%">
         <el-table-column
           prop="user_id"
+          width="100px"
           label="用户id">
         </el-table-column>
         <el-table-column
           prop="name"
+          width="150px"
           label="姓名">
         </el-table-column>
         <el-table-column
