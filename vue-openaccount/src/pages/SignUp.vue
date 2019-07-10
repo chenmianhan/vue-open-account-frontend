@@ -18,7 +18,7 @@
                 <el-form-item prop="password" v-show="isChecked">
                     <el-input
                     show-password
-                    type="password" placeholder="密码" v-model="ruleForm.password" @keyup.enter.native="submitForm('ruleForm')">
+                    type="password" placeholder="密码" v-model="ruleForm.password">
                         <el-button slot="prepend" icon="el-icon-lock"></el-button>
                     </el-input>
                 </el-form-item>
@@ -57,10 +57,10 @@
                     .then(function(response){
                         console.log(response);
                         var code = response.data.code;
-                        if (code == '300'){
+                        if (code == '301'){
                             that.isDisabled = false;
                             return callback();
-                        }else if (code =='301'){
+                        }else if (code =='300'){
                             return callback(new Error('该手机号已注册！请直接登录或输入新的手机号'));
                         }else{
                             return callback(new Error('服务器异常'));
