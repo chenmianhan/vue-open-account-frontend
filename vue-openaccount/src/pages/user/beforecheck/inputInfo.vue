@@ -354,11 +354,12 @@ import area from '../../../assets/js/area.js'
           return this.$confirm(`确定移除 ${ file.name }？`);
         },
 
-        beforeupload(file) {
+        beforeuploadBack(file) {
           // console.log(file);
           //创建临时的路径来展示图片
           var windowURL = window.URL || window.webkitURL;
-          this.src1 = windowURL.createObjectURL(file);
+          this.scr2 = windowURL.createObjectURL(file);
+          this.infoForm.backUrl = this.scr2;
         },
 
         getCascaderObj(val,opt) {
