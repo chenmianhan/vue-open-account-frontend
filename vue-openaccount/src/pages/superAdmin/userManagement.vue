@@ -364,7 +364,7 @@
             this.$axios.post('/api/superadmin/getUserByName', postData)
               .then(function(response){
                 console.log(response);
-                that.tableData = response.data;
+                that.tableData = response.data.tableData;
                 that.length = that.tableData.length;
                 that.loading = false;
                 that.handleCurrentChange(1);
