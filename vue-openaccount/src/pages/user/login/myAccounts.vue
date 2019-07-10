@@ -353,7 +353,7 @@ export default {
             var that = this;
             let postData = {
                 // fund_id: account.id,
-                fund_id: 'u00000000111',
+                account: account.cardID,
                 amount: this.rechargeForm.value
             }
             console.log('postData',postData)
@@ -365,6 +365,7 @@ export default {
                         type:'success'
                     });
                     that.getData();
+                    that.getTimeLine();
                     that.rechargeForm.password = '';
                     that.rechargeVisible = false;
                     that.rechargeForm = {};
@@ -419,7 +420,7 @@ export default {
             } else{
                 var that = this;
                 let postData = {
-                    fund_id: 'u00000000111',
+                    account: account.cardID,
                     amount: this.withdrawForm.value
                 }
                 this.$axios.post('/api/user/withdrawal', postData).then(function(response){
@@ -429,6 +430,7 @@ export default {
                             type: 'success'
                         });
                         that.getData();
+                        that.getTimeLine();
                         that.withdrawForm.password = '';
                         that.withdrawVisible = false;
                         that.withdrawForm = {cardID:'',value:'',password:''}

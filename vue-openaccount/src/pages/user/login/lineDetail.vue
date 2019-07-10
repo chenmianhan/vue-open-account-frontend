@@ -66,9 +66,9 @@ export default {
                 // endDate: that.endDate,
                 // user_id: 44
             }
-            console.log(postData)
+            // console.log(postData)
             this.$axios.get('/api/timeline/get_timeline', postData).then(function(response){
-                console.log(response.data)
+                console.log('line',response.data)
                 that.moreBill = response.data;
             }).catch(() => {
                 that.$message.error({
