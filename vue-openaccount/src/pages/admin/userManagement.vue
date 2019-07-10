@@ -390,13 +390,13 @@
         },
 
         submitModifyForm(formName, row) {
-          this.vals = this.getCascaderObj(this.modifyForm.address, this.address);
+          this.vals = this.getCascaderObj(this.modifyForm.contact_address, this.address);
           var temp = [];
           for (var i = 0; i < this.vals.length; i++){
             temp[i] = this.vals[i].label;
           };
-          this.modifyForm.address = temp;
-          console.log(this.modifyForm.address);
+          this.modifyForm.contact_address = temp;
+          console.log(this.modifyForm.contact_address);
 
           var that = this;
           this.$refs[formName].validate((valid) => {
