@@ -144,13 +144,13 @@
                         { validator: validatePhone, trigger: 'blur'}    
                     ],
                     valCode:[
-                        { validator: validateCode, trigger: 'blur'}
+                        { validator: validateCode, trigger: 'change'}
                     ],
                     password: [
-                        { validator: validatePass, trigger: 'blur'}
+                        { validator: validatePass, trigger: 'change'}
                     ],
                     checkPassword: [
-                        { validator: checkPass, trigger:'blur'}
+                        { validator: checkPass, trigger:'change'}
                     ]
                 },
             }
@@ -203,8 +203,8 @@
             },
             //表单验证，主要验证输入格式是否正确；验证正确后向后端传输数据注册新用户
             submitForm(formName) {
-                this.$refs[formName].validate((valid) => {
-                    if (valid) {
+                this.$refs[formName].validateField('checkPassword', (passError) => {
+                    if (!passError) {
                         //前->后端传输
                         var that = this;
                         const postData = {//打包传输数据，类型均为string

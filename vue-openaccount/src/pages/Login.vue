@@ -154,29 +154,27 @@
             //验证码检查
             var validateCode = (rule, value, callback) => {
                 var that = this;
-                if (value != ''){
-                    const postData = {
-                        checkNum: value,
-                    }
-                    this.$axios.get('/api/checkNum', {params:{checkNum: value}})
-                    .then(function(response){
-                        console.log(response);
-                        if (response.data.code == '302'){
-                            that.nextAllowed = true;
-                            that.$message({
-                                message:'验证码正确',
-                                type: 'success'
-                            })
-                            callback();
-                        }else if(response.data.code == '303'){
-                            return callback(new Error('验证码错误'));
-                        }else{
-                            return callback(new Error('服务器异常'));
-                        }
-                    }).catch(function(error){
-                        console.log(error);
-                    })
+                const postData = {
+                    checkNum: value,
                 }
+                this.$axios.get('/api/checkNum', {params:{checkNum: value}})
+                .then(function(response){
+                    console.log(response);
+                    if (response.data.code == '302'){
+                        that.nextAllowed = true;
+                        that.$message({
+                            message:'验证码正确',
+                            type: 'success'
+                        })
+                        callback();
+                    }else if(response.data.code == '303'){
+                        return callback(new Error('验证码错误'));
+                    }else{
+                        return callback(new Error('服务器异常'));
+                    }
+                }).catch(function(error){
+                    console.log(error);
+                })
             };
 
             return {
@@ -338,8 +336,8 @@
             },
 
             submitChangeForm(formName){
-                this.$refs[formName].validate((valid) => {
-                    if (valid) {
+                this.$refs[formName].validateField('newPassword',(passError) => {
+                    if (!passError) {
                         var that = this;
                         const postData = {
                             phone: this.changeForm.phone,
