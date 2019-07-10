@@ -81,6 +81,7 @@ export default {
         if(command == 'loginout'){
             this.$axios.post('/api/logout'
             ).then(function(response){
+                console.log(response);
                 if(response.data.code == '104'){
                     sessionStorage.removeItem('ms_username');
                     sessionStorage.removeItem('Flag');
