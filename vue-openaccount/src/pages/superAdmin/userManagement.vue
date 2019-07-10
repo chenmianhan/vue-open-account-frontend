@@ -342,7 +342,7 @@
               that.$msgbox({
                 type: 'error',
                 title: '连接失败',
-                message: '获取管理员信息失败！'
+                message: '获取用户信息失败！'
               })
             })
           }else{
@@ -364,7 +364,7 @@
             this.$axios.post('/api/superadmin/getUserByName', postData)
               .then(function(response){
                 console.log(response);
-                that.tableData = response.data.tableData;
+                that.tableData = response.data;
                 that.length = that.tableData.length;
                 that.loading = false;
                 that.handleCurrentChange(1);

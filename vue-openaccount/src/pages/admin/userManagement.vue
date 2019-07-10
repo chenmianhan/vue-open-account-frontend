@@ -484,7 +484,7 @@
           this.$axios.post('/api/admin/getUserInfo', postData
           ).then(function(response){
               console.log(response);
-              that.tableData = response.data.tableDate;
+              that.tableData = response.data.tableData;
           }).catch(function(error){
               console.log(error);
               that.$msgbox({
