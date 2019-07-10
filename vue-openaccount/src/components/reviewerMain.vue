@@ -81,6 +81,7 @@ export default {
         if(command == 'loginout'){
             this.$axios.post('/api/logout'
             ).then(function(response){
+                console.log(response);
                 if(response.data.code == '104'){
                     sessionStorage.removeItem('ms_username');
                     sessionStorage.removeItem('Flag');
@@ -92,6 +93,13 @@ export default {
                         title: '系统异常',
                         message: '注销失败'
                     })
+                }else if(response.data.code == '20011'){
+                    that.$msgbox({
+                      type:'error',
+                      title:'状态失效',
+                      message:'登录状态失效！请重新登录'
+                    });
+                    that.$router.push('/login');
                 }else {
                     that.$msgbox({
                         type: 'error',

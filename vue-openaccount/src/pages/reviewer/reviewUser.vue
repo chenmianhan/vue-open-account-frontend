@@ -84,17 +84,17 @@
                             <div class="image__placeholder">
                                 <el-col :span='8'>
                                     <div class='img-box'>
-                                        <img class="img-item" :src=imageUrl_1>
+                                        <img class="img-item" :src='imageUrl_1'>
                                     </div>
                                 </el-col>
                                 <el-col :span='8'>
                                     <div class='img-box'>
-                                        <img class="img-item" :src=imageUrl_2>
+                                        <img class="img-item" :src='imageUrl_2'>
                                     </div>
                                 </el-col>
                                 <el-col :span='8'>
                                     <div class='img-box'>
-                                        <img class="img-item" :src=imageUrl_3>
+                                        <img class="img-item" :src='imageUrl_3'>
                                     </div>
                                 </el-col>
                             </div>
@@ -134,7 +134,6 @@
 export default {
     data: function(){
         return {
-
             userId:'',
             imageUrl_1:'../../assets/image/user.jpg',
             imageUrl_2:'../../assets/image/user.jpg',
