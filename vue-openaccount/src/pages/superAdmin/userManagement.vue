@@ -270,20 +270,20 @@
         },
 
         submitModifyForm(formName, row) {
-          this.vals = this.getCascaderObj(this.modifyForm.address, this.address);
+          this.vals = this.getCascaderObj(this.modifyForm.contact_address, this.address);
           var temp = [];
           for (var i = 0; i < this.vals.length; i++){
             temp[i] = this.vals[i].label;
           };
-          this.modifyForm.address = temp;
-          console.log(this.modifyForm.address);
+          this.modifyForm.contact_address = temp;
+          console.log(this.modifyForm.contact_address);
 
           var that = this;
           // console.log(this.infoForm);
           // debugger;
           this.$refs[formName].validate((valid) => {
             // console.log(valid);
-            if (valid) {
+
               const postData = {
                 name: that.modifyForm.name,
                 //ID_number: that.modifyForm.idNum,
@@ -301,7 +301,8 @@
                     title: '修改成功',
                     type: 'succeed'
                   });
-                  that.handleSearch();
+                  //that.handleSearch();
+                  that.queryUser();
                 })
                 .catch(function (error) {
                   that.$msgbox({
@@ -309,14 +310,7 @@
                     type: 'error'
                   });
                 });
-            } else {
-              this.$msgbox({
-                message: '表单格式有误',
-                type: 'error'
-              });
-              // console.log('error submit!!');
-              return false;
-            }
+
           });
         },
 

@@ -193,6 +193,10 @@ import area from '../../../assets/js/area.js'
           haveSubmit: false,
           allDone: true,
 
+          vals_id:[],
+          vals_con:[],
+          vals_pos:[],
+
           front: [],
           back: [],
           head: [],
@@ -354,10 +358,33 @@ import area from '../../../assets/js/area.js'
           this.src1 = windowURL.createObjectURL(file);
         },
 
-
-
+        getCascaderObj(val,opt) {
+          return val.map(function (value, index, array) {
+            for (var itm of opt) {
+              if (itm.value == value) { opt = itm.children; return itm; }
+            }
+            return null;
+          });
+        },
 
         submitForm(formName) {
+          this.vals_id = this.getCascaderObj(this.infoForm.id_address, this.address);
+          this.vals_con = this.getCascaderObj(this.infoForm.contact_address, this.address);
+          this.vals_pos = this.getCascaderObj(this.infoForm.mail_address, this.address);
+          var temp1 = [];
+          var temp2 = [];
+          var temp3 = [];
+          for (var i = 0; i < this.vals_id.length; i++)
+            temp1[i] = this.vals_id[i].label;
+          for (var j = 0; j < this.vals_con.length; j++)
+            temp2[j] = this.vals_con[j].label;
+          for (var k = 0; k < this.vals_pos.length; k++)
+            temp3[k] = this.vals_pos[k].label;
+
+          this.infoForm.id_address = temp1;
+          this.infoForm.contact_address = temp2;
+          this.infoForm.mail_address = temp3;
+
           var that = this;
           // console.log(this.infoForm);
           // debugger;
