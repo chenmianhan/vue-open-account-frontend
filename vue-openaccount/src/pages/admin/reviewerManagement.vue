@@ -68,9 +68,7 @@
               :picker-options="pickerOptions">
             </el-date-picker>
 
-            <el-tooltip class="item" effect="dark" content="所选日期范围最大为一周" placement="right">
-              <el-button @click='getReviewerInfo(props.row)' icon='el-icon-search' type='primary' round>查询</el-button>
-            </el-tooltip>
+            <el-button @click='getReviewerInfo(props.row)' icon='el-icon-search' type='primary' round>查询</el-button>
 
             <el-form label-position="left" class="demo-table-expand" v-bind:key="refresh">
               <el-form-item style="padding-top: 10px">
