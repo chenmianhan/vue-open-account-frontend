@@ -84,17 +84,17 @@
                             <div class="image__placeholder">
                                 <el-col :span='8'>
                                     <div class='img-box'>
-                                        <img class="img-item" src="../../assets/image/user.jpg">
+                                        <img class="img-item" :src=imageUrl_1>
                                     </div>
                                 </el-col>
                                 <el-col :span='8'>
                                     <div class='img-box'>
-                                        <img class="img-item" src="../../assets/image/user.jpg">
+                                        <img class="img-item" :src=imageUrl_2>
                                     </div>
                                 </el-col>
                                 <el-col :span='8'>
                                     <div class='img-box'>
-                                        <img class="img-item" src="../../assets/image/user.jpg">
+                                        <img class="img-item" :src=imageUrl_3>
                                     </div>
                                 </el-col>
                             </div>
@@ -134,6 +134,7 @@
 export default {
     data: function(){
         return {
+
             userId:'',
             imageUrl_1:'../../assets/image/user.jpg',
             imageUrl_2:'../../assets/image/user.jpg',
@@ -160,6 +161,8 @@ export default {
             console.log(this.$route.query.userId);
             console.log(this.userId);
 
+            //let Base64 = require('js-base64').Base64;
+
             this.checked.info = false;
             this.checked.grade = false;
             this.checked.image = false;
@@ -176,11 +179,11 @@ export default {
             var that = this;
             this.$axios.post('/api/reviewer/getUserInfo', this.$Qs.stringify(postData)
             ).then(function(response){
-                console.log("response: " + response.data);
+                console.log("response: " , response.data);
                 that.userInfo = response.data.userInfo;
-                that.imageUrl_1 = response.data.imageUrl_1;
-                that.imageUrl_2 = response.data.imageUrl_2;
-                that.imageUrl_3 = response.data.imageUrl_3;
+                that.imageUrl_1 = 'data:image/png;base64,' + response.data.imageUrl_1;
+                that.imageUrl_2 = 'data:image/png;base64,' + response.data.imageUrl_2;
+                that.imageUrl_3 = 'data:image/png;base64,' + response.data.imageUrl_3;
                 that.userType = response.data.userType;
                 that.userGrade = response.data.userGrade;
                 var code = response.data.code;

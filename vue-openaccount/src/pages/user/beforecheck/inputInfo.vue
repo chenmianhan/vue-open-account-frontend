@@ -98,7 +98,8 @@
         <h3>上传身份证正反面照和个人大头照</h3>
         <el-upload
           class="upload-demo"
-          action=""
+          action="/api/upload"
+          :on-change="onUpload"
           :on-preview="handlePreview"
           :on-remove="handleRemove"
           :before-remove="beforeRemove"
@@ -344,6 +345,13 @@ import area from '../../../assets/js/area.js'
           }
         },*/
 
+        onUpload(file) {
+          this.$axios.post('/api/upload',file)
+            .then(function(response){
+              console.log(response.data);
+            })
+        },
+
         handleRemove(file, fileList) {
           // console.log(file, fileList);
         },
@@ -354,11 +362,12 @@ import area from '../../../assets/js/area.js'
           return this.$confirm(`确定移除 ${ file.name }？`);
         },
 
-        beforeupload(file) {
+        beforeuploadBack(file) {
           // console.log(file);
           //创建临时的路径来展示图片
           var windowURL = window.URL || window.webkitURL;
-          this.src1 = windowURL.createObjectURL(file);
+          this.scr2 = windowURL.createObjectURL(file);
+          this.infoForm.backUrl = this.scr2;
         },
 
         getCascaderObj(val,opt) {
