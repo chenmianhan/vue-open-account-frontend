@@ -51,24 +51,25 @@
         style="width: 100%">
         <el-table-column
           prop="user_id"
-          width="100px"
           label="用户id">
         </el-table-column>
         <el-table-column
           prop="name"
-          width="100px"
           label="姓名">
         </el-table-column>
         <el-table-column
           prop="id_num"
+          width="200"
           label="身份证号码">
         </el-table-column>
         <el-table-column
           prop="contact"
+          width="150"
           label="联系方式">
         </el-table-column>
         <el-table-column
           prop="address"
+          width="200"
           label="联系地址">
         </el-table-column>
         <el-table-column
@@ -389,13 +390,13 @@
         },
 
         submitModifyForm(formName, row) {
-          this.vals = this.getCascaderObj(this.modifyForm.address, this.address);
+          this.vals = this.getCascaderObj(this.modifyForm.contact_address, this.address);
           var temp = [];
           for (var i = 0; i < this.vals.length; i++){
             temp[i] = this.vals[i].label;
           };
-          this.modifyForm.address = temp;
-          console.log(this.modifyForm.address);
+          this.modifyForm.contact_address = temp;
+          console.log(this.modifyForm.contact_address);
 
           var that = this;
           this.$refs[formName].validate((valid) => {
@@ -448,11 +449,18 @@
             this.$axios.post('/api/deleteUsers', {user_id: deleteId})//post也可以改成get，但需要对应服务端的请求方法
               .then(function (response) {
                 console.log('delete',response);
-                that.$message({
-                  message: '删除成功',
-                  type: 'success'
-                })
-                that.queryTable();
+                if(response.data == 1){
+                  that.$message({
+                    message: '删除成功',
+                    type: 'success'
+                  })
+                  that.queryTable();
+                } else {
+                  that.$msgbox({
+                    message: '用户账户余额不为零，不可删除',
+                    type: 'warning'
+                  });
+                }
               })
               .catch(function (error) {
                 alert(error);
@@ -476,7 +484,7 @@
           this.$axios.post('/api/admin/getUserInfo', postData
           ).then(function(response){
               console.log(response);
-              that.tableData = response.data.tableDate;
+              that.tableData = response.data.tableData;
           }).catch(function(error){
               console.log(error);
               that.$msgbox({
