@@ -13,11 +13,11 @@
         <el-main style="text-align:left;">
           <el-menu :collapse="collapsed" background-color="#F2F6FC" router :default-active='onRoutes'>
             <el-menu-item index="/admin/home">
-              <i class="el-icon-notebook-1"></i>
+              <i class="el-icon-s-custom"></i>
               <span slot="title">客户管理</span>
             </el-menu-item>
             <el-menu-item index="/admin/manageReviewer">
-              <i class="el-icon-user"></i>
+              <i class="el-icon-s-management"></i>
               <span slot="title">审核员管理</span>
             </el-menu-item>
           </el-menu>

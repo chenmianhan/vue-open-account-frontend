@@ -13,11 +13,11 @@
         <el-main style="text-align:left;">
           <el-menu :collapse="collapsed" background-color="#EBEEF5" router :default-active='onRoutes'>
             <el-menu-item index="/reviewer/home">
-              <i class="el-icon-notebook-1"></i>
+              <i class="el-icon-s-data"></i>
               <span slot="title">统计数据</span>
             </el-menu-item>
             <el-menu-item index="/reviewer/reviewUser">
-              <i class="el-icon-user"></i>
+              <i class="el-icon-s-check"></i>
               <span slot="title">开始审核</span>
             </el-menu-item>
           </el-menu>

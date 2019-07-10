@@ -31,7 +31,7 @@
                   <el-button type="primary" size="mini" @click="visible1 = false; submitAddForm('addForm')">保存</el-button>
                 </el-form>
               </div>
-              <el-button slot="reference" type="success" size="small" >添加</el-button>
+              <el-button slot="reference" type="primary">添加</el-button>
             </el-popover>
 
         </div>
@@ -149,7 +149,7 @@
       data() {
         return {
           visible1: false,
-          loading: false,
+          loading: true,
           refresh: 0,
 
           pickerOptions: {//日期选择器的快捷选项
@@ -337,6 +337,7 @@
                   that.tableData = response.data;
                   for(var i = 0; i < that.tableData.length; i++)
                     that.tableData[i].visible2 = false;
+                  that.loading = false;
               }).catch(function(error){
                   console.log(error);
                   that.$msgbox({

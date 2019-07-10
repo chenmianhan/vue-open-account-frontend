@@ -45,22 +45,23 @@
       </div>
       <div class="results">
         <el-table
+        stripe
         v-loading='loading'
         :data="tableData"
         style="width: 100%">
         <el-table-column
           prop="user_id"
-          width="100px"
+          width="80px"
           label="用户id">
         </el-table-column>
         <el-table-column
           prop="name"
-          width="150px"
+          width="90px"
           label="姓名">
         </el-table-column>
         <el-table-column
           prop="id_num"
-          width="200"
+          width="180"
           label="身份证号码">
         </el-table-column>
         <el-table-column
