@@ -29,7 +29,9 @@
                         <el-button slot="prepend" icon="el-icon-lock"></el-button>
                     </el-input>
                 </el-form-item>
-                <div class="login-btn">
+                <div>
+                    <el-button @click="$router.push('/login')">返回</el-button>
+                    <!-- <el-button v-show="!isChecked" :disabled="!nextAllowed" type="primary" @click="isChecked=true">下一步</el-button> -->
                     <el-button type="primary" 
                     @click="submitForm('ruleForm')" 
                     v-show="isChecked"
@@ -84,6 +86,7 @@
                     .then(function(response){
                         console.log(response);
                         if (response.data.code == '302'){
+                            that.nextAllowed = true;
                             that.isChecked = true;
                             that.$message({
                                 message:'验证码正确',
@@ -127,6 +130,7 @@
                 isChecked: false,
                 isDisabled: true,
                 signUpAllowed: false,
+                nextAllowed: false,
 
                 buttonName: '发送验证码',
                 timer: null,
